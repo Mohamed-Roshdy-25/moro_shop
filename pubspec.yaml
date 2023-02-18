@@ -43,6 +43,7 @@ dependencies:
   dio: ^5.0.0
   json_serializable: ^6.6.1
   build_runner: ^2.3.3
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:
