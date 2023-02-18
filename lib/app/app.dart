@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moro_shop/presentation/resources/routes_manager.dart';
 
 class MyApp extends StatefulWidget {
 
@@ -15,6 +16,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: RouteGenerator.getRoute,
+      initialRoute: Routes.introRoute,
+    );
   }
 }
