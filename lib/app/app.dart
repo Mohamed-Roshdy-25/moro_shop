@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moro_shop/presentation/resources/routes_manager.dart';
+import 'package:moro_shop/presentation/resources/theme_manager.dart';
 
 class MyApp extends StatefulWidget {
 
@@ -20,6 +21,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RouteGenerator.getRoute,
       initialRoute: Routes.introRoute,
+      theme: ThemeManager.getTheme(),
     );
   }
 }
