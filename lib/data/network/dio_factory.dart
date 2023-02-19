@@ -4,6 +4,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/app/constants.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -13,14 +14,19 @@ const String AUTHORIZATION = "Authorization";
 const String DEFAULT_LANGUAGE = "lang";
 
 class DioFactory {
+  final AppPreferences _appPreferences;
+
+  DioFactory(this._appPreferences);
 
   Future<Dio> getDio() async {
     Dio dio = Dio();
 
+    String lang = await _appPreferences.getAppLanguage();
+
     Map<String, String> headers = {
       CONTENT_TYPE: APPLICATION_JSON,
       AUTHORIZATION: Constants.token,
-      DEFAULT_LANGUAGE:'en'
+      DEFAULT_LANGUAGE: lang,
     };
 
     dio.options = BaseOptions(
