@@ -20,14 +20,18 @@ class RepositoryImpl implements Repository{
   @override
   Future<Either<Failure, LoginModel>> login(LoginRequest loginRequest) async {
     if(await _networkInfo.isConnected){
-      LoginResponse response = await _remoteDataSource.login(loginRequest);
-      if(response.status == true) {
-        return Right(response.toDomain());
-      }else{
-        return Left(Failure(409, response.message.orEmpty()));
+      try{
+        LoginResponse response = await _remoteDataSource.login(loginRequest);
+        if(response.status == true) {
+          return Right(response.toDomain());
+        }else{
+          return Left(Failure(response.status.orFalse(), response.message.orEmpty()));
+        }
+      }catch (error){
+        return Left(Failure(false, error.toString()));
       }
     }else{
-      return Left(Failure(501, Constants.checkInternet));
+      return Left(Failure(false, Constants.checkInternet));
     }
   }
   
