@@ -11,7 +11,9 @@ class LoginDataModel{
 }
 
 class LoginModel{
+  bool status;
+  String message;
   LoginDataModel? loginDataModel;
 
-  LoginModel(this.loginDataModel);
+  LoginModel(this.status,this.message,this.loginDataModel);
 }
