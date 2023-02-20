@@ -6,16 +6,6 @@ part of 'responses.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse()
-  ..status = json['status'] as bool?
-  ..message = json['message'] as String?;
-
-Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
-    <String, dynamic>{
-      'status': instance.status,
-      'message': instance.message,
-    };
-
 LoginDataResponse _$LoginDataResponseFromJson(Map<String, dynamic> json) =>
     LoginDataResponse(
       json['id'] as int?,
@@ -38,12 +28,12 @@ Map<String, dynamic> _$LoginDataResponseToJson(LoginDataResponse instance) =>
 
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     LoginResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
       json['data'] == null
           ? null
           : LoginDataResponse.fromJson(json['data'] as Map<String, dynamic>),
-    )
-      ..status = json['status'] as bool?
-      ..message = json['message'] as String?;
+    );
 
 Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
     <String, dynamic>{

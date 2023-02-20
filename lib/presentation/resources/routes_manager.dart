@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:moro_shop/presentation/cart/cart_view.dart';
-import 'package:moro_shop/presentation/categories/categories_view.dart';
-import 'package:moro_shop/presentation/favorite/favorite_view.dart';
-import 'package:moro_shop/presentation/home/home_view.dart';
-import 'package:moro_shop/presentation/intro/intro_view.dart';
-import 'package:moro_shop/presentation/profile/profile_view.dart';
+import 'package:moro_shop/presentation/pages/cart/cart_view.dart';
+import 'package:moro_shop/presentation/pages/categories/categories_view.dart';
+import 'package:moro_shop/presentation/pages/favorite/favorite_view.dart';
+import 'package:moro_shop/presentation/pages/home/home_view.dart';
+import 'package:moro_shop/presentation/pages/intro/intro_view.dart';
+import 'package:moro_shop/presentation/pages/profile/profile_view.dart';
+import 'package:moro_shop/presentation/pages/search/search_view.dart';
+import 'package:moro_shop/presentation/pages/settings/settings_view.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
-import 'package:moro_shop/presentation/search/search_view.dart';
-import 'package:moro_shop/presentation/settings/settings_view.dart';
+
 
 class Routes {
   static const String introRoute = '/';

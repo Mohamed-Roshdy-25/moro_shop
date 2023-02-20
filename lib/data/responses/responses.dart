@@ -4,14 +4,6 @@ import 'package:json_annotation/json_annotation.dart';
 part 'responses.g.dart';
 
 @JsonSerializable()
-class BaseResponse {
-  @JsonKey(name: 'status')
-  bool? status;
-  @JsonKey(name: 'message')
-  String? message;
-}
-
-@JsonSerializable()
 class LoginDataResponse {
   @JsonKey(name: 'id')
   int? id;
@@ -35,11 +27,15 @@ class LoginDataResponse {
 }
 
 @JsonSerializable()
-class LoginResponse extends BaseResponse{
+class LoginResponse{
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
   @JsonKey(name: 'data')
   LoginDataResponse? loginDataResponse;
 
-  LoginResponse(this.loginDataResponse);
+  LoginResponse(this.status,this.message,this.loginDataResponse);
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
 
