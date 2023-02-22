@@ -84,7 +84,7 @@ extension FlowStateExtension on FlowState{
       case LoadingState:
         dismissDialog(context);
         if(getStateRendererType() == StateRendererType.popupLoadingState) {
-          _showPopup(context, getStateRendererType(),);
+          _showPopup(context, getStateRendererType(),message: getMessage());
         }else{
           return StateRenderer(stateRendererType: getStateRendererType());
         }

@@ -40,7 +40,7 @@ class StateRenderer extends StatelessWidget {
     switch (stateRendererType) {
       case StateRendererType.popupLoadingState:
         return _getPopUpDialog(
-            context, [_getAnimatedImage(JsonAssets.loading)]);
+            context, [_getAnimatedImage(JsonAssets.loading),_getMessage(message)]);
       case StateRendererType.popupErrorState:
         return _getPopUpDialog(
           context,
@@ -130,6 +130,7 @@ class StateRenderer extends StatelessWidget {
         child: Text(
           message,
           textAlign: TextAlign.center,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -139,8 +140,26 @@ class StateRenderer extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppPadding.p18),
-        child: SizedBox(
+        child: Container(
             width: double.infinity,
+            decoration: BoxDecoration(
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(0, 4),
+                    blurRadius: AppSize.s5)
+              ],
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                stops: const [0.0, 1.0],
+                colors: [
+                  Theme.of(context).primaryColor,
+                  Theme.of(context).colorScheme.secondary,
+                ],
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
             child: ElevatedButton(
                 onPressed: () {
                   if (stateRendererType ==
