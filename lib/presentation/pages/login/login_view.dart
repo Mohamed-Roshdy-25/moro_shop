@@ -5,8 +5,13 @@ import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/presentation/bloc/login/login_bloc.dart';
 import 'package:moro_shop/presentation/common/freezed_data_classes.dart';
+import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
+import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
 import 'package:moro_shop/presentation/common/widgets/auth_header_widget.dart';
+import 'package:moro_shop/presentation/resources/font_manager.dart';
 import 'package:moro_shop/presentation/resources/routes_manager.dart';
+import 'package:moro_shop/presentation/resources/strings_manager.dart';
+import 'package:moro_shop/presentation/resources/values_manager.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -43,10 +48,28 @@ class _LoginViewState extends State<LoginView> {
   }
 
   @override
+  void dispose() {
+    LoginBloc.isUserLoggedInSuccessfullyStreamController.close();
+    _emailController.dispose();
+    _passController.dispose();
+    super.dispose();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
       create: (_) => instance<LoginBloc>(),
-      child: BlocBuilder<LoginBloc, LoginState>(
+      child: BlocConsumer<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginLoadingState) {
+            LoadingState(stateRendererType: StateRendererType.popupLoadingState,message: AppStrings.loading).getScreenWidget(context);
+          }
+          if (state is LoginErrorState) {
+            ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context);
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             body: _buildBody(context),
@@ -70,19 +93,19 @@ class _LoginViewState extends State<LoginView> {
   _loginForm(context) {
     return SafeArea(
       child: Container(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          padding: const EdgeInsets.fromLTRB(AppPadding.p20, AppPadding.p10, AppPadding.p20, AppPadding.p10),
+          margin: const EdgeInsets.fromLTRB(AppMargin.m20, AppMargin.m10, AppMargin.m20, AppMargin.m10),
           child: Column(
             children: [
               const Text(
                 'Hello',
-                style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: FontSize.s60, fontWeight: FontWeight.bold),
               ),
               const Text(
                 'Sign in into your account',
                 style: TextStyle(color: Colors.grey),
               ),
-              const SizedBox(height: 30.0),
+              const SizedBox(height: AppSize.s30),
               Form(
                   key: _formKey,
                   child: Column(
@@ -98,23 +121,23 @@ class _LoginViewState extends State<LoginView> {
                         child: TextFormField(
                           controller: _emailController,
                           decoration: const InputDecoration(
-                            label: Text("E-mail"),
-                            hintText: "Enter your email",
+                            label: Text(AppStrings.email),
+                            hintText: AppStrings.emailHintText,
                           ),
                           validator: (value) {
-                            if(value?.isEmpty??false){
-                              return "E-mail is too short";
+                            if (value?.isEmpty ?? false) {
+                              return AppStrings.emailErrorText;
                             }
                             return null;
                           },
                         ),
                       ),
-                      const SizedBox(height: 30.0),
+                      const SizedBox(height: AppSize.s30),
                       Container(
                         decoration: BoxDecoration(boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
-                            blurRadius: 20,
+                            blurRadius: AppSize.s20,
                             offset: const Offset(0, 5),
                           )
                         ]),
@@ -122,12 +145,12 @@ class _LoginViewState extends State<LoginView> {
                           controller: _passController,
                           obscureText: true,
                           decoration: const InputDecoration(
-                            label: Text("Password"),
-                            hintText: "Enter your password",
+                            label: Text(AppStrings.password),
+                            hintText: AppStrings.passwordHintText,
                           ),
                           validator: (value) {
-                            if(value?.isEmpty??false){
-                              return "password is too short";
+                            if (value?.isEmpty ?? false) {
+                              return AppStrings.passwordErrorText;
                             }
                             return null;
                           },
@@ -135,12 +158,12 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       const SizedBox(height: 15.0),
                       Container(
-                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                        margin: const EdgeInsets.fromLTRB(AppMargin.m10, AppMargin.m0, AppMargin.m10, AppMargin.m20),
                         alignment: Alignment.topRight,
                         child: GestureDetector(
                           onTap: () {},
                           child: const Text(
-                            "Forgot your password?",
+                            AppStrings.forgetPassword,
                             style: TextStyle(
                               color: Colors.grey,
                             ),
@@ -153,7 +176,7 @@ class _LoginViewState extends State<LoginView> {
                             BoxShadow(
                                 color: Colors.black26,
                                 offset: Offset(0, 4),
-                                blurRadius: 5.0)
+                                blurRadius: AppSize.s5)
                           ],
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
@@ -168,7 +191,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         child: ElevatedButton(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                            padding: const EdgeInsets.fromLTRB(AppPadding.p40, AppPadding.p10, AppPadding.p40, AppPadding.p10),
                             child: Text(
                               'Sign In'.toUpperCase(),
                               style: const TextStyle(
@@ -178,7 +201,7 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ),
                           onPressed: () {
-                            if(_formKey.currentState!.validate()){
+                            if (_formKey.currentState!.validate()) {
                               BlocProvider.of<LoginBloc>(context).add(
                                   PostLoginEvent(_emailController.text,
                                       _passController.text));
@@ -187,12 +210,12 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                        margin: const EdgeInsets.fromLTRB(AppMargin.m10, AppMargin.m20, AppMargin.m10, AppMargin.m20),
                         //child: Text('Don\'t have an account? Create'),
                         child: Text.rich(TextSpan(children: [
-                          const TextSpan(text: "Don't have an account? "),
+                          const TextSpan(text: AppStrings.dontHaveAccount),
                           TextSpan(
-                            text: 'Create',
+                            text: AppStrings.create,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.secondary),
