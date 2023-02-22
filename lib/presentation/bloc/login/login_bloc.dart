@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/domain/models/models.dart';
+import 'package:moro_shop/app/constants.dart';
+import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/domain/use_case/login_use_case.dart';
 import 'package:moro_shop/presentation/common/freezed_data_classes.dart';
 
@@ -21,14 +22,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event is PostLoginEvent) {
         emit(LoginLoadingState());
 
-        (await loginUseCase.execute(
+        loginObject = loginObject.copyWith(email: event.email,password: event.password);
+        ( await loginUseCase.execute(
           LoginUseCaseInput(loginObject.email, loginObject.password),
-        ))
-            .fold((failure) {
-          emit(LoginErrorState(event.loginModel.message));
-          print('error ==> ${event.loginModel.message}');
+        )).fold((failure) {
+          emit(LoginErrorState(failure.message));
         }, (data) {
-          emit(LoginSuccessState(event.loginModel.message));
+          emit(LoginSuccessState(data.message));
+          Constants.token = data.loginDataModel?.token.orEmpty();
           isUserLoggedInSuccessfullyStreamController.add(true);
         });
       }

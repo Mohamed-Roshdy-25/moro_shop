@@ -8,10 +8,11 @@ abstract class LoginEvent extends Equatable {
 }
 
 class PostLoginEvent extends LoginEvent{
-  final LoginModel loginModel;
+  final String email;
+  final String password;
 
-  const PostLoginEvent(this.loginModel);
+  const PostLoginEvent(this.email, this.password);
 
   @override
-  List<Object> get props => [loginModel];
+  List<Object> get props => [email,password];
 }
