@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/app/constants.dart';
+import 'package:moro_shop/app/extensions.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 const String APPLICATION_JSON = "application/json";
@@ -18,14 +19,14 @@ class DioFactory {
 
   DioFactory(this._appPreferences);
 
-  Future<Dio> getDio() async {
+   Future<Dio> getDio() async {
     Dio dio = Dio();
 
     String lang = await _appPreferences.getAppLanguage();
 
     Map<String, String> headers = {
       CONTENT_TYPE: APPLICATION_JSON,
-      AUTHORIZATION: Constants.token,
+      AUTHORIZATION: Constants.token.orEmpty(),
       DEFAULT_LANGUAGE: lang,
     };
 

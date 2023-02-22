@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:moro_shop/app/constants.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/data/data_sources/remote_data_source.dart';
 import 'package:moro_shop/data/mappers/mappers.dart';
+import 'package:moro_shop/data/network/error_handler.dart';
 import 'package:moro_shop/data/network/failure.dart';
 import 'package:moro_shop/data/network/network_info.dart';
 import 'package:moro_shop/data/network/requests.dart';
@@ -28,10 +28,10 @@ class RepositoryImpl implements Repository{
           return Left(Failure(response.status.orFalse(), response.message.orEmpty()));
         }
       }catch (error){
-        return Left(Failure(false, error.toString()));
+        return Left(ErrorHandler.handle(error).failure);
       }
     }else{
-      return Left(Failure(false, Constants.checkInternet));
+      return Left(DataSource.noInternetConnection.getFailure());
     }
   }
   
