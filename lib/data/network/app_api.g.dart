@@ -21,7 +21,7 @@ class _AppServiceClient implements AppServiceClient {
   String? baseUrl;
 
   @override
-  Future<LoginResponse> login(
+  Future<LoginOrRegisterResponse> login(
     email,
     password,
   ) async {
@@ -32,8 +32,8 @@ class _AppServiceClient implements AppServiceClient {
       'email': email,
       'password': password,
     };
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<LoginResponse>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<LoginOrRegisterResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -45,7 +45,42 @@ class _AppServiceClient implements AppServiceClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = LoginResponse.fromJson(_result.data!);
+    final value = LoginOrRegisterResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<LoginOrRegisterResponse> register(
+    email,
+    password,
+    name,
+    phone,
+    image,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'email': email,
+      'password': password,
+      'name': name,
+      'phone': phone,
+      'image': image,
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<LoginOrRegisterResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'register',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = LoginOrRegisterResponse.fromJson(_result.data!);
     return value;
   }
 

@@ -1,6 +1,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/data/data_sources/remote_data_source.dart';
@@ -10,7 +11,9 @@ import 'package:moro_shop/data/network/network_info.dart';
 import 'package:moro_shop/data/repository_impl/repository_impl.dart';
 import 'package:moro_shop/domain/repository/repository.dart';
 import 'package:moro_shop/domain/use_case/login_use_case.dart';
+import 'package:moro_shop/domain/use_case/register_use_case.dart';
 import 'package:moro_shop/presentation/bloc/login/login_bloc.dart';
+import 'package:moro_shop/presentation/bloc/register/register_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final instance = GetIt.instance;
@@ -66,15 +69,14 @@ initLoginModule() {
 //   }
 // }
 //
-// initRegisterModule() {
-//   if (!GetIt.I.isRegistered<RegisterUseCase>()) {
-//     instance
-//         .registerFactory<RegisterUseCase>(() => RegisterUseCase(instance()));
-//     instance.registerFactory<RegisterViewModel>(
-//         () => RegisterViewModel(instance()));
-//     instance.registerFactory<ImagePicker>(() => ImagePicker());
-//   }
-// }
+initRegisterModule() {
+  if (!GetIt.I.isRegistered<RegisterUseCase>()) {
+    instance
+        .registerFactory<RegisterUseCase>(() => RegisterUseCase(instance()));
+    instance.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: instance()));
+    instance.registerFactory<ImagePicker>(() => ImagePicker());
+  }
+}
 //
 // initHomeModule() {
 //   if (!GetIt.I.isRegistered<HomeUseCase>()) {

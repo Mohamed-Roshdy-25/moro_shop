@@ -29,7 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginErrorState(failure.message));
         }, (data) {
           emit(LoginSuccessState(data.message));
-          Constants.token = data.loginDataModel?.token.orEmpty();
+          Constants.token = data.loginOrRegisterDataModel?.token.orEmpty();
           isUserLoggedInSuccessfullyStreamController.add(true);
         });
       }

@@ -25,7 +25,6 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
-  var loginObject = LoginObject('', '');
 
   AppPreferences? _appPreferences;
 
@@ -212,15 +211,20 @@ class _LoginViewState extends State<LoginView> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(AppMargin.m10, AppMargin.m20, AppMargin.m10, AppMargin.m20),
                         //child: Text('Don\'t have an account? Create'),
-                        child: Text.rich(TextSpan(children: [
-                          const TextSpan(text: AppStrings.dontHaveAccount),
-                          TextSpan(
-                            text: AppStrings.create,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.secondary),
-                          ),
-                        ])),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, Routes.registerRoute);
+                          },
+                          child: Text.rich(TextSpan(children: [
+                            const TextSpan(text: AppStrings.dontHaveAccount),
+                            TextSpan(
+                              text: AppStrings.create,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.secondary),
+                            ),
+                          ]),
+                        )),
                       ),
                     ],
                   )),

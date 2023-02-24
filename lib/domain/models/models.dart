@@ -1,4 +1,4 @@
-class LoginDataModel{
+class LoginOrRegisterDataModel{
   int id;
   String name;
   String email;
@@ -6,14 +6,14 @@ class LoginDataModel{
   String imageUrl;
   String token;
 
-  LoginDataModel(
+  LoginOrRegisterDataModel(
       this.id, this.name, this.email, this.phone, this.imageUrl, this.token);
 }
 
-class LoginModel{
+class LoginOrRegisterModel{
   bool status;
   String message;
-  LoginDataModel? loginDataModel;
+  LoginOrRegisterDataModel? loginOrRegisterDataModel;
 
-  LoginModel(this.status,this.message,this.loginDataModel);
+  LoginOrRegisterModel(this.status,this.message,this.loginOrRegisterDataModel);
 }
