@@ -10,11 +10,13 @@ import 'package:moro_shop/presentation/pages/profile/profile_view.dart';
 import 'package:moro_shop/presentation/pages/register/register_view.dart';
 import 'package:moro_shop/presentation/pages/search/search_view.dart';
 import 'package:moro_shop/presentation/pages/settings/settings_view.dart';
+import 'package:moro_shop/presentation/pages/splash/splash_view.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
 
 
 class Routes {
-  static const String introRoute = '/';
+  static const String splashRoute = '/';
+  static const String introRoute = '/intro';
   static const String loginRoute = '/login';
   static const String registerRoute = '/register';
   static const String homeRoute = '/home';
@@ -29,6 +31,8 @@ class Routes {
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
     switch(settings.name){
+      case Routes.splashRoute:
+        return MaterialPageRoute(builder: (_) => const SplashView(),);
       case Routes.loginRoute:
         initLoginModule();
         return MaterialPageRoute(builder: (_) => const LoginView(),);

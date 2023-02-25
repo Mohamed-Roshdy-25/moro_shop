@@ -6,6 +6,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/app/constants.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/domain/use_case/register_use_case.dart';
@@ -15,14 +16,13 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  RegisterUseCase registerUseCase;
+  final RegisterUseCase registerUseCase;
   var registerObject = RegisterObject('', '', '', '', '');
   File? imageFile;
+  final AppPreferences appPreferences;
 
-  static StreamController isUserRegisteredSuccessfullyStreamController =
-  StreamController<bool>();
 
-  RegisterBloc({required this.registerUseCase}) : super(RegisterInitial()) {
+  RegisterBloc({required this.registerUseCase,required this.appPreferences}) : super(RegisterInitial()) {
     on<RegisterEvent>((event, emit) async {
       if (event is PostRegisterEvent) {
         emit(RegisterLoadingState());
@@ -39,10 +39,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         ))
             .fold((failure) {
           emit(RegisterErrorState(failure.message));
-        }, (data) {
-          emit(RegisterSuccessState(data.message));
+        }, (data)  {
           Constants.token = data.loginOrRegisterDataModel?.token.orEmpty();
-          isUserRegisteredSuccessfullyStreamController.add(true);
+           appPreferences.setUserLoggedIn();
+          emit(RegisterSuccessState(data.message));
         });
       }
       if(event is PickCameraPhotoEvent){
