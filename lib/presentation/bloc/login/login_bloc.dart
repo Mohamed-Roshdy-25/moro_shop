@@ -1,7 +1,7 @@
-import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/app/constants.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/domain/use_case/login_use_case.dart';
@@ -11,13 +11,13 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginUseCase loginUseCase;
+  final LoginUseCase loginUseCase;
+  final AppPreferences appPreferences;
   var loginObject = LoginObject('', '');
 
-  static StreamController isUserLoggedInSuccessfullyStreamController =
-      StreamController<bool>();
 
-  LoginBloc({required this.loginUseCase}) : super(LoginInitial()) {
+
+  LoginBloc({required this.loginUseCase,required this.appPreferences}) : super(LoginInitial()) {
     on<LoginEvent>((event, emit) async {
       if (event is PostLoginEvent) {
         emit(LoginLoadingState());
@@ -27,10 +27,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           LoginUseCaseInput(loginObject.email, loginObject.password),
         )).fold((failure) {
           emit(LoginErrorState(failure.message));
-        }, (data) {
-          emit(LoginSuccessState(data.message));
+        }, (data)  {
           Constants.token = data.loginOrRegisterDataModel?.token.orEmpty();
-          isUserLoggedInSuccessfullyStreamController.add(true);
+             appPreferences.setUserLoggedIn();
+          emit(LoginSuccessState(data.message));
         });
       }
     });

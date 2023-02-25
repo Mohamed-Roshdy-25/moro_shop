@@ -56,7 +56,7 @@ Future<void> initAppModule() async {
 initLoginModule() {
   if (!GetIt.I.isRegistered<LoginUseCase>()) {
     instance.registerFactory<LoginUseCase>(() => LoginUseCase(instance()));
-    instance.registerFactory<LoginBloc>(() => LoginBloc(loginUseCase: instance()));
+    instance.registerFactory<LoginBloc>(() => LoginBloc(loginUseCase: instance(), appPreferences: instance()));
   }
 }
 
@@ -73,7 +73,7 @@ initRegisterModule() {
   if (!GetIt.I.isRegistered<RegisterUseCase>()) {
     instance
         .registerFactory<RegisterUseCase>(() => RegisterUseCase(instance()));
-    instance.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: instance()));
+    instance.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: instance(), appPreferences: instance()));
     instance.registerFactory<ImagePicker>(() => ImagePicker());
   }
 }

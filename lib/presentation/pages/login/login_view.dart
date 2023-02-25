@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/presentation/bloc/login/login_bloc.dart';
-import 'package:moro_shop/presentation/common/freezed_data_classes.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
 import 'package:moro_shop/presentation/common/widgets/auth_header_widget.dart';
@@ -26,29 +23,8 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _passController = TextEditingController();
 
 
-  AppPreferences? _appPreferences;
-
-  @override
-  void initState() {
-    _isLoggedIn();
-    super.initState();
-  }
-
-  _isLoggedIn() {
-    LoginBloc.isUserLoggedInSuccessfullyStreamController.stream
-        .listen((isLoggedIn) {
-      if (isLoggedIn) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          _appPreferences?.setUserLoggedIn();
-          Navigator.of(context).pushReplacementNamed(Routes.homeRoute);
-        });
-      }
-    });
-  }
-
   @override
   void dispose() {
-    LoginBloc.isUserLoggedInSuccessfullyStreamController.close();
     _emailController.dispose();
     _passController.dispose();
     super.dispose();
@@ -64,6 +40,9 @@ class _LoginViewState extends State<LoginView> {
         listener: (context, state) {
           if (state is LoginLoadingState) {
             LoadingState(stateRendererType: StateRendererType.popupLoadingState,message: AppStrings.loading).getScreenWidget(context);
+          }
+          if(state is LoginSuccessState){
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.homeRoute, ModalRoute.withName(Routes.splashRoute));
           }
           if (state is LoginErrorState) {
             ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context);
