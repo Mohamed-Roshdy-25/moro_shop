@@ -3,8 +3,10 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'responses.g.dart';
 
+//Login & Register Responses
+
 @JsonSerializable()
-class LoginDataResponse {
+class LoginOrRegisterDataResponse {
   @JsonKey(name: 'id')
   int? id;
   @JsonKey(name: 'name')
@@ -18,26 +20,26 @@ class LoginDataResponse {
   @JsonKey(name: 'token')
   String? token;
 
-  LoginDataResponse(
+  LoginOrRegisterDataResponse(
       this.id, this.name, this.email, this.phone, this.imageUrl, this.token);
 
-  factory LoginDataResponse.fromJson(Map<String,dynamic> json) => _$LoginDataResponseFromJson(json);
+  factory LoginOrRegisterDataResponse.fromJson(Map<String,dynamic> json) => _$LoginOrRegisterDataResponseFromJson(json);
 
-  Map<String,dynamic> toJson() => _$LoginDataResponseToJson(this);
+  Map<String,dynamic> toJson() => _$LoginOrRegisterDataResponseToJson(this);
 }
 
 @JsonSerializable()
-class LoginResponse{
+class LoginOrRegisterResponse{
   @JsonKey(name: 'status')
   bool? status;
   @JsonKey(name: 'message')
   String? message;
   @JsonKey(name: 'data')
-  LoginDataResponse? loginDataResponse;
+  LoginOrRegisterDataResponse? loginOrRegisterDataResponse;
 
-  LoginResponse(this.status,this.message,this.loginDataResponse);
+  LoginOrRegisterResponse(this.status,this.message,this.loginOrRegisterDataResponse);
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
+  factory LoginOrRegisterResponse.fromJson(Map<String, dynamic> json) => _$LoginOrRegisterResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
+  Map<String, dynamic> toJson() => _$LoginOrRegisterResponseToJson(this);
 }
