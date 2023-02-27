@@ -6,7 +6,7 @@ import 'package:moro_shop/presentation/resources/strings_manager.dart';
 import 'package:moro_shop/presentation/resources/values_manager.dart';
 
 enum StateRendererType {
-  // POPUP STATES (DIALOG)
+  // POPUP STATES (DIALOG).
   popupLoadingState,
   popupErrorState,
   popupSuccessState,
