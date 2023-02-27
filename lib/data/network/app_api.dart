@@ -20,4 +20,18 @@ abstract class AppServiceClient {
     @Field('phone') String phone,
     @Field('image') String image,
   );
+
+  @POST('verify-email')
+  Future<ForgotPasswordResponse> forgotPassword(@Field('email') String email);
+
+  @POST('verify-code')
+  Future<VerifyCodeResponse> verifyCode(
+      @Field('email') String email, @Field('code') String code);
+
+  @POST('reset-password')
+  Future<ResetPasswordResponse> resetPassword(@Field('email') String email,
+      @Field('code') String code, @Field('password') String password);
+
+  // @GET("/get-state/{id}")
+  // Future<AllCountryResponse> getStates(@Path("id") String id);
 }

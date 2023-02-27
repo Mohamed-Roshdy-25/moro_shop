@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:moro_shop/app/constants.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
@@ -82,7 +83,6 @@ extension FlowStateExtension on FlowState{
    getScreenWidget(context,{Function? retryActionFunction}){
     switch(runtimeType){
       case LoadingState:
-        dismissDialog(context);
         if(getStateRendererType() == StateRendererType.popupLoadingState) {
           _showPopup(context, getStateRendererType(),message: getMessage());
         }else{
@@ -111,7 +111,7 @@ extension FlowStateExtension on FlowState{
   _showPopup(
       BuildContext context, StateRendererType stateRendererType,
       {String? message,String title = Constants.empty, Function? retryActionFunction}) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => showDialog(
+    SchedulerBinding.instance.addPostFrameCallback((_) => showDialog(
         context: context,
         builder: (context) => StateRenderer(
           stateRendererType: stateRendererType,
@@ -120,13 +120,10 @@ extension FlowStateExtension on FlowState{
           retryActionFunction: retryActionFunction ?? () {},
         )));
   }
+}
 
-  _isCurrentDialogShowing(BuildContext context) =>
-      ModalRoute.of(context)?.isCurrent != true;
-
-  dismissDialog(BuildContext context) {
-    if (_isCurrentDialogShowing(context)) {
-      Navigator.of(context, rootNavigator: true).pop(true);
-    }
-  }
+dismissDialog(BuildContext context) {
+  SchedulerBinding.instance.addPostFrameCallback((_) {
+    Navigator.pop(context);
+  });
 }

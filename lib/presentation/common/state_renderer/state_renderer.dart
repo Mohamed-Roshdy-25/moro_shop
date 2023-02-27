@@ -162,19 +162,22 @@ class StateRenderer extends StatelessWidget {
             ),
             child: ElevatedButton(
                 onPressed: () {
-                  if (stateRendererType ==
-                      StateRendererType.fullScreenErrorState) {
-                    // call retry function
-                    retryActionFunction?.call()??(){};
-                  } else {
-                    // popup error state
-                    Navigator.of(context).pop();
-                  }
+                  retryActionFunction?.call();
+                  // if (stateRendererType ==
+                  //     StateRendererType.fullScreenErrorState) {
+                  //   // call retry function
+                  //   retryActionFunction?.call()??(){};
+                  // } else if(stateRendererType ==
+                  //     StateRendererType.popupErrorState){
+                  //   // popup error state
+                  //   Navigator.of(context).pop();
+                  //   dismissDialog(context);
+                  // }else{
+                  //   Navigator.of(context).pop();
+                  // }
                 },
                 child: Text(buttonTitle))),
       ),
     );
   }
-
-
 }

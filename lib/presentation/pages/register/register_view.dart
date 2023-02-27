@@ -57,7 +57,7 @@ class _RegisterViewState extends State<RegisterView> {
           }
           if (state is RegisterErrorState) {
             ErrorState(StateRendererType.popupErrorState, state.message)
-                .getScreenWidget(context);
+                .getScreenWidget(context,retryActionFunction: (){Navigator.pop(context);});
           }
           if (state is PickCameraPhotoState) {
             if (state.imageFile != null) {

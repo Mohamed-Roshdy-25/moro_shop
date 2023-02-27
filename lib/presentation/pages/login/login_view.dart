@@ -45,7 +45,7 @@ class _LoginViewState extends State<LoginView> {
             Navigator.of(context).pushNamedAndRemoveUntil(Routes.homeRoute, ModalRoute.withName(Routes.splashRoute));
           }
           if (state is LoginErrorState) {
-            ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context);
+            ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,retryActionFunction: (){Navigator.pop(context);});
           }
         },
         builder: (context, state) {
@@ -139,7 +139,9 @@ class _LoginViewState extends State<LoginView> {
                         margin: const EdgeInsets.fromLTRB(AppMargin.m10, AppMargin.m0, AppMargin.m10, AppMargin.m20),
                         alignment: Alignment.topRight,
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, Routes.forgotPasswordRoute);
+                          },
                           child: const Text(
                             AppStrings.forgetPassword,
                             style: TextStyle(

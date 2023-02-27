@@ -17,3 +17,24 @@ class LoginOrRegisterModel{
 
   LoginOrRegisterModel(this.status,this.message,this.loginOrRegisterDataModel);
 }
+
+class ForgotPasswordModel{
+  bool status;
+  String message;
+
+  ForgotPasswordModel(this.status,this.message);
+}
+
+class VerifyCodeModel{
+  bool status;
+  String message;
+
+  VerifyCodeModel(this.status,this.message);
+}
+
+class ResetPasswordModel{
+  bool status;
+  String message;
+
+  ResetPasswordModel(this.status,this.message);
+}

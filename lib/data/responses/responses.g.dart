@@ -46,3 +46,43 @@ Map<String, dynamic> _$LoginOrRegisterResponseToJson(
       'message': instance.message,
       'data': instance.loginOrRegisterDataResponse,
     };
+
+ForgotPasswordResponse _$ForgotPasswordResponseFromJson(
+        Map<String, dynamic> json) =>
+    ForgotPasswordResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+    );
+
+Map<String, dynamic> _$ForgotPasswordResponseToJson(
+        ForgotPasswordResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
+
+VerifyCodeResponse _$VerifyCodeResponseFromJson(Map<String, dynamic> json) =>
+    VerifyCodeResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+    );
+
+Map<String, dynamic> _$VerifyCodeResponseToJson(VerifyCodeResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
+
+ResetPasswordResponse _$ResetPasswordResponseFromJson(
+        Map<String, dynamic> json) =>
+    ResetPasswordResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+    );
+
+Map<String, dynamic> _$ResetPasswordResponseToJson(
+        ResetPasswordResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
