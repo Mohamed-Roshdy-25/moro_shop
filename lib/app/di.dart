@@ -10,10 +10,16 @@ import 'package:moro_shop/data/network/dio_factory.dart';
 import 'package:moro_shop/data/network/network_info.dart';
 import 'package:moro_shop/data/repository_impl/repository_impl.dart';
 import 'package:moro_shop/domain/repository/repository.dart';
+import 'package:moro_shop/domain/use_case/forgot_password_use_case.dart';
 import 'package:moro_shop/domain/use_case/login_use_case.dart';
 import 'package:moro_shop/domain/use_case/register_use_case.dart';
+import 'package:moro_shop/domain/use_case/reset_password_use_case.dart';
+import 'package:moro_shop/domain/use_case/verify_code_use_case.dart';
+import 'package:moro_shop/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:moro_shop/presentation/bloc/login/login_bloc.dart';
 import 'package:moro_shop/presentation/bloc/register/register_bloc.dart';
+import 'package:moro_shop/presentation/bloc/reset_password/reset_password_bloc.dart';
+import 'package:moro_shop/presentation/bloc/verify_code/verify_code_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final instance = GetIt.instance;
@@ -60,15 +66,33 @@ initLoginModule() {
   }
 }
 
-// initForgotPasswordModule() {
-//   if (!GetIt.I.isRegistered<ForgotPasswordUseCase>()) {
-//     instance.registerFactory<ForgotPasswordUseCase>(
-//         () => ForgotPasswordUseCase(instance()));
-//     instance.registerFactory<ForgotPasswordViewModel>(
-//         () => ForgotPasswordViewModel(instance()));
-//   }
-// }
-//
+initForgotPasswordModule() {
+  if (!GetIt.I.isRegistered<ForgotPasswordUseCase>()) {
+    instance.registerFactory<ForgotPasswordUseCase>(
+        () => ForgotPasswordUseCase(instance()));
+    instance.registerFactory<ForgotPasswordBloc>(
+        () => ForgotPasswordBloc(forgotPasswordUseCase: instance()));
+  }
+}
+
+initVerifyCodeModule() {
+  if (!GetIt.I.isRegistered<VerifyCodeUseCase>()) {
+    instance.registerFactory<VerifyCodeUseCase>(
+            () => VerifyCodeUseCase(instance()));
+    instance.registerFactory<VerifyCodeBloc>(
+            () => VerifyCodeBloc(verifyCodeUseCase: instance()));
+  }
+}
+
+initResetPasswordModule() {
+  if (!GetIt.I.isRegistered<ResetPasswordUseCase>()) {
+    instance.registerFactory<ResetPasswordUseCase>(
+            () => ResetPasswordUseCase(instance()));
+    instance.registerFactory<ResetPasswordBloc>(
+            () => ResetPasswordBloc(resetPasswordUseCase: instance(),appPreferences: instance()));
+  }
+}
+
 initRegisterModule() {
   if (!GetIt.I.isRegistered<RegisterUseCase>()) {
     instance

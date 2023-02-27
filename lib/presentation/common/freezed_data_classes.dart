@@ -13,3 +13,19 @@ class RegisterObject with _$RegisterObject {
   factory RegisterObject(String email, String password, String name,
       String phone, String image) = _RegisterObject;
 }
+
+
+@freezed
+class ForgotPasswordObject with _$ForgotPasswordObject {
+  factory ForgotPasswordObject(String email) = _ForgotPasswordObject;
+}
+
+@freezed
+class VerifyCodeObject with _$VerifyCodeObject {
+  factory VerifyCodeObject(String email,String code) = _VerifyCodeObject;
+}
+
+@freezed
+class ResetPasswordObject with _$ResetPasswordObject {
+  factory ResetPasswordObject(String email,String code,String password) = _ResetPasswordObject;
+}

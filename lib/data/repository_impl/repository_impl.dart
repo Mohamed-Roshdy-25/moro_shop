@@ -52,5 +52,58 @@ class RepositoryImpl implements Repository{
       return Left(DataSource.noInternetConnection.getFailure());
     }
   }
-  
+
+  @override
+  Future<Either<Failure, ForgotPasswordModel>> forgotPassword(ForgotPasswordRequest forgotPasswordRequest) async {
+    if(await _networkInfo.isConnected){
+      try{
+        ForgotPasswordResponse response = await _remoteDataSource.forgotPassword(forgotPasswordRequest);
+        if(response.status == true) {
+          return Right(response.toDomain());
+        }else{
+          return Left(Failure(response.status.orFalse(), response.message.orEmpty()));
+        }
+      }catch (error){
+        return Left(ErrorHandler.handle(error).failure);
+      }
+    }else{
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyCodeModel>> verifyCode(VerifyCodeRequest verifyCodeRequest) async {
+    if(await _networkInfo.isConnected){
+      try{
+        VerifyCodeResponse response = await _remoteDataSource.verifyCode(verifyCodeRequest);
+        if(response.status == true) {
+          return Right(response.toDomain());
+        }else{
+          return Left(Failure(response.status.orFalse(), response.message.orEmpty()));
+        }
+      }catch (error){
+        return Left(ErrorHandler.handle(error).failure);
+      }
+    }else{
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResetPasswordModel>> resetPassword(ResetPasswordRequest resetPasswordRequest) async {
+    if(await _networkInfo.isConnected){
+      try{
+        ResetPasswordResponse response = await _remoteDataSource.resetPassword(resetPasswordRequest);
+        if(response.status == true) {
+          return Right(response.toDomain());
+        }else{
+          return Left(Failure(response.status.orFalse(), response.message.orEmpty()));
+        }
+      }catch (error){
+        return Left(ErrorHandler.handle(error).failure);
+      }
+    }else{
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+  }
 }

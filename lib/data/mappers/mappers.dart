@@ -18,3 +18,31 @@ extension LoginResponseMapper on LoginOrRegisterResponse {
     );
   }
 }
+
+
+extension ForgotPasswordResponseMapper on ForgotPasswordResponse {
+  ForgotPasswordModel toDomain() {
+    return ForgotPasswordModel(
+      status.orFalse(),
+      message.orEmpty(),
+    );
+  }
+}
+
+extension VerifyCodeResponseMapper on VerifyCodeResponse {
+  VerifyCodeModel toDomain() {
+    return VerifyCodeModel(
+      status.orFalse(),
+      message.orEmpty(),
+    );
+  }
+}
+
+extension ResetPasswordResponseMapper on ResetPasswordResponse {
+  ResetPasswordModel toDomain() {
+    return ResetPasswordModel(
+      status.orFalse(),
+      message.orEmpty(),
+    );
+  }
+}

@@ -43,3 +43,45 @@ class LoginOrRegisterResponse{
 
   Map<String, dynamic> toJson() => _$LoginOrRegisterResponseToJson(this);
 }
+
+@JsonSerializable()
+class ForgotPasswordResponse{
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  ForgotPasswordResponse(this.status,this.message);
+
+  factory ForgotPasswordResponse.fromJson(Map<String, dynamic> json) => _$ForgotPasswordResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ForgotPasswordResponseToJson(this);
+}
+
+@JsonSerializable()
+class VerifyCodeResponse{
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  VerifyCodeResponse(this.status,this.message);
+
+  factory VerifyCodeResponse.fromJson(Map<String, dynamic> json) => _$VerifyCodeResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VerifyCodeResponseToJson(this);
+}
+
+@JsonSerializable()
+class ResetPasswordResponse{
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  ResetPasswordResponse(this.status,this.message);
+
+  factory ResetPasswordResponse.fromJson(Map<String, dynamic> json) => _$ResetPasswordResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ResetPasswordResponseToJson(this);
+}
