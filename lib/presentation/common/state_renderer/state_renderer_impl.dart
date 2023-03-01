@@ -94,7 +94,7 @@ extension FlowStateExtension on FlowState{
         if(getStateRendererType() == StateRendererType.popupErrorState) {
           _showPopup(context, getStateRendererType(),message: getMessage(),retryActionFunction: retryActionFunction);
         }else{
-          return StateRenderer(stateRendererType: getStateRendererType());
+          return StateRenderer(stateRendererType: getStateRendererType(),message: getMessage(),retryActionFunction: retryActionFunction,);
         }
          break;
       case SuccessState:
@@ -122,8 +122,14 @@ extension FlowStateExtension on FlowState{
   }
 }
 
+_isCurrentDialogShowing(context) =>
+    ModalRoute.of(context)?.isCurrent != true;
+
 dismissDialog(BuildContext context) {
   SchedulerBinding.instance.addPostFrameCallback((_) {
-    Navigator.pop(context);
+    if (_isCurrentDialogShowing(context)) {
+      Navigator.of(context, rootNavigator: true).pop(true);
+    }
   });
+
 }

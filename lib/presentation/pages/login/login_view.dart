@@ -81,7 +81,7 @@ class _LoginViewState extends State<LoginView> {
               ),
               const Text(
                 'Sign in into your account',
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: Colors.grey,),
               ),
               const SizedBox(height: AppSize.s30),
               Form(

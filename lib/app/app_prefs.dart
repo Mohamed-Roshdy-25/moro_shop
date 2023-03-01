@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const String langKey = 'lang_key';
 const String prefsKeyIsUserLoggedIn = "PREFS_KEY_IS_USER_LOGGED_IN";
+const String prefsKeyOnBoardingScreenViewed = "PREFS_KEY_ONBOARDING_SCREEN_VIEWED";
 
 
 class AppPreferences {
@@ -26,6 +27,14 @@ class AppPreferences {
 
   Future<bool> isUserLoggedIn() async{
     return _sharedPreferences.getBool(prefsKeyIsUserLoggedIn) ?? false;
+  }
+
+  Future<void> setOnBoardingScreenViewed() async{
+    _sharedPreferences.setBool(prefsKeyOnBoardingScreenViewed, true);
+  }
+
+  Future<bool> isOnBoardingScreenViewed() async{
+    return _sharedPreferences.getBool(prefsKeyOnBoardingScreenViewed) ?? false;
   }
 
   Future<void> logout() async {

@@ -28,7 +28,7 @@ class StateRenderer extends StatelessWidget {
   const StateRenderer(
       {required this.stateRendererType,
       this.title = '',
-      this.message = AppStrings.loading, this.retryActionFunction,
+      this.message = '', this.retryActionFunction,
       super.key});
 
   @override

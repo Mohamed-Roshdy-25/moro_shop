@@ -1,3 +1,19 @@
+class IntroViewProduct {
+  final String productName;
+  final String productImageUrl;
+  final String currentPrice;
+  final String oldPrice;
+  final bool isLiked;
+
+  const IntroViewProduct({
+    required this.productName,
+    required this.productImageUrl,
+    required this.currentPrice,
+    required this.oldPrice,
+    required this.isLiked,
+  });
+}
+
 class LoginOrRegisterDataModel{
   int id;
   String name;
