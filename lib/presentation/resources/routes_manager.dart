@@ -41,6 +41,9 @@ class RouteGenerator {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashView(),);
 
+      case Routes.introRoute:
+        return MaterialPageRoute(builder: (_) =>  IntroView(),);
+
       case Routes.loginRoute:
         initLoginModule();
         return MaterialPageRoute(builder: (_) => const LoginView(),);
@@ -65,8 +68,6 @@ class RouteGenerator {
         String code = args['pin'];
         return MaterialPageRoute(builder: (_) =>  ResetPasswordView(email: email,code: code),);
 
-      case Routes.introRoute:
-        return MaterialPageRoute(builder: (_) => const IntroView(),);
 
       case Routes.homeRoute:
         return MaterialPageRoute(builder: (_) => const HomeView(),);
