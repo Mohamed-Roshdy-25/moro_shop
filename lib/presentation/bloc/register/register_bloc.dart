@@ -7,8 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moro_shop/app/app_prefs.dart';
-import 'package:moro_shop/app/constants.dart';
-import 'package:moro_shop/app/extensions.dart';
+import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/register_use_case.dart';
 import 'package:moro_shop/presentation/common/freezed_data_classes.dart';
 
@@ -40,9 +39,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
             .fold((failure) {
           emit(RegisterErrorState(failure.message));
         }, (data)  {
-          Constants.token = data.loginOrRegisterDataModel?.token.orEmpty();
+          appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
            appPreferences.setUserLoggedIn();
-          emit(RegisterSuccessState(data.message));
+          emit(RegisterSuccessState(data));
         });
       }
       if(event is PickCameraPhotoEvent){

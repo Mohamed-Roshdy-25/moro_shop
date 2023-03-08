@@ -2,8 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moro_shop/app/app_prefs.dart';
-import 'package:moro_shop/app/constants.dart';
-import 'package:moro_shop/app/extensions.dart';
+import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/login_use_case.dart';
 import 'package:moro_shop/presentation/common/freezed_data_classes.dart';
 
@@ -28,9 +27,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         )).fold((failure) {
           emit(LoginErrorState(failure.message));
         }, (data)  {
-          Constants.token = data.loginOrRegisterDataModel?.token.orEmpty();
+          appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
              appPreferences.setUserLoggedIn();
-          emit(LoginSuccessState(data.message));
+          emit(LoginSuccessState(data));
         });
       }
     });

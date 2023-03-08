@@ -6,13 +6,13 @@ import 'package:moro_shop/domain/repository/repository.dart';
 import 'package:moro_shop/domain/use_case/base_use_case.dart';
 
 class RegisterUseCase
-    implements BaseUseCase<RegisterUseCaseInput, LoginOrRegisterModel> {
+    implements BaseUseCase<RegisterUseCaseInput, LoginOrRegisterOrResetPasswordModel> {
   final Repository _repository;
 
   RegisterUseCase(this._repository);
 
   @override
-  Future<Either<Failure, LoginOrRegisterModel>> execute(
+  Future<Either<Failure, LoginOrRegisterOrResetPasswordModel>> execute(
       RegisterUseCaseInput input) async {
     return await _repository.register(RegisterRequest(
       input.email,

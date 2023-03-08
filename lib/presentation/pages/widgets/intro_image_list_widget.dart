@@ -122,8 +122,6 @@ class _ImageListViewState extends State<ImageListView> {
           controller: _scrollController,
           itemCount: 5,
           itemBuilder: (context, index) {
-            print('index is ====> $index');
-            print('start index is ===> ${widget.startIndex}');
             return CachedNetworkImage(
               imageUrl: products[widget.startIndex + index].productImageUrl,
               imageBuilder: (con5text, imageProvider) {

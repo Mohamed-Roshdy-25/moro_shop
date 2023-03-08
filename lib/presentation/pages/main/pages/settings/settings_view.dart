@@ -10,6 +10,6 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Center(child: Text('settings'),);
   }
 }

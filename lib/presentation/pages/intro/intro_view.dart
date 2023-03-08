@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/app/di.dart';
-import 'package:moro_shop/presentation/pages/widgets/intro_image_list_view.dart';
+import 'package:moro_shop/presentation/pages/widgets/intro_image_list_widget.dart';
 import 'package:moro_shop/presentation/resources/routes_manager.dart';
 import 'package:moro_shop/presentation/resources/style_manager.dart';
 import 'package:moro_shop/presentation/resources/values_manager.dart';

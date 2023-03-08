@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moro_shop/app/di.dart';
+import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/presentation/bloc/login/login_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
@@ -34,18 +34,17 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LoginBloc>(
-      create: (_) => instance<LoginBloc>(),
-      child: BlocConsumer<LoginBloc, LoginState>(
+    return BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginLoadingState) {
             LoadingState(stateRendererType: StateRendererType.popupLoadingState,message: AppStrings.loading).getScreenWidget(context);
           }
           if(state is LoginSuccessState){
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.homeRoute, ModalRoute.withName(Routes.splashRoute));
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.mainRoute, ModalRoute.withName(Routes.splashRoute),arguments: state.loginOrRegisterModel.loginOrRegisterOrResetPasswordDataModel?.imageUrl.orEmpty());
           }
           if (state is LoginErrorState) {
-            ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,retryActionFunction: (){Navigator.pop(context);});
+            ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,retryActionFunction: (){Navigator.pop(context);},
+            buttonTitle: AppStrings.ok);
           }
         },
         builder: (context, state) {
@@ -53,8 +52,7 @@ class _LoginViewState extends State<LoginView> {
             body: _buildBody(context),
           );
         },
-      ),
-    );
+      );
   }
 
   _buildBody(context) {

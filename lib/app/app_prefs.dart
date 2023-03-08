@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String langKey = 'lang_key';
 const String prefsKeyIsUserLoggedIn = "PREFS_KEY_IS_USER_LOGGED_IN";
 const String prefsKeyOnBoardingScreenViewed = "PREFS_KEY_ONBOARDING_SCREEN_VIEWED";
+const String prefsKeySaveToken = "PREFS_KEY_SAVE_TOKEN";
 
 
 class AppPreferences {
@@ -39,5 +40,13 @@ class AppPreferences {
 
   Future<void> logout() async {
     _sharedPreferences.remove(prefsKeyIsUserLoggedIn);
+  }
+
+  Future<void> saveToken(String token) async {
+     _sharedPreferences.setString(prefsKeySaveToken, token);
+  }
+
+  Future<String> getToken() async {
+    return _sharedPreferences.getString(prefsKeySaveToken) ?? '';
   }
 }

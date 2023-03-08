@@ -15,12 +15,12 @@ class LoginLoadingState extends LoginState{
 }
 
 class LoginSuccessState extends LoginState{
-  final String message;
+  final LoginOrRegisterOrResetPasswordModel loginOrRegisterModel;
 
-  const LoginSuccessState(this.message);
+  const LoginSuccessState(this.loginOrRegisterModel);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [loginOrRegisterModel];
 }
 
 class LoginErrorState extends LoginState{

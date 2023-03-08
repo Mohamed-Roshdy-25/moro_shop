@@ -3,11 +3,13 @@ import 'package:moro_shop/data/network/requests.dart';
 import 'package:moro_shop/data/responses/responses.dart';
 
 abstract class RemoteDataSource {
-  Future<LoginOrRegisterResponse> login(LoginRequest loginRequest);
-  Future<LoginOrRegisterResponse> register(RegisterRequest registerRequest);
+  Future<LoginOrRegisterOrResetPasswordResponse> login(LoginRequest loginRequest);
+  Future<LoginOrRegisterOrResetPasswordResponse> register(RegisterRequest registerRequest);
   Future<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
   Future<VerifyCodeResponse> verifyCode(VerifyCodeRequest verifyCodeRequest);
-  Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest resetPasswordRequest);
+  Future<LoginOrRegisterOrResetPasswordResponse> resetPassword(ResetPasswordRequest resetPasswordRequest);
+  Future<CategoriesResponse> getCategories();
+  Future<CategoryAllDataResponse> getCategoryProducts(int categoryId);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -16,13 +18,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   RemoteDataSourceImpl(this.appServiceClient);
 
   @override
-  Future<LoginOrRegisterResponse> login(LoginRequest loginRequest) async {
+  Future<LoginOrRegisterOrResetPasswordResponse> login(LoginRequest loginRequest) async {
     return await appServiceClient.login(
         loginRequest.email, loginRequest.password);
   }
 
   @override
-  Future<LoginOrRegisterResponse> register(
+  Future<LoginOrRegisterOrResetPasswordResponse> register(
       RegisterRequest registerRequest) async {
     return await appServiceClient.register(
       registerRequest.email,
@@ -44,7 +46,17 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest resetPasswordRequest) async {
+  Future<LoginOrRegisterOrResetPasswordResponse> resetPassword(ResetPasswordRequest resetPasswordRequest) async {
     return await appServiceClient.resetPassword(resetPasswordRequest.email, resetPasswordRequest.code, resetPasswordRequest.password);
+  }
+
+  @override
+  Future<CategoriesResponse> getCategories() async {
+    return await appServiceClient.getCategories();
+  }
+
+  @override
+  Future<CategoryAllDataResponse> getCategoryProducts(int categoryId) async {
+    return await appServiceClient.getCategoryProducts(categoryId);
   }
 }

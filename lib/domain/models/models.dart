@@ -14,7 +14,10 @@ class IntroViewProduct {
   });
 }
 
-class LoginOrRegisterDataModel{
+
+//Login & Register & Reset Password Models
+
+class LoginOrRegisterOrResetPasswordDataModel{
   int id;
   String name;
   String email;
@@ -22,17 +25,20 @@ class LoginOrRegisterDataModel{
   String imageUrl;
   String token;
 
-  LoginOrRegisterDataModel(
+  LoginOrRegisterOrResetPasswordDataModel(
       this.id, this.name, this.email, this.phone, this.imageUrl, this.token);
 }
 
-class LoginOrRegisterModel{
+class LoginOrRegisterOrResetPasswordModel{
   bool status;
   String message;
-  LoginOrRegisterDataModel? loginOrRegisterDataModel;
+  LoginOrRegisterOrResetPasswordDataModel? loginOrRegisterOrResetPasswordDataModel;
 
-  LoginOrRegisterModel(this.status,this.message,this.loginOrRegisterDataModel);
+  LoginOrRegisterOrResetPasswordModel(this.status,this.message,this.loginOrRegisterOrResetPasswordDataModel);
 }
+
+
+// ForgotPassword Model
 
 class ForgotPasswordModel{
   bool status;
@@ -41,6 +47,9 @@ class ForgotPasswordModel{
   ForgotPasswordModel(this.status,this.message);
 }
 
+
+//VerifyCode Model
+
 class VerifyCodeModel{
   bool status;
   String message;
@@ -48,9 +57,63 @@ class VerifyCodeModel{
   VerifyCodeModel(this.status,this.message);
 }
 
-class ResetPasswordModel{
+
+//Categories Model
+
+class CategoryModel{
+  int id;
+  String name;
+  String image;
+
+
+  CategoryModel(this.id,this.name,this.image);
+}
+
+class CategoriesDataModel{
+  List<CategoryModel>? categoriesModel;
+
+
+  CategoriesDataModel(this.categoriesModel);
+}
+
+class CategoriesModel{
   bool status;
   String message;
+  CategoriesDataModel? categoriesDataModel;
 
-  ResetPasswordModel(this.status,this.message);
+
+  CategoriesModel(this.status,this.message, this.categoriesDataModel);
+}
+
+
+//Category Products Model
+
+class ProductModel{
+  int id;
+  double price;
+  double oldPrice;
+  double discount;
+  String image;
+  String name;
+  String description;
+  List<String> images;
+  bool inFavorites;
+  bool inCart;
+
+  ProductModel(this.id, this.price, this.oldPrice, this.discount, this.image,
+      this.name, this.description, this.images, this.inFavorites, this.inCart);
+}
+
+class CategoryAllProductsModel{
+  List<ProductModel>? products;
+
+  CategoryAllProductsModel(this.products);
+}
+
+class CategoryAllDataModel{
+  bool status;
+  String message;
+  CategoryAllProductsModel? categoryAllProductsModel;
+
+  CategoryAllDataModel(this.status,this.message,this.categoryAllProductsModel);
 }

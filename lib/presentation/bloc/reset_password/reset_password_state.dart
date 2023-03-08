@@ -15,12 +15,13 @@ class ResetPasswordLoadingState extends ResetPasswordState{
 }
 
 class ResetPasswordSuccessState extends ResetPasswordState{
-  final String message;
+  final LoginOrRegisterOrResetPasswordModel loginOrRegisterOrResetPasswordModel;
 
-  const ResetPasswordSuccessState(this.message);
+
+  const ResetPasswordSuccessState(this.loginOrRegisterOrResetPasswordModel);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [loginOrRegisterOrResetPasswordModel];
 }
 
 class ResetPasswordErrorState extends ResetPasswordState{

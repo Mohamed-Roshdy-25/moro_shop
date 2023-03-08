@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moro_shop/app/constants.dart';
 import 'package:moro_shop/presentation/resources/assets_manager.dart';
 import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
@@ -23,31 +24,35 @@ class StateRenderer extends StatelessWidget {
   final StateRendererType stateRendererType;
   final String title;
   final String message;
+  final String buttonTitle;
   final Function? retryActionFunction;
 
-  const StateRenderer(
-      {required this.stateRendererType,
-      this.title = '',
-      this.message = '', this.retryActionFunction,
-      super.key});
+  const StateRenderer({
+    required this.stateRendererType,
+    this.title = Constants.empty,
+    this.message = Constants.empty,
+    this.retryActionFunction,
+    super.key,
+    this.buttonTitle = Constants.empty,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return _getStateWidget(context);
+    return _getStateWidget(context, buttonTitle);
   }
 
-  _getStateWidget(context) {
+  _getStateWidget(context, String buttonTitle) {
     switch (stateRendererType) {
       case StateRendererType.popupLoadingState:
-        return _getPopUpDialog(
-            context, [_getAnimatedImage(JsonAssets.loading),_getMessage(message)]);
+        return _getPopUpDialog(context,
+            [_getAnimatedImage(JsonAssets.loading), _getMessage(message)]);
       case StateRendererType.popupErrorState:
         return _getPopUpDialog(
           context,
           [
             _getAnimatedImage(JsonAssets.error),
             _getMessage(message),
-            _getRetryButton(AppStrings.ok, context)
+            _getRetryButton(buttonTitle, context)
           ],
         );
       case StateRendererType.popupSuccessState:
@@ -55,7 +60,7 @@ class StateRenderer extends StatelessWidget {
           _getAnimatedImage(JsonAssets.success),
           _getMessage(title),
           _getMessage(message),
-          _getRetryButton(AppStrings.ok, context)
+          _getRetryButton(buttonTitle, context)
         ]);
       case StateRendererType.fullScreenLoadingState:
         return _getItemsColumn(
@@ -76,8 +81,7 @@ class StateRenderer extends StatelessWidget {
     }
   }
 
-
-   _getPopUpDialog(BuildContext context, List<Widget> children) {
+  _getPopUpDialog(BuildContext context, List<Widget> children) {
     return Dialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s14)),
@@ -93,10 +97,6 @@ class StateRenderer extends StatelessWidget {
       ),
     );
   }
-
-
-
-
 
   Widget _getDialogContent(BuildContext context, List<Widget> children) {
     return Column(

@@ -6,19 +6,20 @@ part of 'responses.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LoginOrRegisterDataResponse _$LoginOrRegisterDataResponseFromJson(
-        Map<String, dynamic> json) =>
-    LoginOrRegisterDataResponse(
-      json['id'] as int?,
-      json['name'] as String?,
-      json['email'] as String?,
-      json['phone'] as String?,
-      json['image'] as String?,
-      json['token'] as String?,
-    );
+LoginOrRegisterOrResetPasswordDataResponse
+    _$LoginOrRegisterOrResetPasswordDataResponseFromJson(
+            Map<String, dynamic> json) =>
+        LoginOrRegisterOrResetPasswordDataResponse(
+          json['id'] as int?,
+          json['name'] as String?,
+          json['email'] as String?,
+          json['phone'] as String?,
+          json['image'] as String?,
+          json['token'] as String?,
+        );
 
-Map<String, dynamic> _$LoginOrRegisterDataResponseToJson(
-        LoginOrRegisterDataResponse instance) =>
+Map<String, dynamic> _$LoginOrRegisterOrResetPasswordDataResponseToJson(
+        LoginOrRegisterOrResetPasswordDataResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
@@ -28,23 +29,24 @@ Map<String, dynamic> _$LoginOrRegisterDataResponseToJson(
       'token': instance.token,
     };
 
-LoginOrRegisterResponse _$LoginOrRegisterResponseFromJson(
-        Map<String, dynamic> json) =>
-    LoginOrRegisterResponse(
-      json['status'] as bool?,
-      json['message'] as String?,
-      json['data'] == null
-          ? null
-          : LoginOrRegisterDataResponse.fromJson(
-              json['data'] as Map<String, dynamic>),
-    );
+LoginOrRegisterOrResetPasswordResponse
+    _$LoginOrRegisterOrResetPasswordResponseFromJson(
+            Map<String, dynamic> json) =>
+        LoginOrRegisterOrResetPasswordResponse(
+          json['status'] as bool?,
+          json['message'] as String?,
+          json['data'] == null
+              ? null
+              : LoginOrRegisterOrResetPasswordDataResponse.fromJson(
+                  json['data'] as Map<String, dynamic>),
+        );
 
-Map<String, dynamic> _$LoginOrRegisterResponseToJson(
-        LoginOrRegisterResponse instance) =>
+Map<String, dynamic> _$LoginOrRegisterOrResetPasswordResponseToJson(
+        LoginOrRegisterOrResetPasswordResponse instance) =>
     <String, dynamic>{
       'status': instance.status,
       'message': instance.message,
-      'data': instance.loginOrRegisterDataResponse,
+      'data': instance.loginOrRegisterOrResetPasswordDataResponse,
     };
 
 ForgotPasswordResponse _$ForgotPasswordResponseFromJson(
@@ -73,16 +75,108 @@ Map<String, dynamic> _$VerifyCodeResponseToJson(VerifyCodeResponse instance) =>
       'message': instance.message,
     };
 
-ResetPasswordResponse _$ResetPasswordResponseFromJson(
-        Map<String, dynamic> json) =>
-    ResetPasswordResponse(
-      json['status'] as bool?,
-      json['message'] as String?,
+CategoryResponse _$CategoryResponseFromJson(Map<String, dynamic> json) =>
+    CategoryResponse(
+      json['id'] as int?,
+      json['name'] as String?,
+      json['image'] as String?,
     );
 
-Map<String, dynamic> _$ResetPasswordResponseToJson(
-        ResetPasswordResponse instance) =>
+Map<String, dynamic> _$CategoryResponseToJson(CategoryResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'image': instance.image,
+    };
+
+CategoriesDataResponse _$CategoriesDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    CategoriesDataResponse(
+      (json['data'] as List<dynamic>?)
+          ?.map((e) => CategoryResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$CategoriesDataResponseToJson(
+        CategoriesDataResponse instance) =>
+    <String, dynamic>{
+      'data': instance.categoriesResponse,
+    };
+
+CategoriesResponse _$CategoriesResponseFromJson(Map<String, dynamic> json) =>
+    CategoriesResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+      json['data'] == null
+          ? null
+          : CategoriesDataResponse.fromJson(
+              json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$CategoriesResponseToJson(CategoriesResponse instance) =>
     <String, dynamic>{
       'status': instance.status,
       'message': instance.message,
+      'data': instance.categoriesDataResponse,
+    };
+
+ProductResponse _$ProductResponseFromJson(Map<String, dynamic> json) =>
+    ProductResponse(
+      json['id'] as int?,
+      (json['price'] as num?)?.toDouble(),
+      (json['old_price'] as num?)?.toDouble(),
+      (json['discount'] as num?)?.toDouble(),
+      json['image'] as String?,
+      json['name'] as String?,
+      json['description'] as String?,
+      (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      json['in_favorites'] as bool?,
+      json['in_cart'] as bool?,
+    );
+
+Map<String, dynamic> _$ProductResponseToJson(ProductResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'price': instance.price,
+      'old_price': instance.oldPrice,
+      'discount': instance.discount,
+      'image': instance.image,
+      'name': instance.name,
+      'description': instance.description,
+      'images': instance.images,
+      'in_favorites': instance.inFavorites,
+      'in_cart': instance.inCart,
+    };
+
+CategoryAllProductsResponse _$CategoryAllProductsResponseFromJson(
+        Map<String, dynamic> json) =>
+    CategoryAllProductsResponse(
+      (json['data'] as List<dynamic>?)
+          ?.map((e) => ProductResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$CategoryAllProductsResponseToJson(
+        CategoryAllProductsResponse instance) =>
+    <String, dynamic>{
+      'data': instance.products,
+    };
+
+CategoryAllDataResponse _$CategoryAllDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    CategoryAllDataResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+      json['data'] == null
+          ? null
+          : CategoryAllProductsResponse.fromJson(
+              json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$CategoryAllDataResponseToJson(
+        CategoryAllDataResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.categoryAllProductsResponse,
     };
