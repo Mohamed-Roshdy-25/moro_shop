@@ -5,13 +5,13 @@ import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/repository/repository.dart';
 import 'package:moro_shop/domain/use_case/base_use_case.dart';
 
-class ResetPasswordUseCase implements BaseUseCase<ResetPasswordUseCaseInput,ResetPasswordModel>{
+class ResetPasswordUseCase implements BaseUseCase<ResetPasswordUseCaseInput,LoginOrRegisterOrResetPasswordModel>{
   final Repository _repository;
 
   ResetPasswordUseCase(this._repository);
 
   @override
-  Future<Either<Failure, ResetPasswordModel>> execute(ResetPasswordUseCaseInput input) async {
+  Future<Either<Failure, LoginOrRegisterOrResetPasswordModel>> execute(ResetPasswordUseCaseInput input) async {
     return await _repository.resetPassword(ResetPasswordRequest(input.email,input.code,input.password));
   }
 

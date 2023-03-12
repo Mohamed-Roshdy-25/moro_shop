@@ -2,6 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moro_shop/app/app_prefs.dart';
+import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/reset_password_use_case.dart';
 import 'package:moro_shop/presentation/common/freezed_data_classes.dart';
 
@@ -21,10 +22,12 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
         resetPasswordObject = resetPasswordObject.copyWith(email: event.email,code: event.code,password: event.password);
         (await resetPasswordUseCase.execute(ResetPasswordUseCaseInput(resetPasswordObject.email, resetPasswordObject.code,resetPasswordObject.password)))
           .fold((failure) {
-      emit(ResetPasswordErrorState(failure.message));
+          emit(ResetPasswordErrorState(failure.message));
       }, (data) {
+          appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
           appPreferences.setUserLoggedIn();
-      emit(ResetPasswordSuccessState(data.message));
+          emit(ResetPasswordSuccessState(data));
+
       });
     }
     });

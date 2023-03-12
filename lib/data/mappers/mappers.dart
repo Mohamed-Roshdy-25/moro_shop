@@ -2,47 +2,111 @@ import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/data/responses/responses.dart';
 import 'package:moro_shop/domain/models/models.dart';
 
-extension LoginDataResponseMapper on LoginOrRegisterDataResponse {
-  LoginOrRegisterDataModel toDomain() {
-    return LoginOrRegisterDataModel(id.orZero(), name.orEmpty(), email.orEmpty(),
-        phone.orEmpty(), imageUrl.orEmpty(), token.orEmpty());
+//Login & Register & Reset Password Mappers
+
+extension LoginOrRegisterOrResetPasswordDataResponseMapper
+    on LoginOrRegisterOrResetPasswordDataResponse? {
+  LoginOrRegisterOrResetPasswordDataModel toDomain() {
+    return LoginOrRegisterOrResetPasswordDataModel((this?.id).orZero(), (this?.name).orEmpty(),
+        (this?.email).orEmpty(), (this?.phone).orEmpty(), (this?.imageUrl).orEmpty(), (this?.token).orEmpty());
   }
 }
 
-extension LoginResponseMapper on LoginOrRegisterResponse {
-  LoginOrRegisterModel toDomain() {
-    return LoginOrRegisterModel(
-      status.orFalse(),
-      message.orEmpty(),
-      loginOrRegisterDataResponse?.toDomain(),
+extension LoginOrRegisterOrResetPasswordResponseMapper
+    on LoginOrRegisterOrResetPasswordResponse? {
+  LoginOrRegisterOrResetPasswordModel toDomain() {
+    return LoginOrRegisterOrResetPasswordModel(
+      (this?.status).orFalse(),
+      (this?.message).orEmpty(),
+      (this?.loginOrRegisterOrResetPasswordDataResponse).toDomain(),
     );
   }
 }
 
+// ForgotPassword Mapper
 
-extension ForgotPasswordResponseMapper on ForgotPasswordResponse {
+extension ForgotPasswordResponseMapper on ForgotPasswordResponse? {
   ForgotPasswordModel toDomain() {
     return ForgotPasswordModel(
-      status.orFalse(),
-      message.orEmpty(),
+      (this?.status).orFalse(),
+      (this?.message).orEmpty(),
     );
   }
 }
 
-extension VerifyCodeResponseMapper on VerifyCodeResponse {
+//VerifyCode Mapper
+
+extension VerifyCodeResponseMapper on VerifyCodeResponse? {
   VerifyCodeModel toDomain() {
     return VerifyCodeModel(
-      status.orFalse(),
-      message.orEmpty(),
+      (this?.status).orFalse(),
+      (this?.message).orEmpty(),
     );
   }
 }
 
-extension ResetPasswordResponseMapper on ResetPasswordResponse {
-  ResetPasswordModel toDomain() {
-    return ResetPasswordModel(
-      status.orFalse(),
-      message.orEmpty(),
+//Categories Mapper
+
+extension CategoryDataResponseMapper on CategoryResponse? {
+  CategoryModel toDomain() {
+    return CategoryModel(
+      (this?.id).orZero(),
+      (this?.name).orEmpty(),
+      (this?.image).orEmpty(),
     );
+  }
+}
+
+extension CategoryAllDataResponseMapper on CategoriesDataResponse? {
+  CategoriesDataModel toDomain() {
+    List<CategoryModel> categories = (this?.categoriesResponse?.map((categoryResponse) => categoryResponse.toDomain())??const Iterable.empty()).cast<CategoryModel>().toList();
+    return CategoriesDataModel(categories);
+  }
+}
+
+extension CategoryResponseMapper on CategoriesResponse? {
+  CategoriesModel toDomain() {
+    return CategoriesModel(
+      (this?.status).orFalse(),
+      (this?.message).orEmpty(),
+      (this?.categoriesDataResponse).toDomain(),
+    );
+  }
+}
+
+//Category Products Mapper
+
+extension ProductResponseExtension on ProductResponse? {
+  ProductModel toDomain() {
+    return ProductModel(
+      (this?.id).orZero(),
+      (this?.price).orZero(),
+      (this?.oldPrice).orZero(),
+      (this?.discount).orZero(),
+      (this?.image).orEmpty(),
+      (this?.name).orEmpty(),
+      (this?.description).orEmpty(),
+      (this?.images).orEmpty(),
+      (this?.inFavorites).orFalse(),
+      (this?.inCart).orFalse(),
+    );
+  }
+}
+
+extension CategoryAllProductsResponseExtension on CategoryAllProductsResponse? {
+  CategoryAllProductsModel toDomain() {
+
+      List<ProductModel> products = ( this?.products?.map((productResponse) => productResponse.toDomain())??const Iterable.empty()).cast<ProductModel>().toList();
+
+    return CategoryAllProductsModel(products);
+  }
+}
+
+extension CategoryAllDataResponseExtension on CategoryAllDataResponse? {
+  CategoryAllDataModel toDomain(){
+    return CategoryAllDataModel(
+        (this?.status).orFalse(),
+        (this?.message).orEmpty(),
+        (this?.categoryAllProductsResponse).toDomain());
   }
 }

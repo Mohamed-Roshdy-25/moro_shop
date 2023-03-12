@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
@@ -23,21 +22,20 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ForgotPasswordBloc>(
-      create: (context) => instance<ForgotPasswordBloc>(),
-      child: BlocConsumer<ForgotPasswordBloc,ForgotPasswordState>(
+    return BlocConsumer<ForgotPasswordBloc,ForgotPasswordState>(
         listener: (context, state) {
           if (state is ForgotPasswordLoadingState) {
             LoadingState(stateRendererType: StateRendererType.popupLoadingState,message: AppStrings.loading).getScreenWidget(context);
           }
           if(state is ForgotPasswordSuccessState){
-            SuccessState(state.message).getScreenWidget(context);
+            dismissDialog(context);
+            Navigator.pushNamed(context, Routes.verifyCodeRoute,arguments: _emailController.text);
           }
           if (state is ForgotPasswordErrorState) {
             ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,retryActionFunction: (){
               Navigator.pop(context);
               Navigator.pushNamed(context, Routes.verifyCodeRoute,arguments: _emailController.text);
-            });
+            },buttonTitle: AppStrings.ok);
           }
         },
         builder: (context, state) {
@@ -164,7 +162,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                           text: AppStrings.login,
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
-                                              Navigator.pushNamed(context, Routes.loginRoute);
+                                              Navigator.pushNamedAndRemoveUntil(context, Routes.loginRoute,ModalRoute.withName(Routes.splashRoute));
                                             },
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -186,7 +184,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               )
           );
         },
-      ),
-    );
+      );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
   }
 }

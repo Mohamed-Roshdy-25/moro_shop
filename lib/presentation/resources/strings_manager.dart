@@ -2,7 +2,7 @@ class AppStrings {
   static const String noRouteFound = "No Route Found";
   static const String timeoutError = "Request Timeout";
   static const String requestCanceled = "Request Canceled";
-  static const String unKnownError = "Server Error";
+  static const String unKnownError = "UnKnown Error, Please Retry Again";
   static const String cacheError = "Cache Error";
   static const String noInternetError = "No Internet Connection";
   static const String badCertificate = "Bad Certificate";

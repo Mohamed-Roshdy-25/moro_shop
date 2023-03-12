@@ -34,7 +34,8 @@ class DioFactory {
         baseUrl: Constants.baseUrl,
         headers: headers,
         receiveTimeout: Constants.apiTimeOut,
-        sendTimeout: Constants.apiTimeOut);
+        sendTimeout: Constants.apiTimeOut,
+    );
 
 
     if(!kReleaseMode)

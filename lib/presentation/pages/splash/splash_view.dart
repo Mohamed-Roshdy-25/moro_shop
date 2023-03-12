@@ -14,7 +14,6 @@ import 'package:moro_shop/presentation/resources/assets_manager.dart';
 import 'package:moro_shop/presentation/resources/routes_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
 
-
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
 
@@ -26,46 +25,6 @@ class _SplashViewState extends State<SplashView> {
   Timer? _timer;
   final AppPreferences _appPreferences = instance<AppPreferences>();
   final NetworkInfo _networkInfo = instance<NetworkInfo>();
-
-  _startDelay() {
-    dismissDialog(context);
-    _timer = Timer(const Duration(seconds: Constants.splashDelay), _goNext);
-  }
-
-  _goNext()  async {
-    if (await checkInternet()) {
-      // navigate to main screen
-      _appPreferences.isUserLoggedIn().then((isUserLoggedIn) {
-        if (isUserLoggedIn) {
-          Navigator.pushNamedAndRemoveUntil(context, Routes.homeRoute,ModalRoute.withName(Routes.splashRoute));
-        } else {
-          // navigate to login screen
-          _appPreferences
-              .isOnBoardingScreenViewed()
-              .then((isOnBoardingScreenViewed) {
-            if (isOnBoardingScreenViewed) {
-              Navigator.pushNamedAndRemoveUntil(context, Routes.loginRoute,ModalRoute.withName(Routes.splashRoute));
-            } else {
-              // navigate to onBoarding screen
-              Navigator.pushNamedAndRemoveUntil(context, Routes.introRoute,ModalRoute.withName(Routes.splashRoute));
-            }
-          });
-        }
-      });
-    }else{
-      ErrorState(StateRendererType.popupErrorState, AppStrings.noInternetError).getScreenWidget(context,retryActionFunction: (){
-        _startDelay();
-      });
-    }
-  }
-
-  Future<bool> checkInternet() async {
-    if (await _networkInfo.isConnected) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   @override
   void initState() {
@@ -91,7 +50,7 @@ class _SplashViewState extends State<SplashView> {
           ),
         ),
         child: FutureBuilder(
-          future: checkInternet(),
+          future: _checkInternet(),
           builder: (context, snapshot) {
             if (snapshot.data == true) {
               return _buildBody(context);
@@ -106,10 +65,58 @@ class _SplashViewState extends State<SplashView> {
     );
   }
 
+  _startDelay() {
+    dismissDialog(context);
+    _timer = Timer(const Duration(seconds: Constants.splashDelay), _goNext);
+  }
+
+  _goNext() async {
+    if (await _checkInternet()) {
+      // navigate to main screen
+      _appPreferences.isUserLoggedIn().then((isUserLoggedIn) {
+        if (isUserLoggedIn) {
+          Navigator.pushNamedAndRemoveUntil(context, Routes.mainRoute,
+              ModalRoute.withName(Routes.splashRoute));
+        } else {
+          // navigate to login screen
+          _appPreferences
+              .isOnBoardingScreenViewed()
+              .then((isOnBoardingScreenViewed) {
+            if (isOnBoardingScreenViewed) {
+              Navigator.pushNamedAndRemoveUntil(context, Routes.loginRoute,
+                  ModalRoute.withName(Routes.splashRoute));
+            } else {
+              // navigate to onBoarding screen
+              Navigator.pushNamedAndRemoveUntil(context, Routes.introRoute,
+                  ModalRoute.withName(Routes.splashRoute));
+            }
+          });
+        }
+      });
+    } else {
+      ErrorState(StateRendererType.popupErrorState, AppStrings.noInternetError)
+          .getScreenWidget(
+        context,
+        retryActionFunction: () {
+          _startDelay();
+        },
+        buttonTitle: AppStrings.retryAgain,
+      );
+    }
+  }
+
+  Future<bool> _checkInternet() async {
+    if (await _networkInfo.isConnected) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Widget _buildBody(context) {
     return Center(
-          child: Lottie.asset(JsonAssets.splashIcon),
-        );
+      child: Lottie.asset(JsonAssets.splashIcon),
+    );
   }
 
   @override

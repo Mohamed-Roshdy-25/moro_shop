@@ -4,7 +4,7 @@ import 'package:moro_shop/app/constants.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
 
-abstract class FlowState{
+abstract class FlowState {
   StateRendererType getStateRendererType();
   String getMessage();
 }
@@ -49,7 +49,8 @@ class SuccessState extends FlowState {
   String getMessage() => message;
 
   @override
-  StateRendererType getStateRendererType() => StateRendererType.popupSuccessState;
+  StateRendererType getStateRendererType() =>
+      StateRendererType.popupSuccessState;
 }
 
 // content state
@@ -79,51 +80,64 @@ class EmptyState extends FlowState {
       StateRendererType.fullScreenEmptyState;
 }
 
-extension FlowStateExtension on FlowState{
-   getScreenWidget(context,{Function? retryActionFunction}){
-    switch(runtimeType){
+extension FlowStateExtension on FlowState {
+  getScreenWidget(context, {Function? retryActionFunction,String buttonTitle = Constants.empty,}) {
+    switch (runtimeType) {
       case LoadingState:
-        if(getStateRendererType() == StateRendererType.popupLoadingState) {
-          _showPopup(context, getStateRendererType(),message: getMessage());
-        }else{
+        if (getStateRendererType() == StateRendererType.popupLoadingState) {
+          _showPopup(context, getStateRendererType(), message: getMessage());
+        } else {
           return StateRenderer(stateRendererType: getStateRendererType());
         }
-         break;
+        break;
       case ErrorState:
         dismissDialog(context);
-        if(getStateRendererType() == StateRendererType.popupErrorState) {
-          _showPopup(context, getStateRendererType(),message: getMessage(),retryActionFunction: retryActionFunction);
-        }else{
-          return StateRenderer(stateRendererType: getStateRendererType(),message: getMessage(),retryActionFunction: retryActionFunction,);
+        if (getStateRendererType() == StateRendererType.popupErrorState) {
+          _showPopup(context, getStateRendererType(),
+              message: getMessage(),
+              retryActionFunction: retryActionFunction,
+              buttonTitle: buttonTitle);
+        } else {
+          return StateRenderer(
+            stateRendererType: getStateRendererType(),
+            message: getMessage(),
+            retryActionFunction: retryActionFunction,
+          );
         }
-         break;
+        break;
       case SuccessState:
         dismissDialog(context);
-        if(getStateRendererType() == StateRendererType.popupLoadingState) {
-          _showPopup(context, getStateRendererType(),message: getMessage());
-        }else{
+        if (getStateRendererType() == StateRendererType.popupLoadingState) {
+          _showPopup(context, getStateRendererType(),
+              message: getMessage(), buttonTitle: buttonTitle);
+        } else {
           return StateRenderer(stateRendererType: getStateRendererType());
         }
     }
   }
 
-
   _showPopup(
-      BuildContext context, StateRendererType stateRendererType,
-      {String? message,String title = Constants.empty, Function? retryActionFunction}) {
+    BuildContext context,
+    StateRendererType stateRendererType, {
+    String? message,
+    String title = Constants.empty,
+    Function? retryActionFunction,
+    String buttonTitle = Constants.empty,
+  }) {
     SchedulerBinding.instance.addPostFrameCallback((_) => showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) => StateRenderer(
-          stateRendererType: stateRendererType,
-          message: message??AppStrings.loading,
-          title: title,
-          retryActionFunction: retryActionFunction ?? () {},
-        )));
+              stateRendererType: stateRendererType,
+              message: message ?? AppStrings.loading,
+              title: title,
+              retryActionFunction: retryActionFunction ?? () {},
+              buttonTitle: buttonTitle,
+            )));
   }
 }
 
-_isCurrentDialogShowing(context) =>
-    ModalRoute.of(context)?.isCurrent != true;
+_isCurrentDialogShowing(context) => ModalRoute.of(context)?.isCurrent != true;
 
 dismissDialog(BuildContext context) {
   SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -131,5 +145,4 @@ dismissDialog(BuildContext context) {
       Navigator.of(context, rootNavigator: true).pop(true);
     }
   });
-
 }

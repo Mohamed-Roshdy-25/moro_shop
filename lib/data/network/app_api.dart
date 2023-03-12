@@ -9,11 +9,11 @@ abstract class AppServiceClient {
   factory AppServiceClient(Dio dio, {String baseUrl}) = _AppServiceClient;
 
   @POST('login')
-  Future<LoginOrRegisterResponse> login(
+  Future<LoginOrRegisterOrResetPasswordResponse> login(
       @Field('email') String email, @Field('password') String password);
 
   @POST('register')
-  Future<LoginOrRegisterResponse> register(
+  Future<LoginOrRegisterOrResetPasswordResponse> register(
     @Field('email') String email,
     @Field('password') String password,
     @Field('name') String name,
@@ -29,9 +29,12 @@ abstract class AppServiceClient {
       @Field('email') String email, @Field('code') String code);
 
   @POST('reset-password')
-  Future<ResetPasswordResponse> resetPassword(@Field('email') String email,
+  Future<LoginOrRegisterOrResetPasswordResponse> resetPassword(@Field('email') String email,
       @Field('code') String code, @Field('password') String password);
 
-  // @GET("/get-state/{id}")
-  // Future<AllCountryResponse> getStates(@Path("id") String id);
+  @GET('categories')
+  Future<CategoriesResponse> getCategories();
+
+  @GET('categories/{categoryId}')
+  Future<CategoryAllDataResponse> getCategoryProducts(@Path('categoryId') int categoryId);
 }
