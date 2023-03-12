@@ -13,6 +13,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   final ResetPasswordUseCase resetPasswordUseCase;
   final AppPreferences appPreferences;
   var resetPasswordObject = ResetPasswordObject('','','');
+  LoginOrRegisterOrResetPasswordModel? loginOrRegisterOrResetPasswordModel;
 
   ResetPasswordBloc({required this.resetPasswordUseCase, required this.appPreferences}) : super(ResetPasswordInitial()) {
     on<ResetPasswordEvent>((event, emit) async {
@@ -24,6 +25,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
           .fold((failure) {
           emit(ResetPasswordErrorState(failure.message));
       }, (data) {
+          loginOrRegisterOrResetPasswordModel = data;
           appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
           appPreferences.setUserLoggedIn();
           emit(ResetPasswordSuccessState(data));

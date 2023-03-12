@@ -8,8 +8,8 @@ part 'category_products_state.dart';
 
 class CategoryProductsBloc
     extends Bloc<CategoryProductsEvent, CategoryProductsState> {
-
   final CategoryProductsUseCase categoryProductsUseCase;
+  CategoryAllDataModel? categoryAllDataModel;
 
 
   CategoryProductsBloc(this.categoryProductsUseCase)
@@ -25,6 +25,7 @@ class CategoryProductsBloc
           emit(GetCategoryProductsErrorState(failure.message));
           },
           (data) {
+            categoryAllDataModel = data;
           emit(GetCategoryProductsSuccessState(data));
           },
           );

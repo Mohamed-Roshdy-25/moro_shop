@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class _RegisterViewState extends State<RegisterView> {
         children: [
           Column(
             children: [
-              const AuthHeaderWidget(200, false, Icons.login_rounded),
+              const AuthHeaderWidget(200, false, icon: Icons.login_rounded),
               _registerForm(context),
             ],
           ),
@@ -275,6 +276,8 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                           ),
                           onPressed: () {
+                            String imageUrl = base64Encode((imageFile?.readAsBytesSync()??[]));
+
                             if (_formKey.currentState!.validate()) {
                               BlocProvider.of<RegisterBloc>(context).add(
                                 PostRegisterEvent(
@@ -282,7 +285,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   _passController.text,
                                   _nameController.text,
                                   _phoneController.text,
-                                  imageFile?.path ?? '',
+                                  imageUrl,
                                 ),
                               );
                             }

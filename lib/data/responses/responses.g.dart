@@ -180,3 +180,37 @@ Map<String, dynamic> _$CategoryAllDataResponseToJson(
       'message': instance.message,
       'data': instance.categoryAllProductsResponse,
     };
+
+UserDataResponse _$UserDataResponseFromJson(Map<String, dynamic> json) =>
+    UserDataResponse(
+      json['id'] as int?,
+      json['image'] as String?,
+      json['name'] as String?,
+      json['email'] as String?,
+      json['phone'] as String?,
+    );
+
+Map<String, dynamic> _$UserDataResponseToJson(UserDataResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'email': instance.email,
+      'image': instance.image,
+      'phone': instance.phone,
+    };
+
+ProfileResponse _$ProfileResponseFromJson(Map<String, dynamic> json) =>
+    ProfileResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+      json['data'] == null
+          ? null
+          : UserDataResponse.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ProfileResponseToJson(ProfileResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.userDataResponse,
+    };

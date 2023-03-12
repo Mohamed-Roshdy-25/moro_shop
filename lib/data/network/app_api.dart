@@ -37,4 +37,7 @@ abstract class AppServiceClient {
 
   @GET('categories/{categoryId}')
   Future<CategoryAllDataResponse> getCategoryProducts(@Path('categoryId') int categoryId);
+
+  @GET('profile')
+  Future<ProfileResponse> getProfile();
 }

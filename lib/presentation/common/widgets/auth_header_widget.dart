@@ -4,9 +4,9 @@ class AuthHeaderWidget extends StatelessWidget {
 
   final double _height;
   final bool _showIcon;
-  final IconData _icon;
+  final IconData? icon;
 
-  const AuthHeaderWidget(this._height, this._showIcon, this._icon, {super.key});
+  const AuthHeaderWidget(this._height, this._showIcon, {this.icon ,super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +95,7 @@ class AuthHeaderWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(
                     left: 5.0,
                     top: 20.0,
-                    right: 5.0,
+                    right: 10,
                     bottom: 20.0,
                   ),
                   decoration: BoxDecoration(
@@ -109,7 +109,7 @@ class AuthHeaderWidget extends StatelessWidget {
                     border: Border.all(width: 5, color: Colors.white),
                   ),
                   child: Icon(
-                    _icon,
+                    icon,
                     color: Colors.white,
                     size: 40.0,
                   ),

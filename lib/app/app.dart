@@ -5,6 +5,7 @@ import 'package:moro_shop/presentation/bloc/categories/categories_bloc.dart';
 import 'package:moro_shop/presentation/bloc/category_products/category_products_bloc.dart';
 import 'package:moro_shop/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:moro_shop/presentation/bloc/login/login_bloc.dart';
+import 'package:moro_shop/presentation/bloc/profile/profile_bloc.dart';
 import 'package:moro_shop/presentation/bloc/register/register_bloc.dart';
 import 'package:moro_shop/presentation/bloc/reset_password/reset_password_bloc.dart';
 import 'package:moro_shop/presentation/bloc/verify_code/verify_code_bloc.dart';
@@ -32,8 +33,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => instance<ForgotPasswordBloc>(),),
         BlocProvider(create: (_) => instance<VerifyCodeBloc>(),),
         BlocProvider(create: (_) => instance<ResetPasswordBloc>(),),
-        BlocProvider(create: (_) => instance<CategoryBloc>()..add(GetCategoriesEvent()),),
+        BlocProvider(create: (_) => instance<CategoryBloc>(),),
         BlocProvider(create: (_) => instance<CategoryProductsBloc>(),),
+        BlocProvider(create: (_) => instance<ProfileBloc>(),),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

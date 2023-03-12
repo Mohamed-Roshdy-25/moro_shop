@@ -11,4 +11,5 @@ abstract class Repository{
   Future<Either<Failure,LoginOrRegisterOrResetPasswordModel>> resetPassword(ResetPasswordRequest resetPasswordRequest);
   Future<Either<Failure,CategoriesModel>> getCategory();
   Future<Either<Failure,CategoryAllDataModel>> getCategoryProducts(int categoryId);
+  Future<Either<Failure,ProfileModel>> getProfile();
 }

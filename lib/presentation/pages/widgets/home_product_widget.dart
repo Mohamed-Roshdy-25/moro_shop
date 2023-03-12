@@ -23,8 +23,8 @@ class _HomeProductWidgetState extends State<HomeProductWidget> {
   @override
   void initState() {
     super.initState();
-      BlocProvider.of<CategoryProductsBloc>(context)
-          .add(GetCategoryProductsEvent(widget.categoryId));
+        BlocProvider.of<CategoryProductsBloc>(context)
+            .add(GetCategoryProductsEvent(widget.categoryId));
   }
 
   @override

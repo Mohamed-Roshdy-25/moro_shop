@@ -23,66 +23,73 @@ class LoginOrRegisterOrResetPasswordDataResponse {
   LoginOrRegisterOrResetPasswordDataResponse(
       this.id, this.name, this.email, this.phone, this.imageUrl, this.token);
 
-  factory LoginOrRegisterOrResetPasswordDataResponse.fromJson(Map<String,dynamic> json) => _$LoginOrRegisterOrResetPasswordDataResponseFromJson(json);
+  factory LoginOrRegisterOrResetPasswordDataResponse.fromJson(
+          Map<String, dynamic> json) =>
+      _$LoginOrRegisterOrResetPasswordDataResponseFromJson(json);
 
-  Map<String,dynamic> toJson() => _$LoginOrRegisterOrResetPasswordDataResponseToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$LoginOrRegisterOrResetPasswordDataResponseToJson(this);
 }
 
 @JsonSerializable()
-class LoginOrRegisterOrResetPasswordResponse{
+class LoginOrRegisterOrResetPasswordResponse {
   @JsonKey(name: 'status')
   bool? status;
   @JsonKey(name: 'message')
   String? message;
   @JsonKey(name: 'data')
-  LoginOrRegisterOrResetPasswordDataResponse? loginOrRegisterOrResetPasswordDataResponse;
+  LoginOrRegisterOrResetPasswordDataResponse?
+      loginOrRegisterOrResetPasswordDataResponse;
 
-  LoginOrRegisterOrResetPasswordResponse(this.status,this.message,this.loginOrRegisterOrResetPasswordDataResponse);
+  LoginOrRegisterOrResetPasswordResponse(this.status, this.message,
+      this.loginOrRegisterOrResetPasswordDataResponse);
 
-  factory LoginOrRegisterOrResetPasswordResponse.fromJson(Map<String, dynamic> json) => _$LoginOrRegisterOrResetPasswordResponseFromJson(json);
+  factory LoginOrRegisterOrResetPasswordResponse.fromJson(
+          Map<String, dynamic> json) =>
+      _$LoginOrRegisterOrResetPasswordResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$LoginOrRegisterOrResetPasswordResponseToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$LoginOrRegisterOrResetPasswordResponseToJson(this);
 }
-
 
 // ForgotPassword Response
 
 @JsonSerializable()
-class ForgotPasswordResponse{
+class ForgotPasswordResponse {
   @JsonKey(name: 'status')
   bool? status;
   @JsonKey(name: 'message')
   String? message;
 
-  ForgotPasswordResponse(this.status,this.message);
+  ForgotPasswordResponse(this.status, this.message);
 
-  factory ForgotPasswordResponse.fromJson(Map<String, dynamic> json) => _$ForgotPasswordResponseFromJson(json);
+  factory ForgotPasswordResponse.fromJson(Map<String, dynamic> json) =>
+      _$ForgotPasswordResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ForgotPasswordResponseToJson(this);
 }
 
-
 //VerifyCode Response
 
 @JsonSerializable()
-class VerifyCodeResponse{
+class VerifyCodeResponse {
   @JsonKey(name: 'status')
   bool? status;
   @JsonKey(name: 'message')
   String? message;
 
-  VerifyCodeResponse(this.status,this.message);
+  VerifyCodeResponse(this.status, this.message);
 
-  factory VerifyCodeResponse.fromJson(Map<String, dynamic> json) => _$VerifyCodeResponseFromJson(json);
+  factory VerifyCodeResponse.fromJson(Map<String, dynamic> json) =>
+      _$VerifyCodeResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$VerifyCodeResponseToJson(this);
 }
 
-
 //Categories Response
 
 @JsonSerializable()
-class CategoryResponse{
+class CategoryResponse {
   @JsonKey(name: 'id')
   int? id;
   @JsonKey(name: 'name')
@@ -90,27 +97,29 @@ class CategoryResponse{
   @JsonKey(name: 'image')
   String? image;
 
-  CategoryResponse(this.id,this.name,this.image);
+  CategoryResponse(this.id, this.name, this.image);
 
-  factory CategoryResponse.fromJson(Map<String, dynamic> json) => _$CategoryResponseFromJson(json);
+  factory CategoryResponse.fromJson(Map<String, dynamic> json) =>
+      _$CategoryResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryResponseToJson(this);
 }
 
 @JsonSerializable()
-class CategoriesDataResponse{
+class CategoriesDataResponse {
   @JsonKey(name: 'data')
   List<CategoryResponse>? categoriesResponse;
 
   CategoriesDataResponse(this.categoriesResponse);
 
-  factory CategoriesDataResponse.fromJson(Map<String, dynamic> json) => _$CategoriesDataResponseFromJson(json);
+  factory CategoriesDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$CategoriesDataResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoriesDataResponseToJson(this);
 }
 
 @JsonSerializable()
-class CategoriesResponse{
+class CategoriesResponse {
   @JsonKey(name: 'status')
   bool? status;
   @JsonKey(name: 'message')
@@ -118,18 +127,18 @@ class CategoriesResponse{
   @JsonKey(name: 'data')
   CategoriesDataResponse? categoriesDataResponse;
 
-  CategoriesResponse(this.status,this.message,this.categoriesDataResponse);
+  CategoriesResponse(this.status, this.message, this.categoriesDataResponse);
 
-  factory CategoriesResponse.fromJson(Map<String, dynamic> json) => _$CategoriesResponseFromJson(json);
+  factory CategoriesResponse.fromJson(Map<String, dynamic> json) =>
+      _$CategoriesResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoriesResponseToJson(this);
 }
 
-
 //Category Products Response
 
 @JsonSerializable()
-class ProductResponse{
+class ProductResponse {
   @JsonKey(name: 'id')
   int? id;
   @JsonKey(name: 'price')
@@ -154,23 +163,25 @@ class ProductResponse{
   ProductResponse(this.id, this.price, this.oldPrice, this.discount, this.image,
       this.name, this.description, this.images, this.inFavorites, this.inCart);
 
-  factory ProductResponse.fromJson(Map<String,dynamic> json) => _$ProductResponseFromJson(json);
-  Map<String,dynamic> toJson() => _$ProductResponseToJson(this);
+  factory ProductResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProductResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ProductResponseToJson(this);
 }
 
 @JsonSerializable()
-class CategoryAllProductsResponse{
+class CategoryAllProductsResponse {
   @JsonKey(name: 'data')
   List<ProductResponse>? products;
 
   CategoryAllProductsResponse(this.products);
 
-  factory CategoryAllProductsResponse.fromJson(Map<String,dynamic> json) => _$CategoryAllProductsResponseFromJson(json);
-  Map<String,dynamic> toJson() => _$CategoryAllProductsResponseToJson(this);
+  factory CategoryAllProductsResponse.fromJson(Map<String, dynamic> json) =>
+      _$CategoryAllProductsResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$CategoryAllProductsResponseToJson(this);
 }
 
 @JsonSerializable()
-class CategoryAllDataResponse{
+class CategoryAllDataResponse {
   @JsonKey(name: 'status')
   bool? status;
   @JsonKey(name: 'message')
@@ -178,8 +189,49 @@ class CategoryAllDataResponse{
   @JsonKey(name: 'data')
   CategoryAllProductsResponse? categoryAllProductsResponse;
 
-  CategoryAllDataResponse(this.status,this.message,this.categoryAllProductsResponse);
+  CategoryAllDataResponse(
+      this.status, this.message, this.categoryAllProductsResponse);
 
-  factory CategoryAllDataResponse.fromJson(Map<String,dynamic> json) => _$CategoryAllDataResponseFromJson(json);
-  Map<String,dynamic> toJson() => _$CategoryAllDataResponseToJson(this);
+  factory CategoryAllDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$CategoryAllDataResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$CategoryAllDataResponseToJson(this);
+}
+
+// userData Response
+
+@JsonSerializable()
+class UserDataResponse {
+  @JsonKey(name: 'id')
+  int? id;
+  @JsonKey(name: 'name')
+  String? name;
+  @JsonKey(name: 'email')
+  String? email;
+  @JsonKey(name: 'image')
+  String? image;
+  @JsonKey(name: 'phone')
+  String? phone;
+
+  UserDataResponse(this.id, this.image, this.name,this.email,this.phone);
+
+  factory UserDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$UserDataResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$UserDataResponseToJson(this);
+}
+
+@JsonSerializable()
+class ProfileResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+  @JsonKey(name: 'data')
+  UserDataResponse? userDataResponse;
+
+  ProfileResponse(
+      this.status, this.message, this.userDataResponse);
+
+  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProfileResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ProfileResponseToJson(this);
 }

@@ -4,7 +4,7 @@ import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/presentation/bloc/categories/categories_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
-import 'package:moro_shop/presentation/common/widgets/custom_app_bar.dart';
+import 'package:moro_shop/presentation/common/widgets/search_bar.dart';
 import 'package:moro_shop/presentation/pages/widgets/home_product_widget.dart';
 import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
@@ -19,6 +19,13 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   int selectedValue = 0;
 
+
+  @override
+  void initState() {
+    super.initState();
+      BlocProvider.of<CategoryBloc>(context).add(GetCategoriesEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(
@@ -29,8 +36,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
             length: data?.length ?? 0,
             child: Column(
               children: [
-                _customAppBAr(),
+                _searchBAr(),
                 _tabBar(data),
+                const SizedBox(height: 10,),
                 _tabView(data, context),
               ],
             ),
@@ -48,17 +56,15 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     );
   }
 
-  _customAppBAr() {
+  _searchBAr() {
     return const Expanded(
       flex: 2,
       child: Padding(
-        padding: EdgeInsets.only(left: 15, top: 15, right: 15),
-        child: CustomAppBar(
-          title: 'Moro_Shop',
-          searchBarTitle: 'search product',
-        ),
+      padding: EdgeInsets.only(left: 15, right: 15),
+      child: SearchBar(
+        searchBarTitle: 'search product',
       ),
-    );
+    ),);
   }
 
   _tabBar(List<CategoryModel>? data) {
@@ -114,7 +120,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
   _tabView(List<CategoryModel>? data, context) {
     return Expanded(
-      flex: 7,
+      flex: 10,
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: TabBarView(

@@ -19,6 +19,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   var registerObject = RegisterObject('', '', '', '', '');
   File? imageFile;
   final AppPreferences appPreferences;
+  LoginOrRegisterOrResetPasswordModel? loginOrRegisterOrResetPasswordModel;
 
 
   RegisterBloc({required this.registerUseCase,required this.appPreferences}) : super(RegisterInitial()) {
@@ -39,6 +40,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
             .fold((failure) {
           emit(RegisterErrorState(failure.message));
         }, (data)  {
+          loginOrRegisterOrResetPasswordModel = data;
           appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
            appPreferences.setUserLoggedIn();
           emit(RegisterSuccessState(data));

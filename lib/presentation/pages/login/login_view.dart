@@ -40,7 +40,7 @@ class _LoginViewState extends State<LoginView> {
             LoadingState(stateRendererType: StateRendererType.popupLoadingState,message: AppStrings.loading).getScreenWidget(context);
           }
           if(state is LoginSuccessState){
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.mainRoute, ModalRoute.withName(Routes.splashRoute),arguments: state.loginOrRegisterModel.loginOrRegisterOrResetPasswordDataModel?.imageUrl.orEmpty());
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.mainRoute, ModalRoute.withName(Routes.splashRoute),arguments: state.loginOrRegisterOrResetPasswordModel.loginOrRegisterOrResetPasswordDataModel?.imageUrl.orEmpty());
           }
           if (state is LoginErrorState) {
             ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,retryActionFunction: (){Navigator.pop(context);},
@@ -59,7 +59,7 @@ class _LoginViewState extends State<LoginView> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const AuthHeaderWidget(250, true, Icons.login_rounded),
+          const AuthHeaderWidget(250, true, icon: Icons.login_rounded),
           _loginForm(context),
         ],
       ),

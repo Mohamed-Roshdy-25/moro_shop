@@ -19,10 +19,9 @@ class _MainViewState extends State<MainView> {
     FontAwesomeIcons.house,
     FontAwesomeIcons.heartPulse,
     FontAwesomeIcons.cartShopping,
-    FontAwesomeIcons.userPen,
+    FontAwesomeIcons.userGear,
   ];
   int currentIndex = 0;
-
 
 
   @override

@@ -44,7 +44,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               body: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const AuthHeaderWidget(250, true, Icons.password_rounded),
+                    const AuthHeaderWidget(250, true, icon: Icons.password_rounded),
                     SafeArea(
                       child: Container(
                         margin: const EdgeInsets.fromLTRB(AppPadding.p25, AppPadding.p10, AppPadding.p25, AppPadding.p10),

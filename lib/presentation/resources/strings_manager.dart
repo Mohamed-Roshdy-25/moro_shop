@@ -40,4 +40,7 @@ class AppStrings {
   static const String reset  = 'Reset';
   static const String login  = 'Login';
   static const String rememberYourPassword  = 'Remember Your Password ? ';
+  static const String profile  = 'Profile';
+  static const String language  = 'Language';
+  static const String logout  = 'Logout';
 }

@@ -158,4 +158,28 @@ class RepositoryImpl implements Repository{
     }
   }
 
+
+  @override
+  Future<Either<Failure, ProfileModel>> getProfile() async {
+    try{
+      final response = await _localDataSource.getProfileResponse();
+      return Right(response.toDomain());
+    }catch(cacheError){
+      if(await _networkInfo.isConnected){
+        try{
+          ProfileResponse response = await _remoteDataSource.getProfile();
+          if(response.status == true) {
+            await _localDataSource.saveProfileToCache(response);
+            return Right(response.toDomain());
+          }else{
+            return Left(Failure(response.status.orFalse(), response.message.orEmpty()));
+          }
+        }catch (error){
+          return Left(ErrorHandler.handle(error).failure);
+        }
+      }else{
+        return Left(DataSource.noInternetConnection.getFailure());
+      }
+    }
+  }
 }

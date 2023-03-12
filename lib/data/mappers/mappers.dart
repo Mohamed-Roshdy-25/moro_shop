@@ -110,3 +110,27 @@ extension CategoryAllDataResponseExtension on CategoryAllDataResponse? {
         (this?.categoryAllProductsResponse).toDomain());
   }
 }
+
+
+// UserData Mappers
+
+extension UserDataResponseExtension on UserDataResponse? {
+  UserDataModel toDomain() {
+    return UserDataModel(
+      (this?.id).orZero(),
+      (this?.image).orEmpty(),
+      (this?.name).orEmpty(),
+      (this?.email).orEmpty(),
+      (this?.phone).orEmpty(),
+    );
+  }
+}
+
+extension ProfileResponseExtension on ProfileResponse? {
+  ProfileModel toDomain(){
+    return ProfileModel(
+        (this?.status).orFalse(),
+        (this?.message).orEmpty(),
+        (this?.userDataResponse).toDomain());
+  }
+}
