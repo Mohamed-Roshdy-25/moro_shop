@@ -12,9 +12,7 @@ part 'categories_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final CategoriesUseCase categoryUseCase;
-  List<CategoryModel>? categories;
-  int? categoriesLength;
-
+  CategoriesModel? categoriesModel;
 
   CategoryBloc(this.categoryUseCase) : super(CategoryInitial()) {
     on<CategoryEvent>((event, emit) async {
@@ -26,8 +24,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
             emit(CategoriesErrorState(failure.message));
           },
           (data) {
-            categories = data.categoriesDataModel?.categoriesModel;
-            categoriesLength = data.categoriesDataModel?.categoriesModel?.length;
+            categoriesModel = data;
             emit(CategoriesSuccessState(data));
           },
         );

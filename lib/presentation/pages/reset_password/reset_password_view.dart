@@ -52,7 +52,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  const AuthHeaderWidget(250, true, Icons.lock_reset_outlined),
+                  const AuthHeaderWidget(250, true, icon: Icons.lock_reset_outlined),
                   SafeArea(
                     child: Container(
                       margin: const EdgeInsets.fromLTRB(AppPadding.p25,

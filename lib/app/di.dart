@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +14,7 @@ import 'package:moro_shop/domain/use_case/category_products_use_case.dart';
 import 'package:moro_shop/domain/use_case/forgot_password_use_case.dart';
 import 'package:moro_shop/domain/use_case/categories_use_case.dart';
 import 'package:moro_shop/domain/use_case/login_use_case.dart';
+import 'package:moro_shop/domain/use_case/profile_use_case.dart';
 import 'package:moro_shop/domain/use_case/register_use_case.dart';
 import 'package:moro_shop/domain/use_case/reset_password_use_case.dart';
 import 'package:moro_shop/domain/use_case/verify_code_use_case.dart';
@@ -22,6 +22,7 @@ import 'package:moro_shop/presentation/bloc/categories/categories_bloc.dart';
 import 'package:moro_shop/presentation/bloc/category_products/category_products_bloc.dart';
 import 'package:moro_shop/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:moro_shop/presentation/bloc/login/login_bloc.dart';
+import 'package:moro_shop/presentation/bloc/profile/profile_bloc.dart';
 import 'package:moro_shop/presentation/bloc/register/register_bloc.dart';
 import 'package:moro_shop/presentation/bloc/reset_password/reset_password_bloc.dart';
 import 'package:moro_shop/presentation/bloc/verify_code/verify_code_bloc.dart';
@@ -32,95 +33,101 @@ final instance = GetIt.instance;
 Future<void> initAppModule() async {
   // app module, its a module where we put all generic dependencies
 
+  instance.allowReassignment = true;
+
   // shared prefs instance
+
   final sharedPrefs = await SharedPreferences.getInstance();
   instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
 
   // app prefs instance
+
   instance
       .registerLazySingleton<AppPreferences>(() => AppPreferences(instance()));
 
   // network info
+
   instance.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(InternetConnectionChecker()));
 
-  // dio factory
+ // Dio Factory
   instance.registerLazySingleton<DioFactory>(() => DioFactory(instance()));
 
-  Dio dio = await instance<DioFactory>().getDio();
-  //app service client
-  instance.registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
+  // app service client
+    Dio dio = await DioFactory(instance<AppPreferences>()).getDio();
+
+    instance
+        .registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
+
 
   // remote data source
-  instance.registerLazySingleton<RemoteDataSource>(
-      () => RemoteDataSourceImpl(instance<AppServiceClient>()));
+    instance.registerLazySingleton<RemoteDataSource>(
+        () => RemoteDataSourceImpl(instance<AppServiceClient>()));
+
 
   // local data source
-  instance.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl());
+    instance
+        .registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl());
 
   // repository
+    instance.registerLazySingleton<Repository>(
+        () => RepositoryImpl(instance(), instance(), instance()));
+  }
 
-  instance.registerLazySingleton<Repository>(
-      () => RepositoryImpl(instance(), instance(),instance()));
-}
 
 initLoginModule() {
-  if (!GetIt.I.isRegistered<LoginUseCase>()) {
     instance.registerFactory<LoginUseCase>(() => LoginUseCase(instance()));
-    instance.registerFactory<LoginBloc>(() => LoginBloc(loginUseCase: instance(), appPreferences: instance()));
-  }
+    instance.registerFactory<LoginBloc>(
+        () => LoginBloc(loginUseCase: instance(), appPreferences: instance()));
+
 }
 
 initForgotPasswordModule() {
-  if (!GetIt.I.isRegistered<ForgotPasswordUseCase>()) {
     instance.registerFactory<ForgotPasswordUseCase>(
         () => ForgotPasswordUseCase(instance()));
     instance.registerFactory<ForgotPasswordBloc>(
         () => ForgotPasswordBloc(forgotPasswordUseCase: instance()));
-  }
+
 }
 
 initVerifyCodeModule() {
-  if (!GetIt.I.isRegistered<VerifyCodeUseCase>()) {
     instance.registerFactory<VerifyCodeUseCase>(
-            () => VerifyCodeUseCase(instance()));
+        () => VerifyCodeUseCase(instance()));
     instance.registerFactory<VerifyCodeBloc>(
-            () => VerifyCodeBloc(verifyCodeUseCase: instance()));
-  }
+        () => VerifyCodeBloc(verifyCodeUseCase: instance()));
+
 }
 
 initResetPasswordModule() {
-  if (!GetIt.I.isRegistered<ResetPasswordUseCase>()) {
     instance.registerFactory<ResetPasswordUseCase>(
-            () => ResetPasswordUseCase(instance()));
-    instance.registerFactory<ResetPasswordBloc>(
-            () => ResetPasswordBloc(resetPasswordUseCase: instance(),appPreferences: instance()));
-  }
+        () => ResetPasswordUseCase(instance()));
+    instance.registerFactory<ResetPasswordBloc>(() => ResetPasswordBloc(
+        resetPasswordUseCase: instance(), appPreferences: instance()));
+
 }
 
 initRegisterModule() {
-  if (!GetIt.I.isRegistered<RegisterUseCase>()) {
     instance
         .registerFactory<RegisterUseCase>(() => RegisterUseCase(instance()));
-    instance.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: instance(), appPreferences: instance()));
+    instance.registerFactory<RegisterBloc>(() =>
+        RegisterBloc(registerUseCase: instance(), appPreferences: instance()));
     instance.registerFactory<ImagePicker>(() => ImagePicker());
-  }
+
 }
+
 //
 initHomeModule() {
-  if (!GetIt.I.isRegistered<CategoriesUseCase>()) {
-    instance.registerFactory<CategoriesUseCase>(() => CategoriesUseCase(instance()));
+    instance.registerFactory<CategoriesUseCase>(
+        () => CategoriesUseCase(instance()));
     instance.registerFactory<CategoryBloc>(() => CategoryBloc(instance()));
-    instance.registerFactory<CategoryProductsUseCase>(() => CategoryProductsUseCase(instance()));
-    instance.registerFactory<CategoryProductsBloc>(() => CategoryProductsBloc(instance()));
-  }
+    instance.registerFactory<CategoryProductsUseCase>(
+        () => CategoryProductsUseCase(instance()));
+    instance.registerFactory<CategoryProductsBloc>(
+        () => CategoryProductsBloc(instance()));
+
 }
-//
-// initStoreDetailsModule() {
-//   if (!GetIt.I.isRegistered<StoreDetailsUseCase>()) {
-//     instance.registerFactory<StoreDetailsUseCase>(
-//             () => StoreDetailsUseCase(instance()));
-//     instance.registerFactory<StoreDetailsViewModel>(
-//             () => StoreDetailsViewModel(instance()));
-//   }
-// }
+
+initProfileModule() {
+    instance.registerFactory<ProfileUseCase>(() => ProfileUseCase(instance()));
+    instance.registerFactory<ProfileBloc>(() => ProfileBloc(instance()));
+}

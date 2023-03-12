@@ -13,6 +13,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase loginUseCase;
   final AppPreferences appPreferences;
   var loginObject = LoginObject('', '');
+  LoginOrRegisterOrResetPasswordModel? loginOrRegisterOrResetPasswordModel;
+
 
 
 
@@ -22,13 +24,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginLoadingState());
 
         loginObject = loginObject.copyWith(email: event.email,password: event.password);
-        ( await loginUseCase.execute(
+        await ( await loginUseCase.execute(
           LoginUseCaseInput(loginObject.email, loginObject.password),
         )).fold((failure) {
           emit(LoginErrorState(failure.message));
-        }, (data)  {
-          appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
+        }, (data)  async {
+          loginOrRegisterOrResetPasswordModel = data;
              appPreferences.setUserLoggedIn();
+             await appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
           emit(LoginSuccessState(data));
         });
       }

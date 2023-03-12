@@ -57,7 +57,7 @@ class _VerifyCodeViewState extends State<VerifyCodeView> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  const AuthHeaderWidget(250, true, Icons.privacy_tip_outlined),
+                  const AuthHeaderWidget(250, true, icon: Icons.privacy_tip_outlined),
                   SafeArea(
                     child: Container(
                       margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),

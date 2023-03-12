@@ -10,6 +10,7 @@ abstract class RemoteDataSource {
   Future<LoginOrRegisterOrResetPasswordResponse> resetPassword(ResetPasswordRequest resetPasswordRequest);
   Future<CategoriesResponse> getCategories();
   Future<CategoryAllDataResponse> getCategoryProducts(int categoryId);
+  Future<ProfileResponse> getProfile();
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -58,5 +59,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<CategoryAllDataResponse> getCategoryProducts(int categoryId) async {
     return await appServiceClient.getCategoryProducts(categoryId);
+  }
+
+  @override
+  Future<ProfileResponse> getProfile() async {
+    return await appServiceClient.getProfile();
   }
 }

@@ -117,3 +117,25 @@ class CategoryAllDataModel{
 
   CategoryAllDataModel(this.status,this.message,this.categoryAllProductsModel);
 }
+
+//UserData Response
+
+class UserDataModel{
+  int id;
+  String image;
+  String name;
+  String email;
+  String phone;
+
+  UserDataModel(this.id, this.image,
+      this.name, this.email,this.phone);
+}
+
+
+class ProfileModel{
+  bool status;
+  String message;
+  UserDataModel? userDataModel;
+
+  ProfileModel(this.status,this.message,this.userDataModel);
+}

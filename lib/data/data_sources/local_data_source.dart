@@ -3,6 +3,7 @@ import 'package:moro_shop/data/responses/responses.dart';
 
 const cacheCategoriesKey = "Cache_Categories_Key";
 const cacheCategoryProductsKey = "Cache_Category_Products_Key";
+const cacheProfileKey = "Cache_Profile_Key";
 const cacheHomeInterval = 60 * 1000;
 
 abstract class LocalDataSource {
@@ -12,6 +13,9 @@ abstract class LocalDataSource {
   Future<CategoryAllDataResponse> getCategoryProductsResponse(int categoryId);
   Future<void> saveCategoryProductsToCache(
       CategoryAllDataResponse categoryAllDataResponse,int categoryId);
+
+  Future<ProfileResponse> getProfileResponse();
+  Future<void> saveProfileToCache(ProfileResponse profileResponse);
 
   void clearCache();
   void removeFromCache(String key);
@@ -52,6 +56,24 @@ class LocalDataSourceImpl implements LocalDataSource {
       CategoryAllDataResponse categoryAllDataResponse,int categoryId) async {
     cacheMap['$categoryId'] = CachedItem(categoryAllDataResponse);
   }
+
+  @override
+  Future<ProfileResponse> getProfileResponse() async {
+    CachedItem? cachedData = cacheMap[cacheProfileKey];
+
+    if (cachedData != null && cachedData.isValid(cacheHomeInterval)) {
+      return cachedData.data;
+    } else {
+      throw ErrorHandler.handle(DataSource.cacheError);
+    }
+  }
+
+  @override
+  Future<void> saveProfileToCache(
+      ProfileResponse profileResponse) async {
+    cacheMap[cacheProfileKey] = CachedItem(profileResponse);
+  }
+
 
   @override
   void clearCache() {

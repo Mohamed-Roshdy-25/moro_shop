@@ -1,3 +1,4 @@
+import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/presentation/resources/language_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,7 +13,7 @@ class AppPreferences {
 
   AppPreferences(this._sharedPreferences);
 
-  Future<String> getAppLanguage() async {
+  String getAppLanguage() {
     String? language = _sharedPreferences.getString(langKey);
 
         if(language != null && language.isNotEmpty){
@@ -31,7 +32,7 @@ class AppPreferences {
   }
 
   Future<void> setOnBoardingScreenViewed() async{
-    _sharedPreferences.setBool(prefsKeyOnBoardingScreenViewed, true);
+    await _sharedPreferences.setBool(prefsKeyOnBoardingScreenViewed, true);
   }
 
   Future<bool> isOnBoardingScreenViewed() async{
@@ -39,14 +40,15 @@ class AppPreferences {
   }
 
   Future<void> logout() async {
-    _sharedPreferences.remove(prefsKeyIsUserLoggedIn);
+     await _sharedPreferences.remove(prefsKeyIsUserLoggedIn);
+    await  _sharedPreferences.remove(prefsKeySaveToken);
   }
 
   Future<void> saveToken(String token) async {
-     _sharedPreferences.setString(prefsKeySaveToken, token);
+     await _sharedPreferences.setString(prefsKeySaveToken, token);
   }
 
-  Future<String> getToken() async {
-    return _sharedPreferences.getString(prefsKeySaveToken) ?? '';
+  String getToken()  {
+    return  _sharedPreferences.getString(prefsKeySaveToken) ?? '';
   }
 }

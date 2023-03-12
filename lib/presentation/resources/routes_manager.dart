@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:moro_shop/app/di.dart';
-import 'package:moro_shop/presentation/pages/cart/cart_view.dart';
-import 'package:moro_shop/presentation/pages/categories/categories_view.dart';
 import 'package:moro_shop/presentation/pages/forgot_password/forgot_password_view.dart';
 import 'package:moro_shop/presentation/pages/intro/intro_view.dart';
 import 'package:moro_shop/presentation/pages/login/login_view.dart';
 import 'package:moro_shop/presentation/pages/main/main_view.dart';
-import 'package:moro_shop/presentation/pages/main/pages/favorite/favorite_view.dart';
-import 'package:moro_shop/presentation/pages/main/pages/settings/settings_view.dart';
 import 'package:moro_shop/presentation/pages/profile/profile_view.dart';
 import 'package:moro_shop/presentation/pages/register/register_view.dart';
 import 'package:moro_shop/presentation/pages/reset_password/reset_password_view.dart';
@@ -46,7 +42,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>  const IntroView(),);
 
       case Routes.loginRoute:
-        initLoginModule();
+          initLoginModule();
         return MaterialPageRoute(builder: (_) => const LoginView(),);
 
       case Routes.registerRoute:
@@ -70,27 +66,18 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>  ResetPasswordView(email: email,code: code),);
 
       case Routes.mainRoute:
-        initHomeModule();
+        initAppModule().then((value) {
+          initHomeModule();
+        });
         return MaterialPageRoute(builder: (_) => const MainView(),);
 
-
-      case Routes.categoriesRoute:
-        return MaterialPageRoute(builder: (_) => const CategoriesView(),);
-
-      case Routes.cartRoute:
-        return MaterialPageRoute(builder: (_) => const CartView(),);
-
-      case Routes.favoriteRoute:
-        return MaterialPageRoute(builder: (_) => const FavoriteView(),);
-
       case Routes.profileRoute:
+        initProfileModule();
         return MaterialPageRoute(builder: (_) => const ProfileView(),);
 
       case Routes.searchRoute:
         return MaterialPageRoute(builder: (_) => const SearchView(),);
 
-      case Routes.settingsRoute:
-        return MaterialPageRoute(builder: (_) => const SettingsView(),);
       default:
         return unDefinedRoute();
     }
