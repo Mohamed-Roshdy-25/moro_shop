@@ -1,9 +1,9 @@
 
 // ignore_for_file: void_checks
 
-import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/profile_use_case.dart';
@@ -21,13 +21,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       if(event is GetProfileEvent){
         emit(GetProfileLoadingState());
 
-        (await profileUseCase.execute(Void)).fold((failure) {
+        (await profileUseCase.execute(Unit)).fold((failure) {
           emit(GetProfileErrorState(failure.message));
         }, (data) {
           profileModel = data;
           emit(GetProfileSuccessState(data));
         },);
       }
-    });
+    },
+    );
   }
 }

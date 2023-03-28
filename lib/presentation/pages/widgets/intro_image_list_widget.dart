@@ -111,6 +111,12 @@ class _ImageListViewState extends State<ImageListView> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Transform.rotate(

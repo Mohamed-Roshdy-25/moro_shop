@@ -99,9 +99,12 @@ class ProductModel{
   List<String> images;
   bool inFavorites;
   bool inCart;
+  bool isLoading;
+  bool isToast;
 
   ProductModel(this.id, this.price, this.oldPrice, this.discount, this.image,
-      this.name, this.description, this.images, this.inFavorites, this.inCart);
+      this.name, this.description, this.images, this.inFavorites, this.inCart,
+      {this.isLoading = false,this.isToast = false});
 }
 
 class CategoryAllProductsModel{
@@ -138,4 +141,19 @@ class ProfileModel{
   UserDataModel? userDataModel;
 
   ProfileModel(this.status,this.message,this.userDataModel);
+}
+
+
+class AddOrDeleteFavoritesModel{
+  bool status;
+  String message;
+
+  AddOrDeleteFavoritesModel(this.status,this.message);
+}
+
+class LogoutModel{
+  bool status;
+  String message;
+
+  LogoutModel(this.status,this.message);
 }

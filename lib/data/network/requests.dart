@@ -37,3 +37,10 @@ class ResetPasswordRequest{
 
   ResetPasswordRequest(this.email,this.code,this.password);
 }
+
+class AddOrDeleteFavoritesRequest{
+  int productId;
+
+
+  AddOrDeleteFavoritesRequest(this.productId);
+}

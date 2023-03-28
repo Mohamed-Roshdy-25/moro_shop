@@ -214,3 +214,29 @@ Map<String, dynamic> _$ProfileResponseToJson(ProfileResponse instance) =>
       'message': instance.message,
       'data': instance.userDataResponse,
     };
+
+AddOrDeleteFavoritesResponse _$AddOrDeleteFavoritesResponseFromJson(
+        Map<String, dynamic> json) =>
+    AddOrDeleteFavoritesResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+    );
+
+Map<String, dynamic> _$AddOrDeleteFavoritesResponseToJson(
+        AddOrDeleteFavoritesResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
+
+LogoutResponse _$LogoutResponseFromJson(Map<String, dynamic> json) =>
+    LogoutResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+    );
+
+Map<String, dynamic> _$LogoutResponseToJson(LogoutResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };

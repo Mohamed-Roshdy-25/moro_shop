@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/presentation/bloc/register/register_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
@@ -32,48 +33,51 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return BlocConsumer<RegisterBloc, RegisterState>(
-      listener: (context, state) {
-        if (state is RegisterLoadingState) {
-          LoadingState(
-                  stateRendererType: StateRendererType.popupLoadingState,
-                  message: AppStrings.loading)
-              .getScreenWidget(context);
-        }
-        if (state is RegisterSuccessState) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              Routes.mainRoute, ModalRoute.withName(Routes.splashRoute),
-              arguments: state
-                  .loginOrRegisterOrResetPasswordModel.loginOrRegisterOrResetPasswordDataModel?.imageUrl);
-        }
-        if (state is RegisterErrorState) {
-          ErrorState(StateRendererType.popupErrorState, state.message)
-              .getScreenWidget(
-            context,
-            retryActionFunction: () {
-              Navigator.pop(context);
-            },
-            buttonTitle: AppStrings.ok,
+    return BlocProvider<RegisterBloc>(
+      create: (context) => instance<RegisterBloc>(),
+      child: BlocConsumer<RegisterBloc, RegisterState>(
+        listener: (context, state) {
+          if (state is RegisterLoadingState) {
+            LoadingState(
+                    stateRendererType: StateRendererType.popupLoadingState,
+                    message: AppStrings.loading)
+                .getScreenWidget(context);
+          }
+          if (state is RegisterSuccessState) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                Routes.mainRoute, ModalRoute.withName(Routes.splashRoute),
+                arguments: state.loginOrRegisterOrResetPasswordModel
+                    .loginOrRegisterOrResetPasswordDataModel?.imageUrl);
+          }
+          if (state is RegisterErrorState) {
+            ErrorState(StateRendererType.popupErrorState, state.message)
+                .getScreenWidget(
+              context,
+              retryActionFunction: () {
+                Navigator.pop(context);
+              },
+              buttonTitle: AppStrings.ok,
+            );
+          }
+          if (state is PickCameraPhotoState) {
+            if (state.imageFile != null) {
+              imageFile = state.imageFile;
+            }
+            Navigator.pop(context);
+          }
+          if (state is PickGalleryPhotoState) {
+            if (state.imageFile != null) {
+              imageFile = state.imageFile;
+            }
+            Navigator.pop(context);
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            body: _buildBody(context, size),
           );
-        }
-        if (state is PickCameraPhotoState) {
-          if (state.imageFile != null) {
-            imageFile = state.imageFile;
-          }
-          Navigator.pop(context);
-        }
-        if (state is PickGalleryPhotoState) {
-          if (state.imageFile != null) {
-            imageFile = state.imageFile;
-          }
-          Navigator.pop(context);
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          body: _buildBody(context, size),
-        );
-      },
+        },
+      ),
     );
   }
 
@@ -276,7 +280,8 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                           ),
                           onPressed: () {
-                            String imageUrl = base64Encode((imageFile?.readAsBytesSync()??[]));
+                            String imageUrl = base64Encode(
+                                (imageFile?.readAsBytesSync() ?? []));
 
                             if (_formKey.currentState!.validate()) {
                               BlocProvider.of<RegisterBloc>(context).add(
@@ -387,6 +392,7 @@ class _RegisterViewState extends State<RegisterView> {
     _passController.dispose();
     _nameController.dispose();
     _phoneController.dispose();
+    instance<RegisterBloc>().close();
     super.dispose();
   }
 }

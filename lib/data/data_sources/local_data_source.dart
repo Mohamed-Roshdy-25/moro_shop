@@ -2,7 +2,6 @@ import 'package:moro_shop/data/network/error_handler.dart';
 import 'package:moro_shop/data/responses/responses.dart';
 
 const cacheCategoriesKey = "Cache_Categories_Key";
-const cacheCategoryProductsKey = "Cache_Category_Products_Key";
 const cacheProfileKey = "Cache_Profile_Key";
 const cacheHomeInterval = 60 * 1000;
 

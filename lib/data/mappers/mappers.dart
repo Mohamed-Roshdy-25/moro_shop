@@ -134,3 +134,21 @@ extension ProfileResponseExtension on ProfileResponse? {
         (this?.userDataResponse).toDomain());
   }
 }
+
+extension AddOrDeleteFavoriteResponseExtension on AddOrDeleteFavoritesResponse? {
+  AddOrDeleteFavoritesModel toDomain(){
+    return AddOrDeleteFavoritesModel(
+        (this?.status).orFalse(),
+        (this?.message).orEmpty(),
+        );
+  }
+}
+
+extension LogoutResponseExtension on LogoutResponse? {
+  LogoutModel toDomain(){
+    return LogoutModel(
+      (this?.status).orFalse(),
+      (this?.message).orEmpty(),
+    );
+  }
+}

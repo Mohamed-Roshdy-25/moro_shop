@@ -11,6 +11,8 @@ abstract class RemoteDataSource {
   Future<CategoriesResponse> getCategories();
   Future<CategoryAllDataResponse> getCategoryProducts(int categoryId);
   Future<ProfileResponse> getProfile();
+  Future<AddOrDeleteFavoritesResponse> favorite(AddOrDeleteFavoritesRequest addOrDeleteFavoritesRequest);
+  Future<LogoutResponse> logout();
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -64,5 +66,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<ProfileResponse> getProfile() async {
     return await appServiceClient.getProfile();
+  }
+
+  @override
+  Future<AddOrDeleteFavoritesResponse> favorite(AddOrDeleteFavoritesRequest addOrDeleteFavoritesRequest) async {
+    return await appServiceClient.favorites(addOrDeleteFavoritesRequest.productId);
+  }
+
+  @override
+  Future<LogoutResponse> logout() async {
+    return await appServiceClient.logout();
   }
 }

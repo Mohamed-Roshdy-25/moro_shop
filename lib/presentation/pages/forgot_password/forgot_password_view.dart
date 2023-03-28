@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
@@ -22,20 +23,28 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ForgotPasswordBloc,ForgotPasswordState>(
+    return BlocProvider<ForgotPasswordBloc>(
+      create: (context) => instance<ForgotPasswordBloc>(),
+      child: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
         listener: (context, state) {
           if (state is ForgotPasswordLoadingState) {
-            LoadingState(stateRendererType: StateRendererType.popupLoadingState,message: AppStrings.loading).getScreenWidget(context);
+            LoadingState(
+                    stateRendererType: StateRendererType.popupLoadingState,
+                    message: AppStrings.loading)
+                .getScreenWidget(context);
           }
-          if(state is ForgotPasswordSuccessState){
+          if (state is ForgotPasswordSuccessState) {
             dismissDialog(context);
-            Navigator.pushNamed(context, Routes.verifyCodeRoute,arguments: _emailController.text);
+            Navigator.pushNamed(context, Routes.verifyCodeRoute,
+                arguments: _emailController.text);
           }
           if (state is ForgotPasswordErrorState) {
-            ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,retryActionFunction: (){
+            ErrorState(StateRendererType.popupErrorState, state.message)
+                .getScreenWidget(context, retryActionFunction: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, Routes.verifyCodeRoute,arguments: _emailController.text);
-            },buttonTitle: AppStrings.ok);
+              Navigator.pushNamed(context, Routes.verifyCodeRoute,
+                  arguments: _emailController.text);
+            }, buttonTitle: AppStrings.ok);
           }
         },
         builder: (context, state) {
@@ -44,39 +53,48 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               body: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const AuthHeaderWidget(250, true, icon: Icons.password_rounded),
+                    const AuthHeaderWidget(250, true,
+                        icon: Icons.password_rounded),
                     SafeArea(
                       child: Container(
-                        margin: const EdgeInsets.fromLTRB(AppPadding.p25, AppPadding.p10, AppPadding.p25, AppPadding.p10),
-                        padding: const EdgeInsets.fromLTRB(AppPadding.p10, AppPadding.p0, AppPadding.p10, AppPadding.p0),
+                        margin: const EdgeInsets.fromLTRB(AppPadding.p25,
+                            AppPadding.p10, AppPadding.p25, AppPadding.p10),
+                        padding: const EdgeInsets.fromLTRB(AppPadding.p10,
+                            AppPadding.p0, AppPadding.p10, AppPadding.p0),
                         child: Column(
                           children: [
                             Container(
                               alignment: Alignment.topLeft,
-                              margin: const EdgeInsets.fromLTRB(AppPadding.p20, AppPadding.p0, AppPadding.p20, AppPadding.p0),
+                              margin: const EdgeInsets.fromLTRB(AppPadding.p20,
+                                  AppPadding.p0, AppPadding.p20, AppPadding.p0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: const [
-                                  Text(AppStrings.forgetPassword,
+                                  Text(
+                                    AppStrings.forgetPassword,
                                     style: TextStyle(
                                         fontSize: 35,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black54
-                                    ),
+                                        color: Colors.black54),
                                     // textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: 10,),
-                                  Text(AppStrings.enterEmailAddress,
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    AppStrings.enterEmailAddress,
                                     style: TextStyle(
-                                      // fontSize: 20,
+                                        // fontSize: 20,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black54
-                                    ),
+                                        color: Colors.black54),
                                     // textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: AppSize.s10,),
-                                  Text(AppStrings.sendVerification,
+                                  SizedBox(
+                                    height: AppSize.s10,
+                                  ),
+                                  Text(
+                                    AppStrings.sendVerification,
                                     style: TextStyle(
                                       color: Colors.black38,
                                       // fontSize: 20,
@@ -105,8 +123,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                         label: Text(AppStrings.email),
                                         hintText: AppStrings.emailHintText,
                                       ),
-                                      validator: (val){
-                                        if(val!.isEmpty){
+                                      validator: (val) {
+                                        if (val!.isEmpty) {
                                           return AppStrings.emailErrorText;
                                         }
                                         return null;
@@ -128,7 +146,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                         stops: const [0.0, 1.0],
                                         colors: [
                                           Theme.of(context).primaryColor,
-                                          Theme.of(context).colorScheme.secondary,
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(30),
@@ -136,7 +156,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                     child: ElevatedButton(
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            AppPadding.p40, AppPadding.p10, AppPadding.p40, AppPadding.p10),
+                                            AppPadding.p40,
+                                            AppPadding.p10,
+                                            AppPadding.p40,
+                                            AppPadding.p10),
                                         child: Text(
                                           AppStrings.send.toUpperCase(),
                                           style: const TextStyle(
@@ -147,8 +170,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                         ),
                                       ),
                                       onPressed: () {
-                                        if(_formKey.currentState!.validate()) {
-                                          BlocProvider.of<ForgotPasswordBloc>(context).add(PostForgotPasswordEvent(_emailController.text));
+                                        if (_formKey.currentState!.validate()) {
+                                          BlocProvider.of<ForgotPasswordBloc>(
+                                                  context)
+                                              .add(PostForgotPasswordEvent(
+                                                  _emailController.text));
                                         }
                                       },
                                     ),
@@ -157,16 +183,24 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                   Text.rich(
                                     TextSpan(
                                       children: [
-                                        const TextSpan(text: AppStrings.rememberYourPassword),
+                                        const TextSpan(
+                                            text: AppStrings
+                                                .rememberYourPassword),
                                         TextSpan(
                                           text: AppStrings.login,
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
-                                              Navigator.pushNamedAndRemoveUntil(context, Routes.loginRoute,ModalRoute.withName(Routes.splashRoute));
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  Routes.loginRoute,
+                                                  ModalRoute.withName(
+                                                      Routes.splashRoute));
                                             },
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).colorScheme.secondary,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
                                           ),
                                         ),
                                       ],
@@ -181,15 +215,16 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     )
                   ],
                 ),
-              )
-          );
+              ));
         },
-      );
+      ),
+    );
   }
 
   @override
   void dispose() {
     _emailController.dispose();
+    instance<ForgotPasswordBloc>().close();
     super.dispose();
   }
 }

@@ -40,4 +40,10 @@ abstract class AppServiceClient {
 
   @GET('profile')
   Future<ProfileResponse> getProfile();
+
+  @POST('favorites')
+  Future<AddOrDeleteFavoritesResponse> favorites(@Field('product_id') int productId);
+
+  @POST('logout')
+  Future<LogoutResponse> logout();
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/presentation/bloc/login/login_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
@@ -22,29 +23,30 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passController.dispose();
-    super.dispose();
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginBloc, LoginState>(
+    return BlocProvider<LoginBloc>(
+      create: (context) => instance<LoginBloc>(),
+      child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginLoadingState) {
-            LoadingState(stateRendererType: StateRendererType.popupLoadingState,message: AppStrings.loading).getScreenWidget(context);
+            LoadingState(
+                    stateRendererType: StateRendererType.popupLoadingState,
+                    message: AppStrings.loading)
+                .getScreenWidget(context);
           }
-          if(state is LoginSuccessState){
-            Navigator.of(context).pushNamedAndRemoveUntil(Routes.mainRoute, ModalRoute.withName(Routes.splashRoute),arguments: state.loginOrRegisterOrResetPasswordModel.loginOrRegisterOrResetPasswordDataModel?.imageUrl.orEmpty());
+          if (state is LoginSuccessState) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                Routes.mainRoute, ModalRoute.withName(Routes.splashRoute),
+                arguments: state.loginOrRegisterOrResetPasswordModel
+                    .loginOrRegisterOrResetPasswordDataModel?.imageUrl
+                    .orEmpty());
           }
           if (state is LoginErrorState) {
-            ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,retryActionFunction: (){Navigator.pop(context);},
-            buttonTitle: AppStrings.ok);
+            ErrorState(StateRendererType.popupErrorState, state.message)
+                .getScreenWidget(context, retryActionFunction: () {
+              Navigator.pop(context);
+            }, buttonTitle: AppStrings.ok);
           }
         },
         builder: (context, state) {
@@ -52,7 +54,8 @@ class _LoginViewState extends State<LoginView> {
             body: _buildBody(context),
           );
         },
-      );
+      ),
+    );
   }
 
   _buildBody(context) {
@@ -69,17 +72,22 @@ class _LoginViewState extends State<LoginView> {
   _loginForm(context) {
     return SafeArea(
       child: Container(
-          padding: const EdgeInsets.fromLTRB(AppPadding.p20, AppPadding.p10, AppPadding.p20, AppPadding.p10),
-          margin: const EdgeInsets.fromLTRB(AppMargin.m20, AppMargin.m10, AppMargin.m20, AppMargin.m10),
+          padding: const EdgeInsets.fromLTRB(
+              AppPadding.p20, AppPadding.p10, AppPadding.p20, AppPadding.p10),
+          margin: const EdgeInsets.fromLTRB(
+              AppMargin.m20, AppMargin.m10, AppMargin.m20, AppMargin.m10),
           child: Column(
             children: [
               const Text(
                 'Hello',
-                style: TextStyle(fontSize: FontSize.s60, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: FontSize.s60, fontWeight: FontWeight.bold),
               ),
               const Text(
                 'Sign in into your account',
-                style: TextStyle(color: Colors.grey,),
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
               ),
               const SizedBox(height: AppSize.s30),
               Form(
@@ -134,11 +142,13 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       const SizedBox(height: 15.0),
                       Container(
-                        margin: const EdgeInsets.fromLTRB(AppMargin.m10, AppMargin.m0, AppMargin.m10, AppMargin.m20),
+                        margin: const EdgeInsets.fromLTRB(AppMargin.m10,
+                            AppMargin.m0, AppMargin.m10, AppMargin.m20),
                         alignment: Alignment.topRight,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, Routes.forgotPasswordRoute);
+                            Navigator.pushNamed(
+                                context, Routes.forgotPasswordRoute);
                           },
                           child: const Text(
                             AppStrings.forgetPassword,
@@ -169,7 +179,8 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         child: ElevatedButton(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(AppPadding.p40, AppPadding.p10, AppPadding.p40, AppPadding.p10),
+                            padding: const EdgeInsets.fromLTRB(AppPadding.p40,
+                                AppPadding.p10, AppPadding.p40, AppPadding.p10),
                             child: Text(
                               'Sign In'.toUpperCase(),
                               style: const TextStyle(
@@ -188,27 +199,41 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.fromLTRB(AppMargin.m10, AppMargin.m20, AppMargin.m10, AppMargin.m20),
+                        margin: const EdgeInsets.fromLTRB(AppMargin.m10,
+                            AppMargin.m20, AppMargin.m10, AppMargin.m20),
                         //child: Text('Don\'t have an account? Create'),
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, Routes.registerRoute);
-                          },
-                          child: Text.rich(TextSpan(children: [
-                            const TextSpan(text: AppStrings.dontHaveAccount),
-                            TextSpan(
-                              text: AppStrings.create,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.secondary),
-                            ),
-                          ]),
-                        )),
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, Routes.registerRoute);
+                            },
+                            child: Text.rich(
+                              TextSpan(children: [
+                                const TextSpan(
+                                    text: AppStrings.dontHaveAccount),
+                                TextSpan(
+                                  text: AppStrings.create,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                ),
+                              ]),
+                            )),
                       ),
                     ],
                   )),
             ],
           )),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passController.dispose();
+    instance<LoginBloc>().close();
+    super.dispose();
   }
 }

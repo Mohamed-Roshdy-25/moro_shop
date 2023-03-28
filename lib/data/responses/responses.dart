@@ -235,3 +235,31 @@ class ProfileResponse {
       _$ProfileResponseFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileResponseToJson(this);
 }
+
+@JsonSerializable()
+class AddOrDeleteFavoritesResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  AddOrDeleteFavoritesResponse(
+      this.status, this.message);
+
+  factory AddOrDeleteFavoritesResponse.fromJson(Map<String, dynamic> json) => _$AddOrDeleteFavoritesResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$AddOrDeleteFavoritesResponseToJson(this);
+}
+
+@JsonSerializable()
+class LogoutResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  LogoutResponse(
+      this.status, this.message);
+
+  factory LogoutResponse.fromJson(Map<String, dynamic> json) => _$LogoutResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$LogoutResponseToJson(this);
+}

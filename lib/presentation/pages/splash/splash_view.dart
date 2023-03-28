@@ -35,33 +35,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: const [0.0, 1.0],
-            colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).colorScheme.secondary,
-            ],
-          ),
-        ),
-        child: FutureBuilder(
-          future: _checkInternet(),
-          builder: (context, snapshot) {
-            if (snapshot.data == true) {
-              return _buildBody(context);
-            } else if (snapshot.data == false) {
-              return _buildBody(context);
-            } else {
-              return _buildBody(context);
-            }
-          },
-        ),
-      ),
+      body: _buildBody(),
     );
   }
 
@@ -71,7 +45,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   _goNext() async {
-    if (await _checkInternet()) {
+    if (await _networkInfo.isConnected) {
       // navigate to main screen
       _appPreferences.isUserLoggedIn().then((isUserLoggedIn) {
         if (isUserLoggedIn) {
@@ -105,17 +79,24 @@ class _SplashViewState extends State<SplashView> {
     }
   }
 
-  Future<bool> _checkInternet() async {
-    if (await _networkInfo.isConnected) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Widget _buildBody(context) {
-    return Center(
-      child: Lottie.asset(JsonAssets.splashIcon),
+  Widget _buildBody() {
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          stops: const [0.0, 1.0],
+          colors: [
+            Theme.of(context).primaryColor,
+            Theme.of(context).colorScheme.secondary,
+          ],
+        ),
+      ),
+      child: Center(
+        child: Lottie.asset(JsonAssets.splashIcon),
+      ),
     );
   }
 
