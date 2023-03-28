@@ -11,7 +11,6 @@ import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
 
 
-
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
