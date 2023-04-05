@@ -74,55 +74,74 @@ Future<void> initAppModule() async {
 }
 
 initLoginModule() {
-  instance.registerFactory<LoginUseCase>(() => LoginUseCase(instance()));
-  instance.registerFactory<LoginBloc>(
-      () => LoginBloc(loginUseCase: instance(), appPreferences: instance()));
+  if(!GetIt.I.isRegistered<LoginUseCase>()) {
+    instance.registerFactory<LoginUseCase>(() => LoginUseCase(instance()));
+    instance.registerFactory<LoginBloc>(
+            () =>
+            LoginBloc(loginUseCase: instance(), appPreferences: instance()));
+  }
 }
 
 initForgotPasswordModule() {
-  instance.registerFactory<ForgotPasswordUseCase>(
-      () => ForgotPasswordUseCase(instance()));
-  instance.registerFactory<ForgotPasswordBloc>(
-      () => ForgotPasswordBloc(forgotPasswordUseCase: instance()));
+  if(!GetIt.I.isRegistered<ForgotPasswordUseCase>()) {
+    instance.registerFactory<ForgotPasswordUseCase>(
+            () => ForgotPasswordUseCase(instance()));
+    instance.registerFactory<ForgotPasswordBloc>(
+            () => ForgotPasswordBloc(forgotPasswordUseCase: instance()));
+  }
 }
 
 initVerifyCodeModule() {
-  instance
-      .registerFactory<VerifyCodeUseCase>(() => VerifyCodeUseCase(instance()));
-  instance.registerFactory<VerifyCodeBloc>(
-      () => VerifyCodeBloc(verifyCodeUseCase: instance()));
+  if(!GetIt.I.isRegistered<VerifyCodeUseCase>()) {
+    instance
+        .registerFactory<VerifyCodeUseCase>(() =>
+        VerifyCodeUseCase(instance()));
+    instance.registerFactory<VerifyCodeBloc>(
+            () => VerifyCodeBloc(verifyCodeUseCase: instance()));
+  }
 }
 
 initResetPasswordModule() {
-  instance.registerFactory<ResetPasswordUseCase>(
-      () => ResetPasswordUseCase(instance()));
-  instance.registerFactory<ResetPasswordBloc>(() => ResetPasswordBloc(
-      resetPasswordUseCase: instance(), appPreferences: instance()));
+  if(!GetIt.I.isRegistered<ResetPasswordUseCase>()) {
+    instance.registerFactory<ResetPasswordUseCase>(
+            () => ResetPasswordUseCase(instance()));
+    instance.registerFactory<ResetPasswordBloc>(() =>
+        ResetPasswordBloc(
+            resetPasswordUseCase: instance(), appPreferences: instance()));
+  }
 }
 
 initRegisterModule() {
-  instance.registerFactory<RegisterUseCase>(() => RegisterUseCase(instance()));
-  instance.registerFactory<RegisterBloc>(() =>
-      RegisterBloc(registerUseCase: instance(), appPreferences: instance()));
-  instance.registerFactory<ImagePicker>(() => ImagePicker());
+  if(!GetIt.I.isRegistered<RegisterUseCase>()) {
+    instance.registerFactory<RegisterUseCase>(() =>
+        RegisterUseCase(instance()));
+    instance.registerFactory<RegisterBloc>(() =>
+        RegisterBloc(registerUseCase: instance(), appPreferences: instance()));
+    instance.registerFactory<ImagePicker>(() => ImagePicker());
+  }
 }
 
 initHomeModule() {
-  instance
-      .registerFactory<CategoriesUseCase>(() => CategoriesUseCase(instance()));
-  instance
-      .registerFactory<CategoryBloc>(() => CategoryBloc(instance()));
-  instance.registerFactory<CategoryProductsUseCase>(
-      () => CategoryProductsUseCase(instance()));
-  instance.registerFactory<AddOrDeleteFavoritesUseCase>(
-      () => AddOrDeleteFavoritesUseCase(instance()));
-  instance.registerFactory<CategoryProductsBloc>(
-          () => CategoryProductsBloc(instance(),instance()));
-  instance.registerFactory<LogoutUseCase>(() => LogoutUseCase(instance()));
-  instance.registerFactory<LogoutBloc>(() => LogoutBloc(instance()));
+  if(!GetIt.I.isRegistered<CategoriesUseCase>()) {
+    instance
+        .registerFactory<CategoriesUseCase>(() =>
+        CategoriesUseCase(instance()));
+    instance
+        .registerFactory<CategoryBloc>(() => CategoryBloc(instance()));
+    instance.registerFactory<CategoryProductsUseCase>(
+            () => CategoryProductsUseCase(instance()));
+    instance.registerFactory<AddOrDeleteFavoritesUseCase>(
+            () => AddOrDeleteFavoritesUseCase(instance()));
+    instance.registerFactory<CategoryProductsBloc>(
+            () => CategoryProductsBloc(instance(), instance()));
+    instance.registerFactory<LogoutUseCase>(() => LogoutUseCase(instance()));
+    instance.registerFactory<LogoutBloc>(() => LogoutBloc(instance()));
+  }
 }
 
 initProfileModule() {
-  instance.registerFactory<ProfileUseCase>(() => ProfileUseCase(instance()));
-  instance.registerFactory<ProfileBloc>(() => ProfileBloc(instance()));
+  if(!GetIt.I.isRegistered<ProfileUseCase>()) {
+    instance.registerFactory<ProfileUseCase>(() => ProfileUseCase(instance()));
+    instance.registerFactory<ProfileBloc>(() => ProfileBloc(instance()));
+  }
 }

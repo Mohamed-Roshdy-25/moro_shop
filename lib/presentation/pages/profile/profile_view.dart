@@ -5,6 +5,7 @@ import 'package:moro_shop/presentation/bloc/profile/profile_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
 import 'package:moro_shop/presentation/common/widgets/auth_header_widget.dart';
+import 'package:moro_shop/presentation/resources/assets_manager.dart';
 import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
 import 'package:moro_shop/presentation/resources/style_manager.dart';
@@ -17,6 +18,14 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  void _onProfileDataError(ProfileState state, BuildContext context) {
+    if (state is GetProfileErrorState) {
+      if (state.message == AppStrings.unKnownError) {
+        BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,24 +37,22 @@ class _ProfileViewState extends State<ProfileView> {
         elevation: 0,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
                 Theme.of(context).primaryColor,
                 Theme.of(context).colorScheme.secondary,
-              ])),
+              ],
+            ),
+          ),
         ),
       ),
       body: BlocProvider<ProfileBloc>(
         create: (context) => instance<ProfileBloc>()..add(GetProfileEvent()),
         child: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
-            if (state is GetProfileErrorState) {
-              if (state.message == AppStrings.unKnownError) {
-                BlocProvider.of<ProfileBloc>(context).add(GetProfileEvent());
-              }
-            }
+            _onProfileDataError(state, context);
           },
           builder: (context, state) {
             if (state is GetProfileSuccessState) {
@@ -79,11 +86,12 @@ class _ProfileViewState extends State<ProfileView> {
                               ],
                             ),
                             child: data?.image != null && data!.image.isNotEmpty
-                                ? Image.network(
-                                    data.image,
-                                    fit: BoxFit.cover,
+                                ? FadeInImage.assetNetwork(
                                     height: 80,
                                     width: 80,
+                                    placeholder: ImagesAssets.imageLoading,
+                                    image: data.image,
+                                    fit: BoxFit.fill,
                                   )
                                 : Icon(
                                     Icons.person,
@@ -194,11 +202,5 @@ class _ProfileViewState extends State<ProfileView> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    instance<ProfileBloc>().close();
-    super.dispose();
   }
 }

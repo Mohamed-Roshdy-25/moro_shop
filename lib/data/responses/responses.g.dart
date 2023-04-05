@@ -79,14 +79,12 @@ CategoryResponse _$CategoryResponseFromJson(Map<String, dynamic> json) =>
     CategoryResponse(
       json['id'] as int?,
       json['name'] as String?,
-      json['image'] as String?,
     );
 
 Map<String, dynamic> _$CategoryResponseToJson(CategoryResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'image': instance.image,
     };
 
 CategoriesDataResponse _$CategoriesDataResponseFromJson(

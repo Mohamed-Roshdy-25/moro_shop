@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/add_delete_favorites_use_case.dart';
@@ -27,25 +25,9 @@ class CategoryProductsBloc
       }
 
       if (event is PostAddOrDeleteFavoritesEvent) {
-        isLoading[event.productId] = true;
-        emit(AddOrDeleteFavoritesLoadingState());
-
-        (await _addOrDeleteFavoritesUseCase.execute(
-            AddOrDeleteFavoritesUseCaseInput(
-                event.productId, event.categoryId)))
-            .fold((failure) {
-          isLoading[event.productId] = false;
-          emit(AddOrDeleteFavoritesErrorState(failure.message));
-        }, (data) {
-          isLoading[event.productId] = false;
-          emit(AddOrDeleteFavoritesLoadingState());
-          inFavorites[event.productId] =
-          !inFavorites[event.productId].orFalse();
-          emit(AddOrDeleteFavoritesSuccessState(data.message));
-        });
+        await _changeFavorite(emit, event);
       }
     },
-      transformer: sequential(),
     );
   }
 
@@ -56,7 +38,6 @@ class CategoryProductsBloc
         .execute(CategoryProductsUseCaseInput(event.categoryId)))
         .fold(
           (failure) {
-        debugPrint('=============================================error');
         emit(GetCategoryProductsErrorState(failure.message));
       },
           (data) {
@@ -72,4 +53,24 @@ class CategoryProductsBloc
       },
     );
   }
+
+  Future<void> _changeFavorite(emit, event) async {
+    isLoading[event.productId] = true;
+    emit(AddOrDeleteFavoritesLoadingState());
+
+    (await _addOrDeleteFavoritesUseCase.execute(
+    AddOrDeleteFavoritesUseCaseInput(
+    event.productId, event.categoryId)))
+        .fold((failure) {
+    isLoading[event.productId] = false;
+    emit(AddOrDeleteFavoritesErrorState(failure.message));
+    }, (data) {
+    isLoading[event.productId] = false;
+    emit(AddOrDeleteFavoritesLoadingState());
+    inFavorites[event.productId] =
+    !inFavorites[event.productId].orFalse();
+    emit(AddOrDeleteFavoritesSuccessState(data.message));
+    });
+  }
+
 }

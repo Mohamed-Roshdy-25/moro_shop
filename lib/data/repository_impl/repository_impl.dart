@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/data/data_sources/local_data_source.dart';
 import 'package:moro_shop/data/data_sources/remote_data_source.dart';
@@ -167,12 +166,10 @@ class RepositoryImpl implements Repository {
                 response, categoryId);
             return Right(response.toDomain());
           } else {
-            debugPrint('=============================================server');
             return Left(
                 Failure(response.status.orFalse(), response.message.orEmpty()));
           }
         } catch (error) {
-          debugPrint('=============================================dioerror');
           return Left(ErrorHandler.handle(error).failure);
         }
       } else {

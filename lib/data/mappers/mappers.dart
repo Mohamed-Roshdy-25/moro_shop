@@ -52,7 +52,6 @@ extension CategoryDataResponseMapper on CategoryResponse? {
     return CategoryModel(
       (this?.id).orZero(),
       (this?.name).orEmpty(),
-      (this?.image).orEmpty(),
     );
   }
 }

@@ -24,6 +24,33 @@ class _SettingsViewState extends State<SettingsView> {
     return _buildBody(context, size);
   }
 
+  void _onLogoutError(LogoutState state, BuildContext context ){
+    if(state is LogoutErrorState){
+      if(state.message == AppStrings.unKnownError){
+        BlocProvider.of<LogoutBloc>(context).add(const PostLogoutEvent());
+      }else {
+        ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,buttonTitle: AppStrings.retryAgain,retryActionFunction: (){
+          BlocProvider.of<LogoutBloc>(context).add(const PostLogoutEvent());
+        });
+      }
+    }
+  }
+
+  void _onLogoutSuccess(LogoutState state, BuildContext context ){
+    if(state is LogoutSuccessState){
+      Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.loginRoute,
+          ModalRoute.withName(Routes.splashRoute));
+    }
+  }
+
+  void _onLogoutLoading(LogoutState state, BuildContext context ){
+    if(state is LogoutLoadingState){
+      LoadingState(stateRendererType: StateRendererType.popupLoadingState).getScreenWidget(context);
+    }
+  }
+
   _buildBody(context, size) {
     return SingleChildScrollView(
       child: Stack(
@@ -51,25 +78,9 @@ class _SettingsViewState extends State<SettingsView> {
                       create: (context) => instance<LogoutBloc>(),
                       child: BlocConsumer<LogoutBloc, LogoutState>(
                         listener: (context, state) {
-                          if(state is LogoutSuccessState){
-                            Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                Routes.loginRoute,
-                                ModalRoute.withName(Routes.splashRoute));
-                          }
-                          if(state is LogoutErrorState){
-                            if(state.message == AppStrings.unKnownError) {
-                              BlocProvider.of<LogoutBloc>(context)
-                                  .add(const PostLogoutEvent());
-                            }else {
-                              ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,buttonTitle: AppStrings.retryAgain,retryActionFunction: (){
-                              BlocProvider.of<LogoutBloc>(context).add(const PostLogoutEvent());
-                            });
-                            }
-                          }
-                          if(state is LogoutLoadingState){
-                            LoadingState(stateRendererType: StateRendererType.popupLoadingState).getScreenWidget(context);
-                          }
+                          _onLogoutError(state, context);
+                          _onLogoutLoading(state, context);
+                          _onLogoutSuccess(state, context);
                         },
                         builder: (context, state) {
                           return _item(

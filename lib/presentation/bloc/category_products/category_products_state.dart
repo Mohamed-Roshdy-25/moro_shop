@@ -54,8 +54,3 @@ class AddOrDeleteFavoritesErrorState extends CategoryProductsState {
   @override
   List<Object?> get props => [];
 }
-
-class ChangeFavoriteButton extends CategoryProductsState {
-  @override
-  List<Object?> get props => [];
-}

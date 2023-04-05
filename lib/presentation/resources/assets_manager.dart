@@ -11,4 +11,5 @@ class JsonAssets {
 
 class ImagesAssets {
   static const String defaultProfilePic = "$imagesPath/default profile pic.png";
+  static const String imageLoading = "$imagesPath/image_loading.gif";
 }

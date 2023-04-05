@@ -94,10 +94,9 @@ class CategoryResponse {
   int? id;
   @JsonKey(name: 'name')
   String? name;
-  @JsonKey(name: 'image')
-  String? image;
 
-  CategoryResponse(this.id, this.name, this.image);
+
+  CategoryResponse(this.id, this.name);
 
   factory CategoryResponse.fromJson(Map<String, dynamic> json) =>
       _$CategoryResponseFromJson(json);

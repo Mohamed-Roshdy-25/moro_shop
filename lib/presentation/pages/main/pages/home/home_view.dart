@@ -10,7 +10,6 @@ import 'package:moro_shop/presentation/pages/widgets/home_product_widget.dart';
 import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
 
-
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
@@ -21,17 +20,28 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int selectedValue = 0;
 
+
   @override
   Widget build(BuildContext context) {
     return _getContentWidget();
   }
 
+  void _onCategoriesError(CategoryState state, BuildContext context){
+    if(state is CategoriesErrorState){
+      if(state.message == AppStrings.unKnownError){
+        BlocProvider.of<CategoryBloc>(context).add(GetCategoriesEvent());
+      }
+    }
+  }
+
+
   Widget _getContentWidget() {
     return BlocProvider<CategoryBloc>(
+      lazy: false,
       create: (context) => instance<CategoryBloc>()..add(GetCategoriesEvent()),
       child: BlocConsumer<CategoryBloc, CategoryState>(
         listener: (context, state) {
-          _onCategoriesErrorState(state,context);
+          _onCategoriesError(state,context);
         },
         builder: (context, state) {
           List<CategoryModel>? categories =
@@ -127,26 +137,13 @@ class _HomeViewState extends State<HomeView> {
     return Expanded(
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
-        children: List.generate(data.length, (index) {
-          return HomeProductsWidget(categoryId: data[index].id);
-        }),
+        children: List.generate(
+          data.length,
+          (index) {
+            return HomeProductsWidget(categoryId: data[index].id);
+          },
+        ),
       ),
     );
-  }
-
-  Future<void> _onCategoriesErrorState(CategoryState state,BuildContext context) async {
-    if (state is CategoriesErrorState) {
-      if (state.message == AppStrings.unKnownError) {
-        BlocProvider.of<CategoryBloc>(context)
-            .add(GetCategoriesEvent());
-        await Future.delayed(Duration.zero);
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    instance<CategoryBloc>().close();
-    super.dispose();
   }
 }

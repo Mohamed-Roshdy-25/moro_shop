@@ -1,9 +1,9 @@
 // ignore_for_file: void_checks
 
 import 'dart:ffi';
+import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/categories_use_case.dart';
@@ -19,10 +19,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<CategoryEvent>(
       (event, emit) async {
         if (event is GetCategoriesEvent) {
-          await _getCategories(emit,event);
+          await Future.wait([_getCategories(emit,event)]);
         }
       },
-      transformer: sequential(),
     );
   }
 

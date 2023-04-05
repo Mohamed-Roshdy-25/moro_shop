@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moro_shop/app/constants.dart';
 import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/domain/models/models.dart';
@@ -14,7 +14,7 @@ import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl
 import 'package:moro_shop/presentation/resources/assets_manager.dart';
 import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
-
+import 'package:moro_shop/presentation/resources/values_manager.dart';
 
 class HomeProductsWidget extends StatefulWidget {
   final int categoryId;
@@ -34,14 +34,24 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
     return _getContentWidget();
   }
 
+  void _onCategoryProductsError(
+      CategoryProductsState state, BuildContext context) {
+    if (state is GetCategoryProductsErrorState) {
+      if (state.message == AppStrings.unKnownError) {
+        BlocProvider.of<CategoryProductsBloc>(context)
+            .add(GetCategoryProductsEvent(widget.categoryId));
+      }
+    }
+  }
+
   Widget _getContentWidget() {
     return BlocProvider<CategoryProductsBloc>(
       create: (context) => instance<CategoryProductsBloc>()
         ..add(GetCategoryProductsEvent(widget.categoryId)),
       child: BlocConsumer<CategoryProductsBloc, CategoryProductsState>(
         listener: (context, state) {
-          _onProductsErrorState(state,context);
-          _onAddOrDeleteFavoriteErrorState(state,context);
+          _onCategoryProductsError(state, context);
+          _onAddOrDeleteFavoriteErrorState(state, context);
         },
         builder: (context, state) {
           List<ProductModel>? products =
@@ -58,7 +68,7 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
               BlocProvider.of<CategoryProductsBloc>(context)
                   .add(GetCategoryProductsEvent(widget.categoryId));
               await Future.delayed(Duration.zero);
-            },buttonTitle: AppStrings.retryAgain);
+            }, buttonTitle: AppStrings.retryAgain);
           } else {
             return LoadingState(
                     stateRendererType: StateRendererType.fullScreenLoadingState)
@@ -70,20 +80,24 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
   }
 
   Widget _productsGridView(List<ProductModel> products) {
-    return MasonryGridView.count(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      crossAxisSpacing: 15,
-      crossAxisCount: 2,
-      itemCount: products.length,
-      mainAxisSpacing: 10,
-      itemBuilder: (context, index) {
-        return singleProductWidget(
-          products[index],
-          index == (products.length) - 1 ? true : false,
-          context,
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.all(AppPadding.p10),
+      child: MasonryGridView.count(
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        crossAxisSpacing: 15,
+        crossAxisCount: 2,
+        itemCount: products.length,
+        mainAxisSpacing: 10,
+        itemBuilder: (context, index) {
+          return singleProductWidget(
+            products[index],
+            index == (products.length) - 1 ? true : false,
+            context,
+          );
+        },
+      ),
     );
   }
 
@@ -126,21 +140,12 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
     );
   }
 
-  Widget _productImage(ProductModel product) {
+  Widget _productImage(ProductModel? product) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(28),
-      child: Image(
-        image: NetworkImage(
-          product.image,
-        ),
-        errorBuilder: (context, error, stackTrace) {
-          return const SizedBox(
-            height: 100,
-            width: 100,
-            child: Center(child: Text('Your connection is week please refresh the page'),),
-          );
-        },
-        fit: BoxFit.cover,
+      child: FadeInImage.assetNetwork(
+        placeholder: ImagesAssets.imageLoading,
+        image: product?.image ?? Constants.faildToLoadImage,
       ),
     );
   }
@@ -234,38 +239,16 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
     );
   }
 
-  Future<void> _onProductsErrorState(CategoryProductsState state,BuildContext context) async {
-    if (state is GetCategoryProductsErrorState) {
-      if (state.message == AppStrings.unKnownError) {
-        BlocProvider.of<CategoryProductsBloc>(context)
-            .add(GetCategoryProductsEvent(widget.categoryId));
-        await Future.delayed(Duration.zero);
-      }
-    }
-  }
-
-  Future<void> _onAddOrDeleteFavoriteErrorState(CategoryProductsState state,BuildContext context) async {
+  Future<void> _onAddOrDeleteFavoriteErrorState(
+      CategoryProductsState state, BuildContext context) async {
     if (state is AddOrDeleteFavoritesErrorState) {
-      if (state.message == AppStrings.unKnownError) {
-        BlocProvider.of<CategoryProductsBloc>(context).add(
-            PostAddOrDeleteFavoritesEvent(
-                productId.orZero(), widget.categoryId.toString()));
-        await Future.delayed(Duration.zero);
-      } else {
-        Fluttertoast.showToast(
-          msg: state.message,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: ColorManager.red,
-          textColor: ColorManager.white,
-          toastLength: Toast.LENGTH_SHORT,
-        );
-      }
+      Fluttertoast.showToast(
+        msg: state.message,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: ColorManager.red,
+        textColor: ColorManager.white,
+        toastLength: Toast.LENGTH_SHORT,
+      );
     }
-  }
-
-  @override
-  void dispose() {
-    instance<CategoryProductsBloc>().close();
-    super.dispose();
   }
 }
