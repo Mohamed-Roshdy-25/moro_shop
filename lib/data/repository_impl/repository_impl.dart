@@ -14,10 +14,10 @@ import 'package:moro_shop/domain/repository/repository.dart';
 class RepositoryImpl implements Repository {
   final RemoteDataSource _remoteDataSource;
   final NetworkInfo _networkInfo;
-  final LocalDataSource _localDataSource;
+  final LocalDataSource _localDataSource = LocalDataSourceImpl();
 
   RepositoryImpl(
-      this._remoteDataSource, this._networkInfo, this._localDataSource);
+      this._remoteDataSource, this._networkInfo);
 
   @override
   Future<Either<Failure, LoginOrRegisterOrResetPasswordModel>> login(
@@ -125,6 +125,51 @@ class RepositoryImpl implements Repository {
   }
 
   @override
+  Future<Either<Failure, LogoutModel>> logout() async {
+    if (await _networkInfo.isConnected) {
+      try {
+        LogoutResponse response = await _remoteDataSource.logout();
+        if (response.status == true) {
+          _localDataSource.clearCache();
+          return Right(response.toDomain());
+        } else {
+          return Left(
+              Failure(response.status.orFalse(), response.message.orEmpty()));
+        }
+      } catch (error) {
+        return Left(ErrorHandler.handle(error).failure);
+      }
+    } else {
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProfileModel>> getProfile() async {
+    try {
+      final response = await _localDataSource.getProfileResponse();
+      return Right(response.toDomain());
+    } catch (cacheError) {
+      if (await _networkInfo.isConnected) {
+        try {
+          ProfileResponse response = await _remoteDataSource.getProfile();
+          if (response.status == true) {
+            await _localDataSource.saveProfileToCache(response);
+            return Right(response.toDomain());
+          } else {
+            return Left(
+                Failure(response.status.orFalse(), response.message.orEmpty()));
+          }
+        } catch (error) {
+          return Left(ErrorHandler.handle(error).failure);
+        }
+      } else {
+        return Left(DataSource.noInternetConnection.getFailure());
+      }
+    }
+  }
+
+  @override
   Future<Either<Failure, CategoriesModel>> getCategory() async {
     try {
       final response = await _localDataSource.getCategoriesResponse();
@@ -179,16 +224,65 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<Either<Failure, ProfileModel>> getProfile() async {
-    try {
-      final response = await _localDataSource.getProfileResponse();
+  Future<Either<Failure, AddOrDeleteFavoritesModel>> addOrDeleteFavorites(
+      AddOrDeleteFavoritesRequest addOrDeleteFavoritesRequest,
+      String categoryId) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        AddOrDeleteFavoritesResponse response =
+            await _remoteDataSource.addOrDeleteFavorite(addOrDeleteFavoritesRequest);
+        if (response.status == true) {
+          _localDataSource.removeFromCache(categoryId);
+          _localDataSource.removeFromCache(cacheFavoritesKey);
+          return Right(response.toDomain());
+        } else {
+          return Left(
+              Failure(response.status.orFalse(), response.message.orEmpty()));
+        }
+      } catch (error) {
+        return Left(ErrorHandler.handle(error).failure);
+      }
+    } else {
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, AddOrDeleteCartsModel>> addOrDeleteCarts(
+      AddOrDeleteCartsRequest addOrDeleteCartsRequest,
+      String categoryId) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        AddOrDeleteCartsResponse response =
+        await _remoteDataSource.addOrDeleteCart(addOrDeleteCartsRequest);
+        if (response.status == true) {
+          _localDataSource.removeFromCache(categoryId);
+          _localDataSource.removeFromCache(cacheCartItemsKey);
+          return Right(response.toDomain());
+        } else {
+          return Left(
+              Failure(response.status.orFalse(), response.message.orEmpty()));
+        }
+      } catch (error) {
+        return Left(ErrorHandler.handle(error).failure);
+      }
+    } else {
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, FavoritesAllDataModel>> getFavorites() async {
+    try{
+      final response = _localDataSource.getFavorites();
       return Right(response.toDomain());
-    } catch (cacheError) {
+    }catch (cacheError) {
       if (await _networkInfo.isConnected) {
         try {
-          ProfileResponse response = await _remoteDataSource.getProfile();
+          FavoritesAllDataResponse response =
+          await _remoteDataSource.getFavorites();
           if (response.status == true) {
-            await _localDataSource.saveProfileToCache(response);
+            await _localDataSource.saveFavoritesToCache(response);
             return Right(response.toDomain());
           } else {
             return Left(
@@ -204,15 +298,41 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<Either<Failure, AddOrDeleteFavoritesModel>> addOrDeleteFavorites(
-      AddOrDeleteFavoritesRequest addOrDeleteFavoritesRequest,
-      String categoryId) async {
+  Future<Either<Failure, CartsAllDataModel>> getCarts() async {
+    try{
+      final response =  _localDataSource.getCartItems();
+      return Right(response.toDomain());
+    }catch (cacheError){
+      if (await _networkInfo.isConnected) {
+        try {
+          CartsAllDataResponse response =
+          await _remoteDataSource.getCarts();
+          if (response.status == true) {
+            await _localDataSource.saveCartItemsToCache(response);
+            return Right(response.toDomain());
+          } else {
+            return Left(
+                Failure(response.status.orFalse(), response.message.orEmpty()));
+          }
+        } catch (error) {
+          return Left(ErrorHandler.handle(error).failure);
+        }
+      } else {
+        return Left(DataSource.noInternetConnection.getFailure());
+      }
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, DeleteFavoriteModel>> deleteFavorite(
+      DeleteFavoriteRequest deleteFavoriteRequest) async {
     if (await _networkInfo.isConnected) {
       try {
-        AddOrDeleteFavoritesResponse response =
-            await _remoteDataSource.favorite(addOrDeleteFavoritesRequest);
+        DeleteFavoriteResponse response =
+        await _remoteDataSource.deleteFavorite(deleteFavoriteRequest);
         if (response.status == true) {
-          _localDataSource.removeFromCache(categoryId);
+          _localDataSource.removeFromCache(cacheFavoritesKey);
           return Right(response.toDomain());
         } else {
           return Left(
@@ -227,12 +347,37 @@ class RepositoryImpl implements Repository {
   }
 
   @override
-  Future<Either<Failure, LogoutModel>> logout() async {
+  Future<Either<Failure, DeleteCartItemModel>> deleteCartItem(
+      DeleteCartItemRequest deleteCartItemRequest) async {
     if (await _networkInfo.isConnected) {
       try {
-        LogoutResponse response = await _remoteDataSource.logout();
+        DeleteCartItemResponse response =
+        await _remoteDataSource.deleteCartItem(deleteCartItemRequest);
         if (response.status == true) {
-          _localDataSource.clearCache();
+          _localDataSource.removeFromCache(cacheCartItemsKey);
+          return Right(response.toDomain());
+        } else {
+          return Left(
+              Failure(response.status.orFalse(), response.message.orEmpty()));
+        }
+      } catch (error) {
+        return Left(ErrorHandler.handle(error).failure);
+      }
+    } else {
+      return Left(DataSource.noInternetConnection.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UpdateProductQuantityInCartModel>> updateProductQuantityInCart(
+      UpdateProductQuantityInCartRequest updateProductQuantityInCartRequest
+      ) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        UpdateProductQuantityInCartResponse response =
+        await _remoteDataSource.updateProductQuantityInCart(updateProductQuantityInCartRequest);
+        if (response.status == true) {
+          _localDataSource.removeFromCache(cacheCartItemsKey);
           return Right(response.toDomain());
         } else {
           return Left(

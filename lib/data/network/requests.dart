@@ -44,3 +44,32 @@ class AddOrDeleteFavoritesRequest{
 
   AddOrDeleteFavoritesRequest(this.productId);
 }
+
+class AddOrDeleteCartsRequest{
+  int productId;
+
+
+  AddOrDeleteCartsRequest(this.productId);
+}
+
+class DeleteFavoriteRequest{
+  int favoriteItemId;
+
+
+  DeleteFavoriteRequest(this.favoriteItemId);
+}
+
+class DeleteCartItemRequest{
+  int cartItemId;
+
+
+  DeleteCartItemRequest(this.cartItemId);
+}
+
+class UpdateProductQuantityInCartRequest{
+  int cartItemId;
+  int quantity;
+
+
+  UpdateProductQuantityInCartRequest(this.cartItemId,this.quantity);
+}

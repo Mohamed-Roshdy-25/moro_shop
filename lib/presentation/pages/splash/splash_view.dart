@@ -28,15 +28,8 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   void initState() {
-    _startDelay();
     super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-    );
+    _startDelay();
   }
 
   _startDelay() {
@@ -46,37 +39,53 @@ class _SplashViewState extends State<SplashView> {
 
   _goNext() async {
     if (await _networkInfo.isConnected) {
-      // navigate to main screen
-      _appPreferences.isUserLoggedIn().then((isUserLoggedIn) {
-        if (isUserLoggedIn) {
-          Navigator.pushNamedAndRemoveUntil(context, Routes.mainRoute,
-              ModalRoute.withName(Routes.splashRoute));
-        } else {
-          // navigate to login screen
-          _appPreferences
-              .isOnBoardingScreenViewed()
-              .then((isOnBoardingScreenViewed) {
-            if (isOnBoardingScreenViewed) {
-              Navigator.pushNamedAndRemoveUntil(context, Routes.loginRoute,
-                  ModalRoute.withName(Routes.splashRoute));
-            } else {
-              // navigate to onBoarding screen
-              Navigator.pushNamedAndRemoveUntil(context, Routes.introRoute,
-                  ModalRoute.withName(Routes.splashRoute));
-            }
-          });
-        }
-      });
+      manageNavigation();
     } else {
-      ErrorState(StateRendererType.popupErrorState, AppStrings.noInternetError)
-          .getScreenWidget(
-        context,
-        retryActionFunction: () {
-          _startDelay();
-        },
-        buttonTitle: AppStrings.retryAgain,
-      );
+      _showNetworkErrorWidget();
     }
+  }
+
+  void manageNavigation() {
+    // navigate to main screen
+    _appPreferences.isUserLoggedIn().then((isUserLoggedIn) {
+      if (isUserLoggedIn) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.mainRoute, ModalRoute.withName(Routes.splashRoute));
+      } else {
+        // navigate to login screen
+        _appPreferences
+            .isIntroScreenViewed()
+            .then((isIntroScreenViewed) {
+          if (isIntroScreenViewed) {
+            Navigator.pushNamedAndRemoveUntil(context, Routes.loginRoute,
+                ModalRoute.withName(Routes.splashRoute));
+          } else {
+            // navigate to onBoarding screen
+            Navigator.pushNamedAndRemoveUntil(context, Routes.introRoute,
+                ModalRoute.withName(Routes.splashRoute));
+          }
+        });
+      }
+    });
+  }
+
+  Widget _showNetworkErrorWidget() {
+    return ErrorState(
+            StateRendererType.popupErrorState, AppStrings.noInternetError)
+        .getScreenWidget(
+      context,
+      retryActionFunction: () {
+        _startDelay();
+      },
+      buttonTitle: AppStrings.retryAgain,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _buildBody(),
+    );
   }
 
   Widget _buildBody() {
@@ -87,7 +96,6 @@ class _SplashViewState extends State<SplashView> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          stops: const [0.0, 1.0],
           colors: [
             Theme.of(context).primaryColor,
             Theme.of(context).colorScheme.secondary,

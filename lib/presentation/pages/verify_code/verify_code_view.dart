@@ -1,14 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:moro_shop/presentation/bloc/verify_code/verify_code_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
-import 'package:moro_shop/presentation/common/widgets/auth_header_widget.dart';
+import 'package:moro_shop/presentation/pages/widgets/auth_header_widget.dart';
+import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/routes_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
+import 'package:moro_shop/presentation/resources/values_manager.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 
@@ -28,167 +31,174 @@ class _VerifyCodeViewState extends State<VerifyCodeView> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ForgotPasswordBloc>(
-          create: (context) => instance<ForgotPasswordBloc>(),
-        ),
-        BlocProvider<VerifyCodeBloc>(
-          create: (context) => instance<VerifyCodeBloc>(),
-        ),
+        BlocProvider(create: (context) => instance<VerifyCodeBloc>()),
+        BlocProvider(create: (context) => instance<ForgotPasswordBloc>()),
       ],
       child: BlocConsumer<VerifyCodeBloc, VerifyCodeState>(
         listener: (context, state) {
-          if (state is VerifyCodeLoadingState) {
-            LoadingState(
-                    stateRendererType: StateRendererType.popupLoadingState,
-                    message: AppStrings.loading)
-                .getScreenWidget(context);
-          }
-          if (state is VerifyCodeSuccessState) {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, Routes.resetPasswordRoute,
-                arguments: {'email': widget.email, 'pin': _pin});
-          }
-          if (state is VerifyCodeErrorState) {
-            ErrorState(StateRendererType.popupErrorState, state.message)
-                .getScreenWidget(
-              context,
-              retryActionFunction: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, Routes.resetPasswordRoute,
-                    arguments: {'email': widget.email, 'pin': _pin});
-              },
-              buttonTitle: AppStrings.ok,
-            );
-          }
+          _onVerifyCodeLoadingState(context, state);
+          _onVerifyCodeSuccessState(context, state);
+          _onVerifyCodeErrorState(context, state);
         },
         builder: (context, state) {
           return Scaffold(
-              backgroundColor: Colors.white,
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const AuthHeaderWidget(250, true,
-                        icon: Icons.privacy_tip_outlined),
-                    SafeArea(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Column(
-                          children: [
-                            Container(
-                              alignment: Alignment.topLeft,
-                              margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    'Verification',
-                                    style: TextStyle(
-                                        fontSize: 35,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black54),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    'Enter the verification code we just sent you on your email address.',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black54),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 40.0),
-                            Column(
-                              children: [
-                                OTPTextField(
-                                  length: 4,
-                                  width: 300,
-                                  fieldWidth: 50,
-                                  style: const TextStyle(fontSize: 30),
-                                  textFieldAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  fieldStyle: FieldStyle.underline,
-                                  onCompleted: (pin) {
-                                    _pin = pin;
-                                    BlocProvider.of<VerifyCodeBloc>(context)
-                                        .add(PostVerifyCodeEvent(
-                                            widget.email, pin));
-                                  },
-                                  onChanged: (value) {},
-                                ),
-                                const SizedBox(height: 50.0),
-                                BlocListener<ForgotPasswordBloc,
-                                    ForgotPasswordState>(
-                                  listener: (context, state) {
-                                    if (state is ForgotPasswordLoadingState) {
-                                      LoadingState(
-                                              stateRendererType:
-                                                  StateRendererType
-                                                      .popupLoadingState,
-                                              message: AppStrings.loading)
-                                          .getScreenWidget(context);
-                                    }
-                                    if (state is ForgotPasswordErrorState) {
-                                      ErrorState(
-                                              StateRendererType.popupErrorState,
-                                              state.message)
-                                          .getScreenWidget(
-                                        context,
-                                        retryActionFunction: () {
-                                          Navigator.pop(context);
-                                        },
-                                        buttonTitle: AppStrings.ok,
-                                      );
-                                    }
-                                  },
-                                  child: Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        const TextSpan(
-                                          text:
-                                              "If you didn't receive a code! ",
-                                          style: TextStyle(
-                                            color: Colors.black38,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: 'Resend',
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-                                              BlocProvider.of<
-                                                          ForgotPasswordBloc>(
-                                                      context)
-                                                  .add(PostForgotPasswordEvent(
-                                                      widget.email));
-                                            },
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.orange),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 40.0),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ));
+            body: _buildBody(context),
+          );
         },
       ),
     );
+  }
+
+  void _onVerifyCodeLoadingState(context, state) {
+    if (state is VerifyCodeLoadingState) {
+      LoadingState(
+              stateRendererType: StateRendererType.popupLoadingState,
+              message: AppStrings.loading)
+          .getScreenWidget(context);
+    }
+  }
+
+  void _onVerifyCodeSuccessState(context, state) {
+    if (state is VerifyCodeSuccessState) {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, Routes.resetPasswordRoute,
+          arguments: {'email': widget.email, 'pin': _pin});
+    }
+  }
+
+  void _onVerifyCodeErrorState(context, state) {
+    if (state is VerifyCodeErrorState) {
+      ErrorState(StateRendererType.popupErrorState, state.message)
+          .getScreenWidget(
+        context,
+        retryActionFunction: () {
+          Navigator.pop(context);
+          Navigator.pushNamed(context, Routes.resetPasswordRoute,
+              arguments: {'email': widget.email, 'pin': _pin});
+        },
+        buttonTitle: AppStrings.ok,
+      );
+    }
+  }
+
+  Widget _buildBody(context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _headerWidget(),
+          _twoCaptions(),
+          _otpWidget(context),
+          _resendCodeWidget(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _headerWidget() {
+    return AuthHeaderWidget(
+      height: AppSize.s220.h,
+      showIcon: true,
+      icon: Icons.privacy_tip_outlined,
+    );
+  }
+
+  Widget _twoCaptions() {
+    return Container(
+      alignment: Alignment.topLeft,
+      margin: EdgeInsets.symmetric(horizontal: AppPadding.p20.w),
+      padding: EdgeInsets.symmetric(
+          horizontal: AppPadding.p30.w, vertical: AppPadding.p40.h),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: AppPadding.p10.h),
+            child: Text(
+              AppStrings.verification,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ),
+          Text(
+            AppStrings.enterVerifyCode,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _otpWidget(context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: AppPadding.p40.h),
+      child: OTPTextField(
+        length: 4,
+        width: 300,
+        fieldWidth: 50,
+        style: const TextStyle(fontSize: 30),
+        textFieldAlignment: MainAxisAlignment.spaceAround,
+        fieldStyle: FieldStyle.underline,
+        onCompleted: (pin) {
+          _pin = pin;
+          BlocProvider.of<VerifyCodeBloc>(context)
+              .add(PostVerifyCodeEvent(widget.email, pin));
+        },
+        onChanged: (value) {},
+      ),
+    );
+  }
+
+  Widget _resendCodeWidget(context) {
+    return BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
+      listener: (context, state) {
+        _onForgotPasswordLoadingState(context, state);
+        _onForgotPasswordErrorState(context, state);
+      },
+      builder: (context, state) => Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: AppStrings.didReceiveACode,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            TextSpan(
+              text: 'Resend',
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  BlocProvider.of<ForgotPasswordBloc>(context)
+                      .add(PostForgotPasswordEvent(widget.email));
+                },
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: ColorManager.orange),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onForgotPasswordLoadingState(context, state) {
+    if (state is ForgotPasswordLoadingState) {
+      LoadingState(
+              stateRendererType: StateRendererType.popupLoadingState,
+              message: AppStrings.loading)
+          .getScreenWidget(context);
+    }
+  }
+
+  void _onForgotPasswordErrorState(context, state) {
+    if (state is ForgotPasswordErrorState) {
+      ErrorState(StateRendererType.popupErrorState, state.message)
+          .getScreenWidget(
+        context,
+        retryActionFunction: () {
+          Navigator.pop(context);
+        },
+        buttonTitle: AppStrings.ok,
+      );
+    }
   }
 
   @override

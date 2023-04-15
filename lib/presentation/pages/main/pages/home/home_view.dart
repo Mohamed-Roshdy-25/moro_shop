@@ -5,7 +5,7 @@ import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/presentation/bloc/categories/categories_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
-import 'package:moro_shop/presentation/common/widgets/search_bar.dart';
+import 'package:moro_shop/presentation/pages/widgets/search_bar.dart';
 import 'package:moro_shop/presentation/pages/widgets/home_product_widget.dart';
 import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
@@ -20,29 +20,15 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int selectedValue = 0;
 
-
   @override
   Widget build(BuildContext context) {
     return _getContentWidget();
   }
 
-  void _onCategoriesError(CategoryState state, BuildContext context){
-    if(state is CategoriesErrorState){
-      if(state.message == AppStrings.unKnownError){
-        BlocProvider.of<CategoryBloc>(context).add(GetCategoriesEvent());
-      }
-    }
-  }
-
-
   Widget _getContentWidget() {
-    return BlocProvider<CategoryBloc>(
-      lazy: false,
+    return BlocProvider(
       create: (context) => instance<CategoryBloc>()..add(GetCategoriesEvent()),
-      child: BlocConsumer<CategoryBloc, CategoryState>(
-        listener: (context, state) {
-          _onCategoriesError(state,context);
-        },
+      child: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {
           List<CategoryModel>? categories =
               BlocProvider.of<CategoryBloc>(context).categories;
@@ -66,6 +52,8 @@ class _HomeViewState extends State<HomeView> {
               BlocProvider.of<CategoryBloc>(context).add(GetCategoriesEvent());
               await Future.delayed(Duration.zero);
             });
+          } else if (state is CategoryInitial) {
+            return Container();
           } else {
             return LoadingState(
                     stateRendererType: StateRendererType.fullScreenLoadingState)

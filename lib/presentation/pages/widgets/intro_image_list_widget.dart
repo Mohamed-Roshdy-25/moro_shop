@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/presentation/resources/values_manager.dart';
 
@@ -86,35 +87,36 @@ class _ImageListViewState extends State<ImageListView> {
   @override
   void initState() {
     super.initState();
-
-    _scrollController.addListener(() {
-      if (!_scrollController.position.atEdge) {
-        // implement scroll of list
-        autoScroll();
-      }
-      // adding to list
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        autoScroll();
-      });
-    });
+    _startScrolling();
   }
 
-  autoScroll() {
+  void _startScrolling(){
+    Future.delayed(const Duration(seconds: 5),() {
+
+      _scrollController.addListener(() {
+        if (!_scrollController.position.atEdge) {
+          // implement scroll of list
+          _autoScroll();
+        }
+      });
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _autoScroll();
+      });
+    },);
+  }
+
+  void _autoScroll() {
     double currentScrollPosition = _scrollController.offset;
     double scrollEndPosition = _scrollController.position.maxScrollExtent;
     scheduleMicrotask(() {
       _scrollController.animateTo(
           currentScrollPosition == scrollEndPosition ? 0 : scrollEndPosition,
-          duration: const Duration(seconds: 10),
+          duration: Duration(seconds: products.length * 3),
           curve: Curves.linear);
     });
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,30 +129,38 @@ class _ImageListViewState extends State<ImageListView> {
         child: ListView.builder(
           controller: _scrollController,
           itemCount: 5,
-          itemBuilder: (context, index) {
-            return CachedNetworkImage(
-              imageUrl: products[widget.startIndex + index].productImageUrl,
-              imageBuilder: (con5text, imageProvider) {
-                return Container(
-                  margin: const EdgeInsets.only(
-                    right: AppMargin.m8,
-                    left: AppMargin.m8,
-                    top: AppMargin.m10,
-                  ),
-                  height: size.height * 0.40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppSize.s20),
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              },
-            );
-          },
+          itemBuilder: (context, index) => _buildImageItem(size,index),
         ),
       ),
     );
+  }
+
+  Widget _buildImageItem(Size size,int index) {
+    return CachedNetworkImage(
+      imageUrl: products[widget.startIndex + index].productImageUrl,
+      imageBuilder: (context, imageProvider) {
+        return Container(
+          margin: EdgeInsets.only(
+            right: AppMargin.m8.w,
+            left: AppMargin.m8.w,
+            top: AppMargin.m10.h,
+          ),
+          height: size.height * 0.40,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppSize.s20),
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

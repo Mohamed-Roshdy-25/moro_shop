@@ -3,9 +3,12 @@ import 'package:moro_shop/data/responses/responses.dart';
 
 const cacheCategoriesKey = "Cache_Categories_Key";
 const cacheProfileKey = "Cache_Profile_Key";
+const cacheFavoritesKey = "Cache_Favorites_Key";
+const cacheCartItemsKey = "Cache_Cart_Items_Key";
 const cacheHomeInterval = 60 * 1000;
 
 abstract class LocalDataSource {
+
   Future<CategoriesResponse> getCategoriesResponse();
   Future<void> saveCategoriesToCache(CategoriesResponse categoriesResponse);
 
@@ -16,12 +19,24 @@ abstract class LocalDataSource {
   Future<ProfileResponse> getProfileResponse();
   Future<void> saveProfileToCache(ProfileResponse profileResponse);
 
+  FavoritesAllDataResponse getFavorites();
+  Future<void> saveFavoritesToCache(FavoritesAllDataResponse favoritesAllDataResponse);
+
+  CartsAllDataResponse getCartItems();
+  Future<void> saveCartItemsToCache(CartsAllDataResponse favoritesAllDataResponse);
+
   void clearCache();
   void removeFromCache(String key);
 }
 
 class LocalDataSourceImpl implements LocalDataSource {
-  Map<String, CachedItem> cacheMap = {};
+    LocalDataSourceImpl._internal();
+
+   static final LocalDataSourceImpl _instance = LocalDataSourceImpl._internal();
+
+    factory LocalDataSourceImpl() => _instance;
+
+   Map<String, CachedItem> cacheMap = {};
 
   @override
   Future<CategoriesResponse> getCategoriesResponse() async {
@@ -73,6 +88,38 @@ class LocalDataSourceImpl implements LocalDataSource {
     cacheMap[cacheProfileKey] = CachedItem(profileResponse);
   }
 
+    @override
+    FavoritesAllDataResponse getFavorites() {
+      CachedItem? cachedData = cacheMap[cacheFavoritesKey];
+
+      if (cachedData != null && cachedData.isValid(cacheHomeInterval)) {
+        return cachedData.data;
+      } else {
+        throw ErrorHandler.handle(DataSource.cacheError);
+      }
+    }
+
+    @override
+    Future<void> saveFavoritesToCache(FavoritesAllDataResponse favoritesAllDataResponse) async {
+      cacheMap[cacheFavoritesKey] = CachedItem(favoritesAllDataResponse);
+    }
+
+    @override
+    CartsAllDataResponse getCartItems() {
+      CachedItem? cachedData = cacheMap[cacheCartItemsKey];
+
+      if (cachedData != null && cachedData.isValid(cacheHomeInterval)) {
+        return cachedData.data;
+      } else {
+        throw ErrorHandler.handle(DataSource.cacheError);
+      }
+    }
+
+    @override
+    Future<void> saveCartItemsToCache(CartsAllDataResponse cartsAllDataResponse) async {
+      cacheMap[cacheCartItemsKey] = CachedItem(cartsAllDataResponse);
+    }
+
 
   @override
   void clearCache() {
@@ -83,6 +130,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   void removeFromCache(String key) {
     cacheMap.remove(key);
   }
+
 }
 
 class CachedItem {

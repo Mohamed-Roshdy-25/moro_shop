@@ -6,7 +6,7 @@ class StyleManager {
       fontSize: 20, fontWeight: FontWeight.bold, color: ColorManager.white);
 
   static TextStyle bodyStyle = TextStyle(
-      fontSize: 30,
+      fontSize: 16,
 
       fontWeight: FontWeight.w600,
       color: ColorManager.white);

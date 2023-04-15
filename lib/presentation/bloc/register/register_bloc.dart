@@ -42,7 +42,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           loginOrRegisterOrResetPasswordModel = data;
           appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
            appPreferences.setUserLoggedIn();
-          emit(RegisterSuccessState(data));
+          emit(RegisterSuccessState());
         });
       }
       if(event is PickCameraPhotoEvent){

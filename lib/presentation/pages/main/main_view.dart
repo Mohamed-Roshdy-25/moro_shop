@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:moro_shop/presentation/pages/main/pages/cart/cart_view.dart';
 import 'package:moro_shop/presentation/pages/main/pages/favorite/favorite_view.dart';
 import 'package:moro_shop/presentation/pages/main/pages/home/home_view.dart';
 import 'package:moro_shop/presentation/pages/main/pages/settings/settings_view.dart';
 import 'package:moro_shop/presentation/resources/color_manager.dart';
+import 'package:moro_shop/presentation/resources/values_manager.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -27,6 +29,7 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorManager.white,
       body: _body(),
     );
   }
@@ -36,9 +39,6 @@ class _MainViewState extends State<MainView> {
       child: Stack(
         children: [
           _screensView(),
-
-          //bottom bar
-
           _bottomBar(),
         ],
       ),
@@ -66,12 +66,12 @@ class _MainViewState extends State<MainView> {
 
   Widget _bottomBar(){
     return Positioned(
-      bottom: 20,
-      left: 20,
-      right: 20,
+      bottom: 20.h,
+      left: 20.w,
+      right: 20.w,
       child: Container(
         alignment: Alignment.center,
-        height: 70,
+        height: AppSize.s60.h,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -79,7 +79,7 @@ class _MainViewState extends State<MainView> {
               Theme.of(context).colorScheme.secondary,
             ],
           ),
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(40.sp),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -97,7 +97,7 @@ class _MainViewState extends State<MainView> {
                 },
                 icon: Icon(
                   icon,
-                  size: 22,
+                  size: 22.sp,
                 ),
                 color: ColorManager.white,
               ),

@@ -1,8 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/app/extensions.dart';
+import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/models/models.dart';
-import 'package:moro_shop/domain/use_case/add_delete_favorites_use_case.dart';
 import 'package:moro_shop/domain/use_case/category_products_use_case.dart';
 
 part 'category_products_event.dart';
@@ -11,66 +10,36 @@ part 'category_products_state.dart';
 class CategoryProductsBloc
     extends Bloc<CategoryProductsEvent, CategoryProductsState> {
   final CategoryProductsUseCase categoryProductsUseCase;
-  final AddOrDeleteFavoritesUseCase _addOrDeleteFavoritesUseCase;
   List<ProductModel> categoryProductsList = [];
-  Map<int, bool> inFavorites = {};
-  Map<int, bool> isLoading = {};
 
   CategoryProductsBloc(
-      this.categoryProductsUseCase, this._addOrDeleteFavoritesUseCase)
+      this.categoryProductsUseCase)
       : super(CategoryProductsInitial()) {
-    on<CategoryProductsEvent>((event, emit) async {
-      if (event is GetCategoryProductsEvent) {
-       await _getCategoryProducts(emit,event);
-      }
+    on<CategoryProductsEvent>(
+      (event, emit) async {
+        if (event is GetCategoryProductsEvent) {
+          await initAppModule();
+          await Future.wait([_getCategoryProducts(emit, event)]);
+        }
 
-      if (event is PostAddOrDeleteFavoritesEvent) {
-        await _changeFavorite(emit, event);
-      }
-    },
+      },
     );
   }
 
-
-  Future<void> _getCategoryProducts(emit,event) async{
+  Future<void> _getCategoryProducts(emit, event) async {
     emit(GetCategoryProductsLoadingState());
     (await categoryProductsUseCase
-        .execute(CategoryProductsUseCaseInput(event.categoryId)))
+            .execute(CategoryProductsUseCaseInput(event.categoryId)))
         .fold(
-          (failure) {
+      (failure) {
         emit(GetCategoryProductsErrorState(failure.message));
       },
-          (data) {
-        for (ProductModel element
-        in data.categoryAllProductsModel?.products ?? []) {
-          inFavorites.addAll({element.id: element.inFavorites});
-          isLoading.addAll({element.id: element.isLoading});
-        }
-
-        categoryProductsList =
-            data.categoryAllProductsModel?.products ?? [];
+      (data) {
+        categoryProductsList = data.categoryAllProductsModel?.products ?? [];
         emit(GetCategoryProductsSuccessState(data));
       },
     );
   }
 
-  Future<void> _changeFavorite(emit, event) async {
-    isLoading[event.productId] = true;
-    emit(AddOrDeleteFavoritesLoadingState());
-
-    (await _addOrDeleteFavoritesUseCase.execute(
-    AddOrDeleteFavoritesUseCaseInput(
-    event.productId, event.categoryId)))
-        .fold((failure) {
-    isLoading[event.productId] = false;
-    emit(AddOrDeleteFavoritesErrorState(failure.message));
-    }, (data) {
-    isLoading[event.productId] = false;
-    emit(AddOrDeleteFavoritesLoadingState());
-    inFavorites[event.productId] =
-    !inFavorites[event.productId].orFalse();
-    emit(AddOrDeleteFavoritesSuccessState(data.message));
-    });
-  }
 
 }

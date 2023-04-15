@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,59 +23,56 @@ class _SettingsViewState extends State<SettingsView> {
     return _buildBody(context, size);
   }
 
-  void _onLogoutError(LogoutState state, BuildContext context ){
-    if(state is LogoutErrorState){
-      if(state.message == AppStrings.unKnownError){
+  void _onLogoutError(LogoutState state, BuildContext context) {
+    if (state is LogoutErrorState) {
+      ErrorState(StateRendererType.popupErrorState, state.message)
+          .getScreenWidget(context, buttonTitle: AppStrings.retryAgain,
+              retryActionFunction: () {
         BlocProvider.of<LogoutBloc>(context).add(const PostLogoutEvent());
-      }else {
-        ErrorState(StateRendererType.popupErrorState, state.message).getScreenWidget(context,buttonTitle: AppStrings.retryAgain,retryActionFunction: (){
-          BlocProvider.of<LogoutBloc>(context).add(const PostLogoutEvent());
-        });
-      }
+      });
     }
   }
 
-  void _onLogoutSuccess(LogoutState state, BuildContext context ){
-    if(state is LogoutSuccessState){
+  void _onLogoutSuccess(LogoutState state, BuildContext context) {
+    if (state is LogoutSuccessState) {
       Navigator.pushNamedAndRemoveUntil(
-          context,
-          Routes.loginRoute,
-          ModalRoute.withName(Routes.splashRoute));
+          context, Routes.loginRoute, ModalRoute.withName(Routes.splashRoute));
     }
   }
 
-  void _onLogoutLoading(LogoutState state, BuildContext context ){
-    if(state is LogoutLoadingState){
-      LoadingState(stateRendererType: StateRendererType.popupLoadingState).getScreenWidget(context);
+  void _onLogoutLoading(LogoutState state, BuildContext context) {
+    if (state is LogoutLoadingState) {
+      LoadingState(stateRendererType: StateRendererType.popupLoadingState)
+          .getScreenWidget(context);
     }
   }
 
   _buildBody(context, size) {
-    return SingleChildScrollView(
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(30),
-                child: Column(
-                  children: [
-                    _item(
-                        icon: FontAwesomeIcons.userPen,
-                        title: AppStrings.profile,
-                        onTap: () {
-                          Navigator.pushNamed(context, Routes.profileRoute);
-                        }),
-                    const Divider(thickness: 4),
-                    _item(
-                      icon: FontAwesomeIcons.language,
-                      title: AppStrings.language,
-                      onTap: () {},
-                    ),
-                    const Divider(thickness: 4),
-                    BlocProvider<LogoutBloc>(
-                      create: (context) => instance<LogoutBloc>(),
-                      child: BlocConsumer<LogoutBloc, LogoutState>(
+    return BlocProvider(
+      create: (context) => instance<LogoutBloc>(),
+      child: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
+                    children: [
+                      _item(
+                          icon: FontAwesomeIcons.userPen,
+                          title: AppStrings.profile,
+                          onTap: () {
+                            Navigator.pushNamed(context, Routes.profileRoute);
+                          }),
+                      const Divider(thickness: 4),
+                      _item(
+                        icon: FontAwesomeIcons.language,
+                        title: AppStrings.language,
+                        onTap: () {},
+                      ),
+                      const Divider(thickness: 4),
+                      BlocConsumer<LogoutBloc, LogoutState>(
                         listener: (context, state) {
                           _onLogoutError(state, context);
                           _onLogoutLoading(state, context);
@@ -87,18 +83,19 @@ class _SettingsViewState extends State<SettingsView> {
                             icon: FontAwesomeIcons.arrowRightFromBracket,
                             title: AppStrings.logout,
                             onTap: () {
-                              BlocProvider.of<LogoutBloc>(context).add(const PostLogoutEvent());
+                              BlocProvider.of<LogoutBloc>(context)
+                                  .add(const PostLogoutEvent());
                             },
                           );
                         },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lottie/lottie.dart';
 import 'package:moro_shop/app/constants.dart';
 import 'package:moro_shop/app/di.dart';
-import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/domain/models/models.dart';
+import 'package:moro_shop/presentation/bloc/add_delete_cart/add_or_delete_cart_bloc.dart';
+import 'package:moro_shop/presentation/bloc/add_delete_favorite/add_or_delete_favorite_bloc.dart';
 import 'package:moro_shop/presentation/bloc/category_products/category_products_bloc.dart';
+import 'package:moro_shop/presentation/bloc/favorites/favorites_bloc.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer.dart';
 import 'package:moro_shop/presentation/common/state_renderer/state_renderer_impl.dart';
+import 'package:moro_shop/presentation/pages/widgets/favorite_button.dart';
 import 'package:moro_shop/presentation/resources/assets_manager.dart';
 import 'package:moro_shop/presentation/resources/color_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
@@ -27,31 +28,40 @@ class HomeProductsWidget extends StatefulWidget {
 }
 
 class _HomeProductsWidgetState extends State<HomeProductsWidget> {
-  int? productId;
-
   @override
   Widget build(BuildContext context) {
     return _getContentWidget();
   }
 
-  void _onCategoryProductsError(
-      CategoryProductsState state, BuildContext context) {
-    if (state is GetCategoryProductsErrorState) {
-      if (state.message == AppStrings.unKnownError) {
-        BlocProvider.of<CategoryProductsBloc>(context)
-            .add(GetCategoryProductsEvent(widget.categoryId));
-      }
-    }
-  }
-
   Widget _getContentWidget() {
-    return BlocProvider<CategoryProductsBloc>(
-      create: (context) => instance<CategoryProductsBloc>()
-        ..add(GetCategoryProductsEvent(widget.categoryId)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => instance<CategoryProductsBloc>()..add(GetCategoryProductsEvent(widget.categoryId)),),
+        BlocProvider(create: (context) => instance<AddOrDeleteFavoriteBloc>(),),
+        BlocProvider(create: (context) => instance<AddOrDeleteCartBloc>(),),
+        BlocProvider(create: (context) => instance<FavoritesBloc>(),),
+      ],
       child: BlocConsumer<CategoryProductsBloc, CategoryProductsState>(
         listener: (context, state) {
-          _onCategoryProductsError(state, context);
-          _onAddOrDeleteFavoriteErrorState(state, context);
+          if (state is GetCategoryProductsSuccessState) {
+            for (ProductModel element in state
+                    .categoryAllDataModel.categoryAllProductsModel?.products ??
+                []) {
+              BlocProvider.of<AddOrDeleteFavoriteBloc>(context)
+                  .inFavorites
+                  .addAll({element.id: element.inFavorites});
+              BlocProvider.of<AddOrDeleteFavoriteBloc>(context)
+                  .isFavoriteProductLoading
+                  .addAll({element.id: element.isLoading});
+
+              BlocProvider.of<AddOrDeleteCartBloc>(context)
+                  .inCarts
+                  .addAll({element.id: element.inCart});
+              BlocProvider.of<AddOrDeleteCartBloc>(context)
+                  .isCartProductLoading
+                  .addAll({element.id: element.isLoading});
+            }
+          }
         },
         builder: (context, state) {
           List<ProductModel>? products =
@@ -59,17 +69,27 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
                   .categoryProductsList;
 
           if (products.isNotEmpty) {
-            return _productsGridView(products);
+            return BlocConsumer<AddOrDeleteFavoriteBloc,
+                AddOrDeleteFavoriteState>(listener: (context, state) {
+                  if(state is AddOrDeleteFavoritesSuccessState){
+                    BlocProvider.of<FavoritesBloc>(context).add(GetFavoritesEvent());
+                  }
+              _onAddOrDeleteFavoriteErrorState(state, context);
+            }, builder: (context, state) {
+              return _productsGridView(products);
+            });
           }
           if (state is GetCategoryProductsErrorState) {
             return ErrorState(
                     StateRendererType.fullScreenErrorState, state.message)
-                .getScreenWidget(context, retryActionFunction: () async {
+                .getScreenWidget(context, retryActionFunction: () {
               BlocProvider.of<CategoryProductsBloc>(context)
                   .add(GetCategoryProductsEvent(widget.categoryId));
-              await Future.delayed(Duration.zero);
             }, buttonTitle: AppStrings.retryAgain);
-          } else {
+          }else if(state is CategoryProductsInitial){
+            return Container();
+          }
+          else {
             return LoadingState(
                     stateRendererType: StateRendererType.fullScreenLoadingState)
                 .getScreenWidget(context);
@@ -172,7 +192,7 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
               children: [
                 Text(
                   "\$${product.price.round()}",
-                  style: Theme.of(context).textTheme.labelSmall,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
                 const SizedBox(
                   width: 5,
@@ -193,54 +213,14 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
   }
 
   Widget _favoriteButton(ProductModel product, BuildContext context) {
-    return Expanded(
-      child: BlocProvider.of<CategoryProductsBloc>(context)
-              .isLoading[(product.id)]
-              .orFalse()
-          ? SizedBox(
-              height: 30,
-              width: 30,
-              child: Lottie.asset(JsonAssets.loading),
-            )
-          : GestureDetector(
-              onTap: () async {
-                productId = product.id;
-                BlocProvider.of<CategoryProductsBloc>(context).add(
-                    PostAddOrDeleteFavoritesEvent(
-                        product.id, widget.categoryId.toString()));
-                await Future.delayed(Duration.zero);
-              },
-              child: Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: BlocProvider.of<CategoryProductsBloc>(context)
-                                  .inFavorites[(product.id)] ??
-                              false
-                          ? [
-                              Theme.of(context).colorScheme.secondary,
-                              Theme.of(context).primaryColor,
-                            ]
-                          : [
-                              ColorManager.grey,
-                              ColorManager.grey,
-                            ],
-                    ),
-                    shape: BoxShape.circle),
-                alignment: Alignment.center,
-                child: Icon(
-                  FontAwesomeIcons.heartPulse,
-                  size: 15,
-                  color: ColorManager.white,
-                ),
-              ),
-            ),
+    return FavoriteButton(
+      product: product,
+      categoryId: widget.categoryId,
     );
   }
 
   Future<void> _onAddOrDeleteFavoriteErrorState(
-      CategoryProductsState state, BuildContext context) async {
+      AddOrDeleteFavoriteState state, BuildContext context) async {
     if (state is AddOrDeleteFavoritesErrorState) {
       Fluttertoast.showToast(
         msg: state.message,

@@ -32,18 +32,36 @@ abstract class AppServiceClient {
   Future<LoginOrRegisterOrResetPasswordResponse> resetPassword(@Field('email') String email,
       @Field('code') String code, @Field('password') String password);
 
+  @POST('logout')
+  Future<LogoutResponse> logout();
+
+  @GET('profile')
+  Future<ProfileResponse> getProfile();
+
   @GET('categories')
   Future<CategoriesResponse> getCategories();
 
   @GET('categories/{categoryId}')
   Future<CategoryAllDataResponse> getCategoryProducts(@Path('categoryId') int categoryId);
 
-  @GET('profile')
-  Future<ProfileResponse> getProfile();
-
   @POST('favorites')
-  Future<AddOrDeleteFavoritesResponse> favorites(@Field('product_id') int productId);
+  Future<AddOrDeleteFavoritesResponse> addOrDeleteFavorite(@Field('product_id') int productId);
 
-  @POST('logout')
-  Future<LogoutResponse> logout();
+  @POST('carts')
+  Future<AddOrDeleteCartsResponse> addOrDeleteCart(@Field('product_id') int productId);
+
+  @GET('favorites')
+  Future<FavoritesAllDataResponse> getFavorites();
+
+  @GET('carts')
+  Future<CartsAllDataResponse> getCarts();
+
+  @DELETE('favorites/{favoriteItemId}')
+  Future<DeleteFavoriteResponse> deleteFavorite(@Path('favoriteItemId') int favoriteItemId);
+
+  @DELETE('carts/{cartItemId}')
+  Future<DeleteCartItemResponse> deleteCartItem(@Path('cartItemId') int cartItemId);
+
+  @PUT('carts/{cartItemId}')
+  Future<UpdateProductQuantityInCartResponse> updateProductQuantityInCart(@Path('cartItemId') int cartItemId, @Field('quantity') int quantity);
 }

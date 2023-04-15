@@ -75,6 +75,52 @@ Map<String, dynamic> _$VerifyCodeResponseToJson(VerifyCodeResponse instance) =>
       'message': instance.message,
     };
 
+LogoutResponse _$LogoutResponseFromJson(Map<String, dynamic> json) =>
+    LogoutResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+    );
+
+Map<String, dynamic> _$LogoutResponseToJson(LogoutResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
+
+UserDataResponse _$UserDataResponseFromJson(Map<String, dynamic> json) =>
+    UserDataResponse(
+      json['id'] as int?,
+      json['image'] as String?,
+      json['name'] as String?,
+      json['email'] as String?,
+      json['phone'] as String?,
+    );
+
+Map<String, dynamic> _$UserDataResponseToJson(UserDataResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'email': instance.email,
+      'image': instance.image,
+      'phone': instance.phone,
+    };
+
+ProfileResponse _$ProfileResponseFromJson(Map<String, dynamic> json) =>
+    ProfileResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+      json['data'] == null
+          ? null
+          : UserDataResponse.fromJson(json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ProfileResponseToJson(ProfileResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.userDataResponse,
+    };
+
 CategoryResponse _$CategoryResponseFromJson(Map<String, dynamic> json) =>
     CategoryResponse(
       json['id'] as int?,
@@ -179,40 +225,6 @@ Map<String, dynamic> _$CategoryAllDataResponseToJson(
       'data': instance.categoryAllProductsResponse,
     };
 
-UserDataResponse _$UserDataResponseFromJson(Map<String, dynamic> json) =>
-    UserDataResponse(
-      json['id'] as int?,
-      json['image'] as String?,
-      json['name'] as String?,
-      json['email'] as String?,
-      json['phone'] as String?,
-    );
-
-Map<String, dynamic> _$UserDataResponseToJson(UserDataResponse instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'email': instance.email,
-      'image': instance.image,
-      'phone': instance.phone,
-    };
-
-ProfileResponse _$ProfileResponseFromJson(Map<String, dynamic> json) =>
-    ProfileResponse(
-      json['status'] as bool?,
-      json['message'] as String?,
-      json['data'] == null
-          ? null
-          : UserDataResponse.fromJson(json['data'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$ProfileResponseToJson(ProfileResponse instance) =>
-    <String, dynamic>{
-      'status': instance.status,
-      'message': instance.message,
-      'data': instance.userDataResponse,
-    };
-
 AddOrDeleteFavoritesResponse _$AddOrDeleteFavoritesResponseFromJson(
         Map<String, dynamic> json) =>
     AddOrDeleteFavoritesResponse(
@@ -227,13 +239,159 @@ Map<String, dynamic> _$AddOrDeleteFavoritesResponseToJson(
       'message': instance.message,
     };
 
-LogoutResponse _$LogoutResponseFromJson(Map<String, dynamic> json) =>
-    LogoutResponse(
+FavoriteProductResponse _$FavoriteProductResponseFromJson(
+        Map<String, dynamic> json) =>
+    FavoriteProductResponse(
+      json['id'] as int?,
+      json['product'] == null
+          ? null
+          : ProductResponse.fromJson(json['product'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$FavoriteProductResponseToJson(
+        FavoriteProductResponse instance) =>
+    <String, dynamic>{
+      'id': instance.favoriteId,
+      'product': instance.product,
+    };
+
+FavoriteAllProductsDataResponse _$FavoriteAllProductsDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    FavoriteAllProductsDataResponse(
+      (json['data'] as List<dynamic>?)
+          ?.map((e) =>
+              FavoriteProductResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$FavoriteAllProductsDataResponseToJson(
+        FavoriteAllProductsDataResponse instance) =>
+    <String, dynamic>{
+      'data': instance.favoriteProducts,
+    };
+
+FavoritesAllDataResponse _$FavoritesAllDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    FavoritesAllDataResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+      json['data'] == null
+          ? null
+          : FavoriteAllProductsDataResponse.fromJson(
+              json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$FavoritesAllDataResponseToJson(
+        FavoritesAllDataResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.favoriteAllProductsDataResponse,
+    };
+
+DeleteFavoriteResponse _$DeleteFavoriteResponseFromJson(
+        Map<String, dynamic> json) =>
+    DeleteFavoriteResponse(
       json['status'] as bool?,
       json['message'] as String?,
     );
 
-Map<String, dynamic> _$LogoutResponseToJson(LogoutResponse instance) =>
+Map<String, dynamic> _$DeleteFavoriteResponseToJson(
+        DeleteFavoriteResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
+
+AddOrDeleteCartsResponse _$AddOrDeleteCartsResponseFromJson(
+        Map<String, dynamic> json) =>
+    AddOrDeleteCartsResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+    );
+
+Map<String, dynamic> _$AddOrDeleteCartsResponseToJson(
+        AddOrDeleteCartsResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
+
+CartProductResponse _$CartProductResponseFromJson(Map<String, dynamic> json) =>
+    CartProductResponse(
+      json['id'] as int?,
+      json['quantity'] as int?,
+      json['product'] == null
+          ? null
+          : ProductResponse.fromJson(json['product'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$CartProductResponseToJson(
+        CartProductResponse instance) =>
+    <String, dynamic>{
+      'id': instance.cartId,
+      'quantity': instance.quantity,
+      'product': instance.product,
+    };
+
+CartAllProductsDataResponse _$CartAllProductsDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    CartAllProductsDataResponse(
+      (json['cart_items'] as List<dynamic>?)
+          ?.map((e) => CartProductResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      (json['total'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$CartAllProductsDataResponseToJson(
+        CartAllProductsDataResponse instance) =>
+    <String, dynamic>{
+      'cart_items': instance.cartProducts,
+      'total': instance.totalPrice,
+    };
+
+CartsAllDataResponse _$CartsAllDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    CartsAllDataResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+      json['data'] == null
+          ? null
+          : CartAllProductsDataResponse.fromJson(
+              json['data'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$CartsAllDataResponseToJson(
+        CartsAllDataResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+      'data': instance.cartAllProductsDataResponse,
+    };
+
+UpdateProductQuantityInCartResponse
+    _$UpdateProductQuantityInCartResponseFromJson(Map<String, dynamic> json) =>
+        UpdateProductQuantityInCartResponse(
+          json['status'] as bool?,
+          json['message'] as String?,
+        );
+
+Map<String, dynamic> _$UpdateProductQuantityInCartResponseToJson(
+        UpdateProductQuantityInCartResponse instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'message': instance.message,
+    };
+
+DeleteCartItemResponse _$DeleteCartItemResponseFromJson(
+        Map<String, dynamic> json) =>
+    DeleteCartItemResponse(
+      json['status'] as bool?,
+      json['message'] as String?,
+    );
+
+Map<String, dynamic> _$DeleteCartItemResponseToJson(
+        DeleteCartItemResponse instance) =>
     <String, dynamic>{
       'status': instance.status,
       'message': instance.message,

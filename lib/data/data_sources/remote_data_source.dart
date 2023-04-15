@@ -8,11 +8,17 @@ abstract class RemoteDataSource {
   Future<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest forgotPasswordRequest);
   Future<VerifyCodeResponse> verifyCode(VerifyCodeRequest verifyCodeRequest);
   Future<LoginOrRegisterOrResetPasswordResponse> resetPassword(ResetPasswordRequest resetPasswordRequest);
+  Future<LogoutResponse> logout();
+  Future<ProfileResponse> getProfile();
   Future<CategoriesResponse> getCategories();
   Future<CategoryAllDataResponse> getCategoryProducts(int categoryId);
-  Future<ProfileResponse> getProfile();
-  Future<AddOrDeleteFavoritesResponse> favorite(AddOrDeleteFavoritesRequest addOrDeleteFavoritesRequest);
-  Future<LogoutResponse> logout();
+  Future<AddOrDeleteFavoritesResponse> addOrDeleteFavorite(AddOrDeleteFavoritesRequest addOrDeleteFavoritesRequest);
+  Future<AddOrDeleteCartsResponse> addOrDeleteCart(AddOrDeleteCartsRequest addOrDeleteCartsRequest);
+  Future<DeleteFavoriteResponse> deleteFavorite(DeleteFavoriteRequest deleteFavoriteRequest);
+  Future<DeleteCartItemResponse> deleteCartItem(DeleteCartItemRequest deleteCartItemRequest);
+  Future<FavoritesAllDataResponse> getFavorites();
+  Future<CartsAllDataResponse> getCarts();
+  Future<UpdateProductQuantityInCartResponse> updateProductQuantityInCart(UpdateProductQuantityInCartRequest updateProductQuantityInCartRequest);
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -54,6 +60,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
+  Future<LogoutResponse> logout() async {
+    return await appServiceClient.logout();
+  }
+
+  @override
+  Future<ProfileResponse> getProfile() async {
+    return await appServiceClient.getProfile();
+  }
+
+  @override
   Future<CategoriesResponse> getCategories() async {
     return await appServiceClient.getCategories();
   }
@@ -64,17 +80,37 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<ProfileResponse> getProfile() async {
-    return await appServiceClient.getProfile();
+  Future<AddOrDeleteFavoritesResponse> addOrDeleteFavorite(AddOrDeleteFavoritesRequest addOrDeleteFavoritesRequest) async {
+    return await appServiceClient.addOrDeleteFavorite(addOrDeleteFavoritesRequest.productId);
   }
 
   @override
-  Future<AddOrDeleteFavoritesResponse> favorite(AddOrDeleteFavoritesRequest addOrDeleteFavoritesRequest) async {
-    return await appServiceClient.favorites(addOrDeleteFavoritesRequest.productId);
+  Future<AddOrDeleteCartsResponse> addOrDeleteCart(AddOrDeleteCartsRequest addOrDeleteCartsRequest) async {
+    return await appServiceClient.addOrDeleteCart(addOrDeleteCartsRequest.productId);
   }
 
   @override
-  Future<LogoutResponse> logout() async {
-    return await appServiceClient.logout();
+  Future<CartsAllDataResponse> getCarts() async {
+    return await appServiceClient.getCarts();
+  }
+
+  @override
+  Future<FavoritesAllDataResponse> getFavorites() async {
+    return await appServiceClient.getFavorites();
+  }
+
+  @override
+  Future<DeleteFavoriteResponse> deleteFavorite(DeleteFavoriteRequest deleteFavoriteRequest) async {
+    return await appServiceClient.deleteFavorite(deleteFavoriteRequest.favoriteItemId);
+  }
+
+  @override
+  Future<DeleteCartItemResponse> deleteCartItem(DeleteCartItemRequest deleteCartItemRequest) async {
+    return await appServiceClient.deleteCartItem(deleteCartItemRequest.cartItemId);
+  }
+
+  @override
+  Future<UpdateProductQuantityInCartResponse> updateProductQuantityInCart(UpdateProductQuantityInCartRequest updateProductQuantityInCartRequest) async {
+    return await appServiceClient.updateProductQuantityInCart(updateProductQuantityInCartRequest.cartItemId, updateProductQuantityInCartRequest.quantity);
   }
 }

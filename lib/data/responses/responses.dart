@@ -86,6 +86,61 @@ class VerifyCodeResponse {
   Map<String, dynamic> toJson() => _$VerifyCodeResponseToJson(this);
 }
 
+// LogoutResponse
+
+@JsonSerializable()
+class LogoutResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  LogoutResponse(this.status, this.message);
+
+  factory LogoutResponse.fromJson(Map<String, dynamic> json) =>
+      _$LogoutResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$LogoutResponseToJson(this);
+}
+
+// userData Response
+
+@JsonSerializable()
+class UserDataResponse {
+  @JsonKey(name: 'id')
+  int? id;
+  @JsonKey(name: 'name')
+  String? name;
+  @JsonKey(name: 'email')
+  String? email;
+  @JsonKey(name: 'image')
+  String? image;
+  @JsonKey(name: 'phone')
+  String? phone;
+
+  UserDataResponse(this.id, this.image, this.name, this.email, this.phone);
+
+  factory UserDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$UserDataResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$UserDataResponseToJson(this);
+}
+
+@JsonSerializable()
+class ProfileResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+  @JsonKey(name: 'data')
+  UserDataResponse? userDataResponse;
+
+  ProfileResponse(this.status, this.message, this.userDataResponse);
+
+  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProfileResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ProfileResponseToJson(this);
+}
+
+
 //Categories Response
 
 @JsonSerializable()
@@ -94,7 +149,6 @@ class CategoryResponse {
   int? id;
   @JsonKey(name: 'name')
   String? name;
-
 
   CategoryResponse(this.id, this.name);
 
@@ -196,44 +250,8 @@ class CategoryAllDataResponse {
   Map<String, dynamic> toJson() => _$CategoryAllDataResponseToJson(this);
 }
 
-// userData Response
 
-@JsonSerializable()
-class UserDataResponse {
-  @JsonKey(name: 'id')
-  int? id;
-  @JsonKey(name: 'name')
-  String? name;
-  @JsonKey(name: 'email')
-  String? email;
-  @JsonKey(name: 'image')
-  String? image;
-  @JsonKey(name: 'phone')
-  String? phone;
-
-  UserDataResponse(this.id, this.image, this.name,this.email,this.phone);
-
-  factory UserDataResponse.fromJson(Map<String, dynamic> json) =>
-      _$UserDataResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$UserDataResponseToJson(this);
-}
-
-@JsonSerializable()
-class ProfileResponse {
-  @JsonKey(name: 'status')
-  bool? status;
-  @JsonKey(name: 'message')
-  String? message;
-  @JsonKey(name: 'data')
-  UserDataResponse? userDataResponse;
-
-  ProfileResponse(
-      this.status, this.message, this.userDataResponse);
-
-  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProfileResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$ProfileResponseToJson(this);
-}
+// Add or delete favorite response
 
 @JsonSerializable()
 class AddOrDeleteFavoritesResponse {
@@ -242,23 +260,172 @@ class AddOrDeleteFavoritesResponse {
   @JsonKey(name: 'message')
   String? message;
 
-  AddOrDeleteFavoritesResponse(
-      this.status, this.message);
+  AddOrDeleteFavoritesResponse(this.status, this.message);
 
-  factory AddOrDeleteFavoritesResponse.fromJson(Map<String, dynamic> json) => _$AddOrDeleteFavoritesResponseFromJson(json);
+  factory AddOrDeleteFavoritesResponse.fromJson(Map<String, dynamic> json) =>
+      _$AddOrDeleteFavoritesResponseFromJson(json);
   Map<String, dynamic> toJson() => _$AddOrDeleteFavoritesResponseToJson(this);
 }
 
+// Favorites Response
+
 @JsonSerializable()
-class LogoutResponse {
+class FavoriteProductResponse {
+  @JsonKey(name: 'id')
+  int? favoriteId;
+  @JsonKey(name: 'product')
+  ProductResponse? product;
+
+  FavoriteProductResponse(this.favoriteId, this.product);
+
+  factory FavoriteProductResponse.fromJson(Map<String, dynamic> json) =>
+      _$FavoriteProductResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$FavoriteProductResponseToJson(this);
+}
+
+@JsonSerializable()
+class FavoriteAllProductsDataResponse {
+  @JsonKey(name: 'data')
+  List<FavoriteProductResponse>? favoriteProducts;
+
+  FavoriteAllProductsDataResponse(this.favoriteProducts);
+
+  factory FavoriteAllProductsDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$FavoriteAllProductsDataResponseFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$FavoriteAllProductsDataResponseToJson(this);
+}
+
+@JsonSerializable()
+class FavoritesAllDataResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+  @JsonKey(name: 'data')
+  FavoriteAllProductsDataResponse? favoriteAllProductsDataResponse;
+
+  FavoritesAllDataResponse(
+      this.status, this.message, this.favoriteAllProductsDataResponse);
+
+  factory FavoritesAllDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$FavoritesAllDataResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$FavoritesAllDataResponseToJson(this);
+}
+
+// delete favorite response
+
+@JsonSerializable()
+class DeleteFavoriteResponse {
   @JsonKey(name: 'status')
   bool? status;
   @JsonKey(name: 'message')
   String? message;
 
-  LogoutResponse(
-      this.status, this.message);
+  DeleteFavoriteResponse(this.status, this.message);
 
-  factory LogoutResponse.fromJson(Map<String, dynamic> json) => _$LogoutResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$LogoutResponseToJson(this);
+  factory DeleteFavoriteResponse.fromJson(Map<String, dynamic> json) =>
+      _$DeleteFavoriteResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$DeleteFavoriteResponseToJson(this);
 }
+
+
+// Add or delete cart response
+
+@JsonSerializable()
+class AddOrDeleteCartsResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  AddOrDeleteCartsResponse(this.status, this.message);
+
+  factory AddOrDeleteCartsResponse.fromJson(Map<String, dynamic> json) =>
+      _$AddOrDeleteCartsResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$AddOrDeleteCartsResponseToJson(this);
+}
+
+
+// Carts Response
+
+@JsonSerializable()
+class CartProductResponse {
+  @JsonKey(name: 'id')
+  int? cartId;
+  @JsonKey(name: 'quantity')
+  int? quantity;
+  @JsonKey(name: 'product')
+  ProductResponse? product;
+
+  CartProductResponse(this.cartId, this.quantity, this.product);
+
+  factory CartProductResponse.fromJson(Map<String, dynamic> json) =>
+      _$CartProductResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$CartProductResponseToJson(this);
+}
+
+@JsonSerializable()
+class CartAllProductsDataResponse {
+  @JsonKey(name: 'cart_items')
+  List<CartProductResponse>? cartProducts;
+  @JsonKey(name: 'total')
+  double? totalPrice;
+
+  CartAllProductsDataResponse(this.cartProducts,this.totalPrice);
+
+  factory CartAllProductsDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$CartAllProductsDataResponseFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$CartAllProductsDataResponseToJson(this);
+}
+
+@JsonSerializable()
+class CartsAllDataResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+  @JsonKey(name: 'data')
+  CartAllProductsDataResponse? cartAllProductsDataResponse;
+
+  CartsAllDataResponse(
+      this.status, this.message, this.cartAllProductsDataResponse);
+
+  factory CartsAllDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$CartsAllDataResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$CartsAllDataResponseToJson(this);
+}
+
+// product quantity in cart response
+
+@JsonSerializable()
+class UpdateProductQuantityInCartResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  UpdateProductQuantityInCartResponse(this.status, this.message);
+
+  factory UpdateProductQuantityInCartResponse.fromJson(Map<String, dynamic> json) =>
+      _$UpdateProductQuantityInCartResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$UpdateProductQuantityInCartResponseToJson(this);
+}
+
+// delete cartItem response
+
+@JsonSerializable()
+class DeleteCartItemResponse {
+  @JsonKey(name: 'status')
+  bool? status;
+  @JsonKey(name: 'message')
+  String? message;
+
+  DeleteCartItemResponse(this.status, this.message);
+
+  factory DeleteCartItemResponse.fromJson(Map<String, dynamic> json) =>
+      _$DeleteCartItemResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$DeleteCartItemResponseToJson(this);
+}
+

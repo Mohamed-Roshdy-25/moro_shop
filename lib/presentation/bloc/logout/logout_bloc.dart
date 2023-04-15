@@ -17,19 +17,24 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
 
   LogoutBloc(this._logoutUseCase) : super(LogoutInitial()) {
     on<LogoutEvent>((event, emit) async {
-      if (event is PostLogoutEvent) {
-        emit(LogoutLoadingState());
-
-        await (await _logoutUseCase.execute(Void)).fold(
-          (failure) {
-            emit(LogoutErrorState(failure.message));
-          },
-          (data) async {
-            await _appPreferences.logout();
-            emit(LogoutSuccessState(data.message));
-          },
-        );
-      }
+      await initAppModule();
+      await Future.wait([_logout(event, emit)]);
     });
+  }
+
+  Future<void> _logout(event, emit) async {
+    if (event is PostLogoutEvent) {
+      emit(LogoutLoadingState());
+
+      await (await _logoutUseCase.execute(Void)).fold(
+    (failure) {
+    emit(LogoutErrorState(failure.message));
+    },
+    (data) async {
+    await _appPreferences.logout();
+    emit(LogoutSuccessState(data.message));
+    },
+    );
+  }
   }
 }
