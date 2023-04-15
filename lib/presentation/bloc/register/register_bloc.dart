@@ -1,5 +1,4 @@
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -43,7 +42,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           loginOrRegisterOrResetPasswordModel = data;
           appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
            appPreferences.setUserLoggedIn();
-          emit(RegisterSuccessState(data));
+          emit(RegisterSuccessState());
         });
       }
       if(event is PickCameraPhotoEvent){

@@ -15,12 +15,8 @@ class RegisterLoadingState extends RegisterState{
 }
 
 class RegisterSuccessState extends RegisterState{
-  final LoginOrRegisterOrResetPasswordModel loginOrRegisterOrResetPasswordModel;
-
-  const RegisterSuccessState(this.loginOrRegisterOrResetPasswordModel);
-
   @override
-  List<Object?> get props => [loginOrRegisterOrResetPasswordModel];
+  List<Object?> get props => [];
 }
 
 class RegisterErrorState extends RegisterState{

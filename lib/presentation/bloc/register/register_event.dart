@@ -22,14 +22,12 @@ class PostRegisterEvent extends RegisterEvent{
 
 
 class PickCameraPhotoEvent extends RegisterEvent{
-  const PickCameraPhotoEvent();
 
   @override
   List<Object> get props => [];
 }
 
 class PickGalleryPhotoEvent extends RegisterEvent{
-  const PickGalleryPhotoEvent();
 
   @override
   List<Object> get props => [];

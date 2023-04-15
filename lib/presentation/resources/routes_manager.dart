@@ -66,7 +66,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) =>  ResetPasswordView(email: email,code: code),);
 
       case Routes.mainRoute:
-        initAppModule().then((value) {
+        initAppModule().then((value){
           initHomeModule();
         });
         return MaterialPageRoute(builder: (_) => const MainView(),);

@@ -37,6 +37,15 @@ class LoginOrRegisterOrResetPasswordModel{
   LoginOrRegisterOrResetPasswordModel(this.status,this.message,this.loginOrRegisterOrResetPasswordDataModel);
 }
 
+// Logout Model
+
+class LogoutModel{
+  bool status;
+  String message;
+
+  LogoutModel(this.status,this.message);
+}
+
 
 // ForgotPassword Model
 
@@ -58,15 +67,37 @@ class VerifyCodeModel{
 }
 
 
+//UserData Model
+
+class UserDataModel{
+  int id;
+  String image;
+  String name;
+  String email;
+  String phone;
+
+  UserDataModel(this.id, this.image,
+      this.name, this.email,this.phone);
+}
+
+
+class ProfileModel{
+  bool status;
+  String message;
+  UserDataModel? userDataModel;
+
+  ProfileModel(this.status,this.message,this.userDataModel);
+}
+
+
 //Categories Model
 
 class CategoryModel{
   int id;
   String name;
-  String image;
 
 
-  CategoryModel(this.id,this.name,this.image);
+  CategoryModel(this.id,this.name);
 }
 
 class CategoriesDataModel{
@@ -99,9 +130,11 @@ class ProductModel{
   List<String> images;
   bool inFavorites;
   bool inCart;
+  bool isLoading;
 
   ProductModel(this.id, this.price, this.oldPrice, this.discount, this.image,
-      this.name, this.description, this.images, this.inFavorites, this.inCart);
+      this.name, this.description, this.images, this.inFavorites, this.inCart,
+      {this.isLoading = false});
 }
 
 class CategoryAllProductsModel{
@@ -118,24 +151,101 @@ class CategoryAllDataModel{
   CategoryAllDataModel(this.status,this.message,this.categoryAllProductsModel);
 }
 
-//UserData Response
+// Add or delete favorite
 
-class UserDataModel{
-  int id;
-  String image;
-  String name;
-  String email;
-  String phone;
+class AddOrDeleteFavoritesModel{
+  bool status;
+  String message;
 
-  UserDataModel(this.id, this.image,
-      this.name, this.email,this.phone);
+  AddOrDeleteFavoritesModel(this.status,this.message);
 }
 
 
-class ProfileModel{
+// Favorites Model
+
+class FavoriteProductModel {
+  int favoriteId;
+  ProductModel product;
+
+  FavoriteProductModel(this.favoriteId, this.product);
+}
+
+class FavoriteAllProductsDataModel {
+  List<FavoriteProductModel>? favoriteProducts;
+
+  FavoriteAllProductsDataModel(this.favoriteProducts);
+}
+
+class FavoritesAllDataModel {
   bool status;
   String message;
-  UserDataModel? userDataModel;
+  FavoriteAllProductsDataModel? favoriteAllProductsDataModel;
 
-  ProfileModel(this.status,this.message,this.userDataModel);
+  FavoritesAllDataModel(
+      this.status, this.message, this.favoriteAllProductsDataModel);
+}
+
+
+// delete favorite model
+
+class DeleteFavoriteModel{
+  bool status;
+  String message;
+
+  DeleteFavoriteModel(this.status,this.message);
+}
+
+
+// Add or delete cart Model
+
+class AddOrDeleteCartsModel {
+  bool status;
+  String message;
+
+  AddOrDeleteCartsModel(this.status, this.message);
+}
+
+
+// Carts Model
+
+class CartProductModel {
+  int cartId;
+  int quantity;
+  ProductModel product;
+
+  CartProductModel(this.cartId, this.quantity, this.product);
+}
+
+class CartAllProductsDataModel {
+  List<CartProductModel>? cartProducts;
+  double totalPrice;
+
+  CartAllProductsDataModel(this.cartProducts,this.totalPrice);
+}
+
+class CartsAllDataModel {
+  bool status;
+  String message;
+  CartAllProductsDataModel? cartAllProductsDataModel;
+
+  CartsAllDataModel(
+      this.status, this.message, this.cartAllProductsDataModel);
+}
+
+// delete cartItem model
+
+class DeleteCartItemModel{
+  bool status;
+  String message;
+
+  DeleteCartItemModel(this.status,this.message);
+}
+
+// product quantity in cart model
+
+class UpdateProductQuantityInCartModel {
+  bool status;
+  String message;
+
+  UpdateProductQuantityInCartModel(this.status, this.message);
 }

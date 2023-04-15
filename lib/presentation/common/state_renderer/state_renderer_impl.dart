@@ -107,9 +107,11 @@ extension FlowStateExtension on FlowState {
         break;
       case SuccessState:
         dismissDialog(context);
-        if (getStateRendererType() == StateRendererType.popupLoadingState) {
+        if (getStateRendererType() == StateRendererType.popupSuccessState) {
           _showPopup(context, getStateRendererType(),
-              message: getMessage(), buttonTitle: buttonTitle);
+              message: getMessage(),
+              retryActionFunction: retryActionFunction,
+              buttonTitle: buttonTitle,);
         } else {
           return StateRenderer(stateRendererType: getStateRendererType());
         }

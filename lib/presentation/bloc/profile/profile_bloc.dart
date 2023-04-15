@@ -1,10 +1,9 @@
-
 // ignore_for_file: void_checks
 
-import 'dart:ffi';
-
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/profile_use_case.dart';
 
@@ -15,19 +14,27 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ProfileUseCase profileUseCase;
   ProfileModel? profileModel;
 
-
   ProfileBloc(this.profileUseCase) : super(ProfileInitial()) {
     on<ProfileEvent>((event, emit) async {
-      if(event is GetProfileEvent){
-        emit(GetProfileLoadingState());
+        if (event is GetProfileEvent) {
+          await initAppModule();
+          await Future.wait([_getProfile(event, emit)]);
+        }
+      },
+    );
+  }
 
-        (await profileUseCase.execute(Void)).fold((failure) {
-          emit(GetProfileErrorState(failure.message));
-        }, (data) {
-          profileModel = data;
-          emit(GetProfileSuccessState(data));
-        },);
-      }
-    });
+  Future<void> _getProfile(event, emit) async {
+    emit(GetProfileLoadingState());
+
+    (await profileUseCase.execute(Unit)).fold(
+      (failure) {
+        emit(GetProfileErrorState(failure.message));
+      },
+      (data) {
+        profileModel = data;
+        emit(GetProfileSuccessState(data));
+      },
+    );
   }
 }

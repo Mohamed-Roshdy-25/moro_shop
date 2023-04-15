@@ -4,7 +4,7 @@ abstract class CategoryProductsEvent extends Equatable {
   const CategoryProductsEvent();
 }
 
-class GetCategoryProductsEvent extends CategoryProductsEvent{
+class GetCategoryProductsEvent extends CategoryProductsEvent {
   final int categoryId;
 
   const GetCategoryProductsEvent(this.categoryId);

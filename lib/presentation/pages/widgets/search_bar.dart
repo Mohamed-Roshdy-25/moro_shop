@@ -26,7 +26,7 @@ class _SearchBarState extends State<SearchBar> {
               children: [
                 const Icon(FontAwesomeIcons.searchengin),
                 const SizedBox(width: 10,),
-                Text(widget.searchBarTitle)
+                Text(widget.searchBarTitle,style: Theme.of(context).textTheme.titleSmall,)
               ],
             ),
           ),

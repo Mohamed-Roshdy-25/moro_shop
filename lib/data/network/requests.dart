@@ -37,3 +37,39 @@ class ResetPasswordRequest{
 
   ResetPasswordRequest(this.email,this.code,this.password);
 }
+
+class AddOrDeleteFavoritesRequest{
+  int productId;
+
+
+  AddOrDeleteFavoritesRequest(this.productId);
+}
+
+class AddOrDeleteCartsRequest{
+  int productId;
+
+
+  AddOrDeleteCartsRequest(this.productId);
+}
+
+class DeleteFavoriteRequest{
+  int favoriteItemId;
+
+
+  DeleteFavoriteRequest(this.favoriteItemId);
+}
+
+class DeleteCartItemRequest{
+  int cartItemId;
+
+
+  DeleteCartItemRequest(this.cartItemId);
+}
+
+class UpdateProductQuantityInCartRequest{
+  int cartItemId;
+  int quantity;
+
+
+  UpdateProductQuantityInCartRequest(this.cartItemId,this.quantity);
+}
