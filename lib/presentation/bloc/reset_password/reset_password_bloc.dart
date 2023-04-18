@@ -1,6 +1,6 @@
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/reset_password_use_case.dart';
