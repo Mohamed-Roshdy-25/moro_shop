@@ -114,8 +114,9 @@ class _FavoriteViewState extends State<FavoriteView> {
     }
   }
 
-  void _onDeleteFavoriteSuccessState(state, context) {
+  void _onDeleteFavoriteSuccessState(state, context) async {
     if (state is DeleteFavoriteSuccessState) {
+      await Future.delayed(const Duration(milliseconds: 1173));
       BlocProvider.of<FavoritesBloc>(context).add(GetFavoritesEvent());
     }
   }

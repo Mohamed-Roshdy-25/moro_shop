@@ -55,4 +55,5 @@ class AppStrings {
   static const String profile  = 'Profile';
   static const String language  = 'Language';
   static const String logout  = 'Logout';
+  static const String checkout  = 'checkout';
 }

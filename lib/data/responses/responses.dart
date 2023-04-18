@@ -429,3 +429,40 @@ class DeleteCartItemResponse {
   Map<String, dynamic> toJson() => _$DeleteCartItemResponseToJson(this);
 }
 
+// payment responses
+
+@JsonSerializable()
+class AuthTokenResponse{
+  @JsonKey(name: 'token')
+  String? token;
+
+  AuthTokenResponse(this.token);
+
+  factory AuthTokenResponse.fromJson(Map<String, dynamic> json) => _$AuthTokenResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AuthTokenResponseToJson(this);
+}
+
+@JsonSerializable()
+class OrderIdResponse{
+  @JsonKey(name: 'id')
+  int? id;
+
+  OrderIdResponse(this.id);
+
+  factory OrderIdResponse.fromJson(Map<String, dynamic> json) => _$OrderIdResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OrderIdResponseToJson(this);
+}
+
+@JsonSerializable()
+class PaymentTokenResponse{
+  @JsonKey(name: 'token')
+  String? token;
+
+  PaymentTokenResponse(this.token);
+
+  factory PaymentTokenResponse.fromJson(Map<String, dynamic> json) => _$PaymentTokenResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PaymentTokenResponseToJson(this);
+}

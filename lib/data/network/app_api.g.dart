@@ -439,3 +439,122 @@ class _AppServiceClient implements AppServiceClient {
     return requestOptions;
   }
 }
+
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+
+class _PaymentServiceClient implements PaymentServiceClient {
+  _PaymentServiceClient(
+    this._dio, {
+    this.baseUrl,
+  }) {
+    baseUrl ??= 'https://accept.paymob.com/api/';
+  }
+
+  final Dio _dio;
+
+  String? baseUrl;
+
+  @override
+  Future<AuthTokenResponse> getAuthTokenResponse(apiKey) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {'api_key': apiKey};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<AuthTokenResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'auth/tokens',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = AuthTokenResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<OrderIdResponse> getOrderIdResponse(
+    authToken,
+    deliveryNeeded,
+    amountCents,
+    currency,
+    items,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'auth_token': authToken,
+      'delivery_needed': deliveryNeeded,
+      'amount_cents': amountCents,
+      'currency': currency,
+      'items': items,
+    };
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<OrderIdResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'ecommerce/orders',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = OrderIdResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<PaymentTokenResponse> getPaymentTokenResponse(
+    authToken,
+    amountCents,
+    currency,
+    billingData,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'auth_token': authToken,
+      'amount_cents': amountCents,
+      'currency': currency,
+      'billing_data': billingData,
+    };
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PaymentTokenResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'acceptance/payment_keys',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = PaymentTokenResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
+    if (T != dynamic &&
+        !(requestOptions.responseType == ResponseType.bytes ||
+            requestOptions.responseType == ResponseType.stream)) {
+      if (T == String) {
+        requestOptions.responseType = ResponseType.plain;
+      } else {
+        requestOptions.responseType = ResponseType.json;
+      }
+    }
+    return requestOptions;
+  }
+}

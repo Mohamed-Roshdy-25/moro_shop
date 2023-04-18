@@ -396,3 +396,35 @@ Map<String, dynamic> _$DeleteCartItemResponseToJson(
       'status': instance.status,
       'message': instance.message,
     };
+
+AuthTokenResponse _$AuthTokenResponseFromJson(Map<String, dynamic> json) =>
+    AuthTokenResponse(
+      json['token'] as String?,
+    );
+
+Map<String, dynamic> _$AuthTokenResponseToJson(AuthTokenResponse instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+    };
+
+OrderIdResponse _$OrderIdResponseFromJson(Map<String, dynamic> json) =>
+    OrderIdResponse(
+      json['id'] as int?,
+    );
+
+Map<String, dynamic> _$OrderIdResponseToJson(OrderIdResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+    };
+
+PaymentTokenResponse _$PaymentTokenResponseFromJson(
+        Map<String, dynamic> json) =>
+    PaymentTokenResponse(
+      json['token'] as String?,
+    );
+
+Map<String, dynamic> _$PaymentTokenResponseToJson(
+        PaymentTokenResponse instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+    };

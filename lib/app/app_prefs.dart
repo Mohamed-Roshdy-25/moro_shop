@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String langKey = 'lang_key';
 const String prefsKeyIsUserLoggedIn = "PREFS_KEY_IS_USER_LOGGED_IN";
 const String prefsKeyOnBoardingScreenViewed =
-    "PREFS_KEY_ONBOARDING_SCREEN_VIEWED";
+    "PREFS_KEY_ON_BOARDING_SCREEN_VIEWED";
 const String prefsKeySaveToken = "PREFS_KEY_SAVE_TOKEN";
 
 class AppPreferences {

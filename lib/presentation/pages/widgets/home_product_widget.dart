@@ -71,10 +71,8 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
           if (products.isNotEmpty) {
             return BlocConsumer<AddOrDeleteFavoriteBloc,
                 AddOrDeleteFavoriteState>(listener: (context, state) {
-                  if(state is AddOrDeleteFavoritesSuccessState){
-                    BlocProvider.of<FavoritesBloc>(context).add(GetFavoritesEvent());
-                  }
               _onAddOrDeleteFavoriteErrorState(state, context);
+              _onAddOrDeleteFavoriteSuccessState(state, context);
             }, builder: (context, state) {
               return _productsGridView(products);
             });
@@ -165,7 +163,7 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
       borderRadius: BorderRadius.circular(28),
       child: FadeInImage.assetNetwork(
         placeholder: ImagesAssets.imageLoading,
-        image: product?.image ?? Constants.faildToLoadImage,
+        image: product?.image ?? Constants.failedToLoadImage,
       ),
     );
   }
@@ -219,7 +217,14 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
     );
   }
 
-  Future<void> _onAddOrDeleteFavoriteErrorState(
+  void _onAddOrDeleteFavoriteSuccessState(state, context) async {
+    if(state is AddOrDeleteFavoritesSuccessState){
+      await Future.delayed(const Duration(milliseconds: 1173));
+      BlocProvider.of<FavoritesBloc>(context).add(GetFavoritesEvent());
+    }
+  }
+
+  void _onAddOrDeleteFavoriteErrorState(
       AddOrDeleteFavoriteState state, BuildContext context) async {
     if (state is AddOrDeleteFavoritesErrorState) {
       Fluttertoast.showToast(

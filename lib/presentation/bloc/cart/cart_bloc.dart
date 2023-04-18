@@ -15,6 +15,8 @@ part 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   final CartsUseCase _cartsUseCase;
   List<CartProductModel>? cartItems;
+  double? totalPrice;
+
 
   CartBloc(this._cartsUseCase) : super(CartInitial()) {
     on<CartEvent>((event, emit) async {
@@ -33,6 +35,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(GetCartErrorState(failure.message));
       },
       (data) {
+        totalPrice = data.cartAllProductsDataModel?.totalPrice??0;
         cartItems = data.cartAllProductsDataModel?.cartProducts;
         emit(GetCartSuccessState(data));
       },

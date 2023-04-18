@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
@@ -27,8 +28,6 @@ class CartView extends StatefulWidget {
 
 class _CartViewState extends State<CartView> {
   int counter = 1;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,16 +110,83 @@ class _CartViewState extends State<CartView> {
             _onUpdateCartItemQuantityErrorState(state, context);
           },
           builder: (context, state) {
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: cartItems.length,
-              itemBuilder: (context, index) {
-                ProductModel product = cartItems[index].product;
-                return _cartItem(index, cartItems, product, context);
-              },
+            return Stack(
+              children: [
+                _buildCartList(cartItems),
+                _buildPaymentWidget(context),
+              ],
             );
           },
         );
+      },
+    );
+  }
+
+  Widget _buildPaymentWidget(context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: AppSize.s160.h,
+        alignment: Alignment.topLeft,
+        margin: EdgeInsets.symmetric(
+            horizontal: AppMargin.m10.w, vertical: AppMargin.m10.h),
+        padding: EdgeInsets.symmetric(
+            vertical: AppPadding.p20.h, horizontal: AppPadding.p20.w),
+        decoration: BoxDecoration(
+          color: ColorManager.grey,
+          borderRadius: BorderRadius.all(Radius.circular(AppSize.s50.sp)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _checkoutButton(),
+            _totalPrice(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _totalPrice(context) {
+    double? totalPrice = BlocProvider.of<CartBloc>(context).totalPrice;
+    return Text(
+      '\$${totalPrice!.round()}',
+      style: Theme.of(context).textTheme.titleLarge,
+    );
+  }
+
+  Widget _checkoutButton() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: ColorManager.white),
+        borderRadius: BorderRadius.circular(AppSize.s30),
+      ),
+      child: ElevatedButton(
+        onPressed: () {},
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: AppPadding.p10.w),
+              child: Text(
+                AppStrings.checkout.toUpperCase(),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+            const Icon(Icons.arrow_circle_right_sharp),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCartList(List<CartProductModel> cartItems) {
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemCount: cartItems.length,
+      itemBuilder: (context, index) {
+        ProductModel product = cartItems[index].product;
+        return _cartItem(index, cartItems, product, context);
       },
     );
   }
@@ -137,22 +203,24 @@ class _CartViewState extends State<CartView> {
     }
   }
 
-  void _onDeleteCartItemSuccessState(state, context) {
+  void _onDeleteCartItemSuccessState(state, context) async {
     if (state is DeleteCartItemSuccessState) {
+      await Future.delayed(const Duration(milliseconds: 1173));
       BlocProvider.of<CartBloc>(context).add(GetCartEvent());
     }
   }
 
-  void _onUpdateCartItemQuantitySuccessState(state, context) {
+  void _onUpdateCartItemQuantitySuccessState(state, context) async {
     if (state is UpdateProductQuantityInCartSuccessState) {
+      await Future.delayed(const Duration(milliseconds: 1173));
       BlocProvider.of<CartBloc>(context).add(GetCartEvent());
     }
   }
 
   void _onUpdateCartItemQuantityErrorState(state, context) {
-    if(state is UpdateProductQuantityInCartErrorState){
+    if (state is UpdateProductQuantityInCartErrorState) {
       Fluttertoast.showToast(
-          msg: state.message,
+        msg: state.message,
         backgroundColor: ColorManager.red,
         gravity: ToastGravity.BOTTOM,
       );
@@ -164,8 +232,8 @@ class _CartViewState extends State<CartView> {
       children: [
         _itemData(index, cartItems, product, context),
         if (index == cartItems.length - 1)
-          const SizedBox(
-            height: 120,
+          SizedBox(
+            height: AppSize.s200.h,
           )
       ],
     );
@@ -227,7 +295,7 @@ class _CartViewState extends State<CartView> {
           Row(
             children: [
               Text(
-                "\$${product.price.toString()}",
+                "\$${product.price.round().toString()}",
                 style: StyleManager.bodyStyle
                     .copyWith(color: Colors.black, fontSize: FontSize.s12),
                 overflow: TextOverflow.ellipsis,
@@ -237,7 +305,7 @@ class _CartViewState extends State<CartView> {
               ),
               if (product.discount != 0)
                 Text(
-                  "\$${product.oldPrice.toString()}",
+                  "\$${product.oldPrice.round().toString()}",
                   style: StyleManager.bodyStyle.copyWith(
                       color: Colors.red,
                       decoration: TextDecoration.lineThrough,
