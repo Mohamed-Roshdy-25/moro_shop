@@ -15,7 +15,6 @@ class DeleteCartItemBloc extends Bloc<DeleteCartItemEvent, DeleteCartItemState> 
   DeleteCartItemBloc(this._deleteCartItemUseCase) : super(DeleteCartItemInitial()) {
     on<DeleteCartItemEvent>((event, emit) async {
       if(event is PostDeleteCartItemEvent){
-        await initAppModule();
         isCartProductLoading[event.cartItemId] = false;
         await Future.wait([deleteCartItem(event, emit)]);
       }

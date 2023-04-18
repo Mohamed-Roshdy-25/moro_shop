@@ -11,14 +11,13 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase loginUseCase;
-  final AppPreferences appPreferences;
   var loginObject = LoginObject('', '');
   LoginOrRegisterOrResetPasswordModel? loginOrRegisterOrResetPasswordModel;
 
 
 
 
-  LoginBloc({required this.loginUseCase,required this.appPreferences}) : super(LoginInitial()) {
+  LoginBloc({required this.loginUseCase}) : super(LoginInitial()) {
     on<LoginEvent>((event, emit) async {
       if (event is PostLoginEvent) {
         emit(LoginLoadingState());
@@ -30,8 +29,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginErrorState(failure.message));
         }, (data)  async {
           loginOrRegisterOrResetPasswordModel = data;
-             appPreferences.setUserLoggedIn();
-             await appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
+          AppPreferences.setUserLoggedIn();
+             await AppPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
           emit(LoginSuccessState(data));
         });
       }

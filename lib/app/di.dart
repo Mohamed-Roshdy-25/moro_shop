@@ -1,11 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:moro_shop/app/app_prefs.dart';
 import 'package:moro_shop/data/data_sources/remote_data_source.dart';
-import 'package:moro_shop/data/network/app_api.dart';
-import 'package:moro_shop/data/network/dio_factory.dart';
+import 'package:moro_shop/data/network/dio_helper.dart';
 import 'package:moro_shop/data/network/network_info.dart';
 import 'package:moro_shop/data/repository_impl/repository_impl.dart';
 import 'package:moro_shop/domain/repository/repository.dart';
@@ -41,7 +38,6 @@ import 'package:moro_shop/presentation/bloc/register/register_bloc.dart';
 import 'package:moro_shop/presentation/bloc/reset_password/reset_password_bloc.dart';
 import 'package:moro_shop/presentation/bloc/update_product_quantity_in_cart/update_product_quantity_in_cart_bloc.dart';
 import 'package:moro_shop/presentation/bloc/verify_code/verify_code_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final instance = GetIt.instance;
 
@@ -50,32 +46,19 @@ Future<void> initAppModule() async {
 
   instance.allowReassignment = true;
 
-  // shared prefs instance
+  // dio helper
+  instance.registerLazySingleton<DioHelper>(() => DioHelper());
 
-  final sharedPrefs = await SharedPreferences.getInstance();
-  instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
-
-  // app prefs instance
-
-  instance
-      .registerLazySingleton<AppPreferences>(() => AppPreferences(instance()));
 
   // network info
 
   instance.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(InternetConnectionChecker()));
 
-  // Dio Factory
-  instance.registerLazySingleton<DioFactory>(() => DioFactory(instance()));
-
-  // app service client
-  Dio dio = await DioFactory(instance<AppPreferences>()).getDio();
-
-  instance.registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
 
   // remote data source
   instance.registerLazySingleton<RemoteDataSource>(
-      () => RemoteDataSourceImpl(instance<AppServiceClient>()));
+      () => RemoteDataSourceImpl(instance()));
 
   // repository
   instance.registerLazySingleton<Repository>(
@@ -85,7 +68,7 @@ Future<void> initAppModule() async {
 initLoginModule() {
     instance.registerFactory<LoginUseCase>(() => LoginUseCase(instance()));
     instance.registerFactory<LoginBloc>(
-        () => LoginBloc(loginUseCase: instance(), appPreferences: instance()));
+        () => LoginBloc(loginUseCase: instance()));
 
 }
 
@@ -109,7 +92,7 @@ initResetPasswordModule() {
     instance.registerFactory<ResetPasswordUseCase>(
         () => ResetPasswordUseCase(instance()));
     instance.registerFactory<ResetPasswordBloc>(() => ResetPasswordBloc(
-        resetPasswordUseCase: instance(), appPreferences: instance()));
+        resetPasswordUseCase: instance()));
 
 }
 
@@ -117,7 +100,7 @@ initRegisterModule() {
     instance
         .registerFactory<RegisterUseCase>(() => RegisterUseCase(instance()));
     instance.registerFactory<RegisterBloc>(() =>
-        RegisterBloc(registerUseCase: instance(), appPreferences: instance()));
+        RegisterBloc(registerUseCase: instance()));
     instance.registerFactory<ImagePicker>(() => ImagePicker());
 
 }

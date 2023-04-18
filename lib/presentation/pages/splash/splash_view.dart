@@ -23,7 +23,6 @@ class SplashView extends StatefulWidget {
 
 class _SplashViewState extends State<SplashView> {
   Timer? _timer;
-  final AppPreferences _appPreferences = instance<AppPreferences>();
   final NetworkInfo _networkInfo = instance<NetworkInfo>();
 
   @override
@@ -47,13 +46,13 @@ class _SplashViewState extends State<SplashView> {
 
   void manageNavigation() {
     // navigate to main screen
-    _appPreferences.isUserLoggedIn().then((isUserLoggedIn) {
+    AppPreferences.isUserLoggedIn().then((isUserLoggedIn) {
       if (isUserLoggedIn) {
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.mainRoute, ModalRoute.withName(Routes.splashRoute));
       } else {
         // navigate to login screen
-        _appPreferences
+        AppPreferences
             .isIntroScreenViewed()
             .then((isIntroScreenViewed) {
           if (isIntroScreenViewed) {

@@ -20,7 +20,6 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<CategoryEvent>(
       (event, emit) async {
         if (event is GetCategoriesEvent) {
-          await initAppModule();
           await Future.wait([_getCategories(emit,event)]);
         }
       },

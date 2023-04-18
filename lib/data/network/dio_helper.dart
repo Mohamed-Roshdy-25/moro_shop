@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:moro_shop/app/app_prefs.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioHelper {
   static Dio? dio;
@@ -10,18 +13,24 @@ class DioHelper {
         receiveDataWhenStatusError: true,
       ),
     );
+
+    if (!kReleaseMode) {
+      dio?.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+      ));
+    }
   }
 
-  static Future<Response> getData({
+  Future<Response> getData({
     required String url,
     Map<String, dynamic>? query,
-    String lang = 'en',
-    String? token,
   }) async {
     dio!.options.headers = {
       'Content-Type': 'application/json',
-      'lang': lang,
-      'Authorization': token ?? '',
+      'lang': AppPreferences.getAppLanguage(),
+      'Authorization': AppPreferences.getToken(),
     };
 
     return await dio!.get(
@@ -30,17 +39,15 @@ class DioHelper {
     );
   }
 
-  static Future<Response> postData({
+  Future<Response> postData({
     required String url,
     required dynamic data,
     Map<String, dynamic>? query,
-    String lang = 'en',
-    String? token,
   }) async {
     dio!.options.headers = {
       'Content-Type': 'application/json',
-      'lang': lang,
-      'Authorization': token ?? '',
+      'lang': AppPreferences.getAppLanguage(),
+      'Authorization': AppPreferences.getToken(),
     };
 
     return dio!.post(
@@ -50,17 +57,15 @@ class DioHelper {
     );
   }
 
-  static Future<Response> putData({
+  Future<Response> putData({
     required String url,
     required dynamic data,
     Map<String, dynamic>? query,
-    String lang = 'en',
-    String? token,
   }) async {
     dio!.options.headers = {
       'Content-Type': 'application/json',
-      'lang': lang,
-      'Authorization': token ?? '',
+      'lang': AppPreferences.getAppLanguage(),
+      'Authorization': AppPreferences.getToken(),
     };
 
     return dio!.put(
@@ -70,16 +75,14 @@ class DioHelper {
     );
   }
 
-  static Future<Response> deleteAllData({
+  Future<Response> deleteData({
     required String url,
     Map<String, dynamic>? query,
-    String lang = 'en',
-    String? token,
   }) async {
     dio!.options.headers = {
       'Content-Type': 'application/json',
-      'lang': lang,
-      'Authorization': token ?? '',
+      'lang': AppPreferences.getAppLanguage(),
+      'Authorization': AppPreferences.getToken(),
     };
 
     return dio!.delete(

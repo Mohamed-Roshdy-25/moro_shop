@@ -19,7 +19,6 @@ class AddOrDeleteFavoriteBloc
   AddOrDeleteFavoriteBloc(this._addOrDeleteFavoritesUseCase) : super(AddOrDeleteFavoriteInitial()) {
     on<AddOrDeleteFavoriteEvent>((event, emit) async {
       if (event is PostAddOrDeleteFavoritesEvent) {
-        await initAppModule();
         await Future.wait([_changeFavorite(emit, event)]);
       }
     });

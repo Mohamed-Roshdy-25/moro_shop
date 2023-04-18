@@ -15,7 +15,6 @@ class DeleteFavoriteBloc extends Bloc<DeleteFavoriteEvent, DeleteFavoriteState> 
   DeleteFavoriteBloc(this._deleteFavoriteUseCase) : super(DeleteFavoriteInitial()) {
     on<DeleteFavoriteEvent>((event, emit) async {
       if(event is PostDeleteFavoriteEvent){
-        await initAppModule();
         isFavoritesProductLoading[event.favoriteItemId] = false;
         await Future.wait([deleteFavorite(event, emit)]);
       }

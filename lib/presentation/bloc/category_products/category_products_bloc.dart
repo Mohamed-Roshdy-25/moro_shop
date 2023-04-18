@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/category_products_use_case.dart';
 
@@ -18,7 +17,7 @@ class CategoryProductsBloc
     on<CategoryProductsEvent>(
       (event, emit) async {
         if (event is GetCategoryProductsEvent) {
-          await initAppModule();
+
           await Future.wait([_getCategoryProducts(emit, event)]);
         }
 

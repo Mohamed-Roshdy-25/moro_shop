@@ -5,7 +5,6 @@ import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/favorites_use_case.dart';
 
@@ -19,7 +18,6 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc(this._favoritesUseCase) : super(FavoritesInitial()) {
     on<FavoritesEvent>((event, emit) async {
       if (event is GetFavoritesEvent) {
-        await initAppModule();
         await Future.wait([_getFavorites(event, emit)]);
       }
     });

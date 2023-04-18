@@ -1,5 +1,6 @@
+import 'package:moro_shop/app/cache_helper.dart';
 import 'package:moro_shop/presentation/resources/language_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 const String langKey = 'lang_key';
 const String prefsKeyIsUserLoggedIn = "PREFS_KEY_IS_USER_LOGGED_IN";
@@ -8,12 +9,9 @@ const String prefsKeyOnBoardingScreenViewed =
 const String prefsKeySaveToken = "PREFS_KEY_SAVE_TOKEN";
 
 class AppPreferences {
-  final SharedPreferences _sharedPreferences;
 
-  AppPreferences(this._sharedPreferences);
-
-  String getAppLanguage() {
-    String? language = _sharedPreferences.getString(langKey);
+  static String getAppLanguage() {
+    String? language = CacheHelper.getData(key: langKey)??'';
 
     if (language != null && language.isNotEmpty) {
       return language;
@@ -22,32 +20,32 @@ class AppPreferences {
     }
   }
 
-  Future<void> setUserLoggedIn() async {
-    _sharedPreferences.setBool(prefsKeyIsUserLoggedIn, true);
+  static Future<void> setUserLoggedIn() async {
+    await CacheHelper.saveData(key: prefsKeyIsUserLoggedIn, value: true);
   }
 
-  Future<bool> isUserLoggedIn() async {
-    return _sharedPreferences.getBool(prefsKeyIsUserLoggedIn) ?? false;
+  static Future<bool> isUserLoggedIn() async {
+    return CacheHelper.getData(key: prefsKeyIsUserLoggedIn)??false;
   }
 
-  Future<void> setIntroScreenViewed() async {
-    await _sharedPreferences.setBool(prefsKeyOnBoardingScreenViewed, true);
+  static Future<void> setIntroScreenViewed() async {
+    await CacheHelper.saveData(key: prefsKeyOnBoardingScreenViewed, value: true);
   }
 
-  Future<bool> isIntroScreenViewed() async {
-    return _sharedPreferences.getBool(prefsKeyOnBoardingScreenViewed) ?? false;
+  static Future<bool> isIntroScreenViewed() async {
+    return CacheHelper.getData(key: prefsKeyOnBoardingScreenViewed)??false;
   }
 
-  Future<void> logout() async {
-    await _sharedPreferences.remove(prefsKeyIsUserLoggedIn);
-    await _sharedPreferences.remove(prefsKeySaveToken);
+  static Future<void> logout() async {
+    await CacheHelper.removeData(key: prefsKeyIsUserLoggedIn);
+    await CacheHelper.removeData(key: prefsKeySaveToken);
   }
 
-  Future<void> saveToken(String token) async {
-    await _sharedPreferences.setString(prefsKeySaveToken, token);
+  static Future<void> saveToken(String token) async {
+    await CacheHelper.saveData(key: prefsKeySaveToken, value: token);
   }
 
-  String getToken() {
-    return _sharedPreferences.getString(prefsKeySaveToken) ?? '';
+  static String getToken() {
+    return CacheHelper.getData(key: prefsKeySaveToken)??'';
   }
 }

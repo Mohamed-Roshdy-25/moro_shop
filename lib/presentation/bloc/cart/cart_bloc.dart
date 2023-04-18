@@ -5,7 +5,6 @@ import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/carts_use_case.dart';
 
@@ -21,7 +20,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this._cartsUseCase) : super(CartInitial()) {
     on<CartEvent>((event, emit) async {
       if (event is GetCartEvent) {
-        await initAppModule();
         await Future.wait([_getCart(event, emit)]);
       }
     });

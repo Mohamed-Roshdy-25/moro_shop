@@ -17,7 +17,6 @@ class UpdateProductQuantityInCartBloc extends Bloc<
       : super(UpdateProductQuantityInCartInitial()) {
     on<UpdateProductQuantityInCartEvent>((event, emit) async {
       if (event is PostUpdateProductQuantityInCartEvent) {
-        await initAppModule();
         isUpdateCartProductLoading[event.cartItemId] = false;
         await Future.wait([_updateProductQuantityInCart(event, emit)]);
       }

@@ -205,14 +205,12 @@ class _CartViewState extends State<CartView> {
 
   void _onDeleteCartItemSuccessState(state, context) async {
     if (state is DeleteCartItemSuccessState) {
-      await Future.delayed(const Duration(milliseconds: 1173));
       BlocProvider.of<CartBloc>(context).add(GetCartEvent());
     }
   }
 
   void _onUpdateCartItemQuantitySuccessState(state, context) async {
     if (state is UpdateProductQuantityInCartSuccessState) {
-      await Future.delayed(const Duration(milliseconds: 1173));
       BlocProvider.of<CartBloc>(context).add(GetCartEvent());
     }
   }

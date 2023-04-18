@@ -17,7 +17,6 @@ class AddOrDeleteCartBloc extends Bloc<AddOrDeleteCartEvent, AddOrDeleteCartStat
   AddOrDeleteCartBloc(this._addOrDeleteCartsUseCase) : super(AddOrDeleteCartInitial()) {
     on<AddOrDeleteCartEvent>((event, emit) async {
       if(event is PostAddOrDeleteCartsEvent){
-        await initAppModule();
         await Future.wait([_changeCart(emit, event)]);
       }
     });

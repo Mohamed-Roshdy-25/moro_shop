@@ -13,11 +13,9 @@ part 'logout_state.dart';
 
 class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
   final LogoutUseCase _logoutUseCase;
-  final AppPreferences _appPreferences = instance<AppPreferences>();
 
   LogoutBloc(this._logoutUseCase) : super(LogoutInitial()) {
     on<LogoutEvent>((event, emit) async {
-      await initAppModule();
       await Future.wait([_logout(event, emit)]);
     });
   }
@@ -31,7 +29,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
     emit(LogoutErrorState(failure.message));
     },
     (data) async {
-    await _appPreferences.logout();
+    await AppPreferences.logout();
     emit(LogoutSuccessState(data.message));
     },
     );

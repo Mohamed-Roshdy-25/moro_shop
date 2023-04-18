@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moro_shop/app/app_prefs.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/presentation/pages/widgets/intro_image_list_widget.dart';
 import 'package:moro_shop/presentation/resources/routes_manager.dart';
 import 'package:moro_shop/presentation/resources/strings_manager.dart';
@@ -15,12 +14,11 @@ class IntroView extends StatefulWidget {
 }
 
 class _IntroViewState extends State<IntroView> {
-  final AppPreferences _appPreferences = instance<AppPreferences>();
 
   @override
   void initState() {
     super.initState();
-    _appPreferences.setIntroScreenViewed();
+    AppPreferences.setIntroScreenViewed();
   }
 
   @override

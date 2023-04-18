@@ -17,11 +17,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase registerUseCase;
   var registerObject = RegisterObject('', '', '', '', '');
   File? imageFile;
-  final AppPreferences appPreferences;
   LoginOrRegisterOrResetPasswordModel? loginOrRegisterOrResetPasswordModel;
 
 
-  RegisterBloc({required this.registerUseCase,required this.appPreferences}) : super(RegisterInitial()) {
+  RegisterBloc({required this.registerUseCase}) : super(RegisterInitial()) {
     on<RegisterEvent>((event, emit) async {
       if (event is PostRegisterEvent) {
         emit(RegisterLoadingState());
@@ -40,8 +39,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           emit(RegisterErrorState(failure.message));
         }, (data)  {
           loginOrRegisterOrResetPasswordModel = data;
-          appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
-           appPreferences.setUserLoggedIn();
+          AppPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
+          AppPreferences.setUserLoggedIn();
           emit(RegisterSuccessState());
         });
       }

@@ -219,7 +219,6 @@ class _HomeProductsWidgetState extends State<HomeProductsWidget> {
 
   void _onAddOrDeleteFavoriteSuccessState(state, context) async {
     if(state is AddOrDeleteFavoritesSuccessState){
-      await Future.delayed(const Duration(milliseconds: 1173));
       BlocProvider.of<FavoritesBloc>(context).add(GetFavoritesEvent());
     }
   }

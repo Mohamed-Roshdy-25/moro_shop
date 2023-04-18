@@ -17,7 +17,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(this.profileUseCase) : super(ProfileInitial()) {
     on<ProfileEvent>((event, emit) async {
         if (event is GetProfileEvent) {
-          await initAppModule();
           await Future.wait([_getProfile(event, emit)]);
         }
       },

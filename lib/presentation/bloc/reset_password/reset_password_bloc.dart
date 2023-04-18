@@ -11,11 +11,10 @@ part 'reset_password_state.dart';
 
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   final ResetPasswordUseCase resetPasswordUseCase;
-  final AppPreferences appPreferences;
   var resetPasswordObject = ResetPasswordObject('','','');
   LoginOrRegisterOrResetPasswordModel? loginOrRegisterOrResetPasswordModel;
 
-  ResetPasswordBloc({required this.resetPasswordUseCase, required this.appPreferences}) : super(ResetPasswordInitial()) {
+  ResetPasswordBloc({required this.resetPasswordUseCase}) : super(ResetPasswordInitial()) {
     on<ResetPasswordEvent>((event, emit) async {
       if(event is PostResetPasswordEvent){
         emit(ResetPasswordLoadingState());
@@ -26,8 +25,8 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
           emit(ResetPasswordErrorState(failure.message));
       }, (data) {
           loginOrRegisterOrResetPasswordModel = data;
-          appPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
-          appPreferences.setUserLoggedIn();
+          AppPreferences.saveToken(data.loginOrRegisterOrResetPasswordDataModel?.token??'');
+          AppPreferences.setUserLoggedIn();
           emit(ResetPasswordSuccessState(data));
 
       });
