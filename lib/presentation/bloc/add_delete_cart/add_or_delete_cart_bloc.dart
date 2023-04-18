@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/domain/use_case/add_delete_carts_use_case.dart';
 

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/use_case/update_product_quantity_in_cart_use_case.dart';
 
 part 'update_product_quantity_in_cart_event.dart';

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/app/extensions.dart';
 import 'package:moro_shop/domain/use_case/add_delete_favorites_use_case.dart';
 

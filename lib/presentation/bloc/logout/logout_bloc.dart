@@ -5,7 +5,6 @@ import 'dart:ffi';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moro_shop/app/app_prefs.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/use_case/logout_use_case.dart';
 
 part 'logout_event.dart';

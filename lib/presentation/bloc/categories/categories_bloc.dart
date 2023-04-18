@@ -5,7 +5,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/categories_use_case.dart';
 

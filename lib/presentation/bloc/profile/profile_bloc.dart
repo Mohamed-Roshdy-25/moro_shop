@@ -3,7 +3,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moro_shop/app/di.dart';
 import 'package:moro_shop/domain/models/models.dart';
 import 'package:moro_shop/domain/use_case/profile_use_case.dart';
 
