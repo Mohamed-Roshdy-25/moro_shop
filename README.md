@@ -6,7 +6,16 @@ An e-commerce app dealing with :
   - Bloc as state management.
   - responsive ui.
   - real time cache (save data for one minute or more).
-  - payment method (paymob)
+  - payment method (paymob).
+
+
+# Featuers
+
+  - Authentication (login - register - forget password - verification - reset password).
+  - get each Category products.
+  - (Add - Delete) to/from favorites.
+  - (Add - Delete) to/from cart.
+  - paymob payment (ref code - card).
 
 ## project images
 
