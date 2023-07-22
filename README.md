@@ -1,6 +1,12 @@
-# moro_shop
+# moro_shop (still in progress)
 
-A new Flutter project.
+An e-commerce app dealing with :
+  - API.
+  - Clean Architecture & clean code.
+  - Bloc as state management.
+  - responsive ui.
+  - real time cache (save data for one minute or more).
+  - payment method (paymob)
 
 ## Getting Started
 
