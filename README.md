@@ -30,6 +30,8 @@ An e-commerce app dealing with :
 
 <img src="https://github.com/MoRoshdy/moro_shop/assets/92895129/25f0d66d-5476-43fd-ac6e-8c71077d4ba1" width=200 height=400>
 
+<img src="https://github.com/MoRoshdy/moro_shop/assets/92895129/bb947b5e-ec9e-4ef0-bf1a-4e36a6d30497" width=200 height=400>
+
 <img src="https://github.com/MoRoshdy/moro_shop/assets/92895129/c6fcaa1e-6ebf-4bc1-81f6-34abc3f0f97f" width=200 height=400>
 
 </div>
